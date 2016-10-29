@@ -3,8 +3,8 @@
   Description: Assignment for Object Oriented Programming DT228
  */
 
-ArrayList<Button> buttons = new ArrayList<Button>();
-Button pos1,pos2;
+ArrayList<Button> menu = new ArrayList<Button>();
+Button pos1,pos2,pos3,pos4,pos5,pos6;
 
 
 void setup()
@@ -12,9 +12,18 @@ void setup()
  fullScreen(1);
  pos1 = new Button();
  pos2 = new Button();
+ pos3 = new Button();
+ pos4 = new Button();
+ pos5 = new Button();
+ pos6 = new Button();
  
- buttons.add(pos1);
- buttons.add(pos2);
+ menu.add(pos1);
+ menu.add(pos2);
+ menu.add(pos3);
+ menu.add(pos4);
+ menu.add(pos5);
+ menu.add(pos6);
+ 
  
 }
 
@@ -41,6 +50,18 @@ void drawBackground()
 
 void drawMenu()
 {
-  pos1.drawButton(250,250,100,150);
+  
+  int size = menu.size();
+  float x = width/(size);
+  float y = height/8;
+  
+  
+
+  for(int i = 0;i<size;i++)
+  {
+    menu.get(i).drawButton(x-300,y,200,75);
+    x+=width/size;
+  }
+  
 }
   

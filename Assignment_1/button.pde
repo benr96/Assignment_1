@@ -19,19 +19,24 @@ class Button
  
  void drawButton(float x, float y, float buttonWidth, float buttonHeight)
  {
-   fill(255);
-   stroke(255,0,0);
+   stroke(0,0,200);
+   strokeWeight(5);
    
-   float widthTen = buttonWidth*0.1;
+   float width10 = buttonWidth*0.1;
+   float width90 = buttonWidth*0.9;
    
-   line(x+20,y,x+200,y);
-   line(x+200,y,x+220,y+20);
-   line(x+220,y+20,x+220,y+60);
-   line(x+220,y+60,x+200,y+80);
-   line(x+200,y+80,x+20,y+80);
-   line(x+20,y+80,x,y+60);
-   line(x,y+60,x,y+20);
-   line(x,y+20,x+20,y);
+   float height20 = buttonHeight*0.2;
+   float height80 = buttonHeight*0.8;
+   
+   
+   line(x+width10,y,x+width90,y);
+   line(x+width90,y,x+buttonWidth,y+height20);
+   line(x+buttonWidth,y+height20,x+buttonWidth,y+height80);
+   line(x+buttonWidth,y+height80,x+width90,y+buttonHeight);
+   line(x+width90,y+buttonHeight,x+width10,y+buttonHeight);
+   line(x+width10,y+buttonHeight,x,y+height80);
+   line(x,y+height80,x,y+height20);
+   line(x,y+height20,x+width10,y);
   
  }
  String toString()
