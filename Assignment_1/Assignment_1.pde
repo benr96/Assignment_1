@@ -9,9 +9,9 @@ Button pos1,pos2,pos3,pos4,pos5;
 
 void setup()
 {
-// size(800,800);
+ //size(800,800);
  fullScreen(P3D,2);
-  smooth(8);
+ smooth(8);
   
  pos1 = new Button();
  pos2 = new Button();
@@ -54,7 +54,7 @@ void drawMenu()
   float y = height/20;
   
   float buttonWidth = width/size-1;
-  float buttonHeight = 100;
+  float buttonHeight =width/22;
 
   stroke(0,0,200);
   
@@ -62,14 +62,14 @@ void drawMenu()
   {
     if(i==2)
     {
-      menu.get(i).drawButton(x,0,buttonWidth,buttonHeight+y+25);
+      menu.get(i).drawButton(x,0,buttonWidth,buttonHeight+y*2);
     }
     else
     {
        menu.get(i).drawButton(x,y,buttonWidth,buttonHeight);
     }
     
-    x+=width/size-1;
+    x+=(width/size-1)+1;
   }
   
 }

@@ -27,8 +27,7 @@ class Button
    float height80 = buttonHeight*0.8;
    
    isClicked(x,y,buttonWidth,buttonHeight);
-   
-   
+  
    line(x+width10,y,x+width90,y);//top line
    line(x+width90,y,x+buttonWidth,y+height20);//top right
    line(x+buttonWidth,y+height20,x+buttonWidth,y+height80);//right
