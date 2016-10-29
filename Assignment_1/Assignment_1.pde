@@ -3,12 +3,11 @@
   Description: Assignment for Object Oriented Programming DT228
  */
 
-PImage icon;
+
 
 void setup()
 {
  fullScreen(1); 
- icon = loadImage("cd.. brand.gif");
 }
 
 void draw()
@@ -30,7 +29,6 @@ void drawBackground()
     ellipse(width/2,height/2,width*i,height*i);
   }
   
-  image(icon,0,0);
   
   
   
