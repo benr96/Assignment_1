@@ -13,12 +13,14 @@ void setup()
  fullScreen(P3D,2);
  smooth(8);
   
+ //objects
  pos1 = new Button();
  pos2 = new Button();
  pos3 = new Button();
  pos4 = new Button();
  pos5 = new Button();
  
+ //adding objects to array list
  menu.add(pos1);
  menu.add(pos2);
  menu.add(pos3);
@@ -30,6 +32,7 @@ void draw()
 {
   drawBackground();
   drawMenu();
+  drawMainWindow();
 }
 
 void drawBackground()
@@ -71,6 +74,57 @@ void drawMenu()
     
     x+=(width/size-1)+1;
   }
-  
 }
+
+void drawMainWindow()
+{
+ int windowState = 0;
+ 
+ stroke(255);
+ 
+ float x1 = width/25;
+ float y1 = height/5;
+ float x2 = width-x1;
+ float y2 = height*0.95;
+ 
+ float windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
+ float windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
+ 
+ line(x1*2,y1,windowWidth,y1);//top
+ line(windowWidth,y1,windowWidth+x1,height-windowHeight);//top right
+ line(x2,height-windowHeight,x2,y2*0.95);//right
+ line(x2,y2*0.95,windowWidth,y2);//bottom right
+ line(windowWidth,y2,x1*2,y2);//bottom
+ line(x1*2,y2,x1,y2*0.95);//bottom left
+ line(x1,y2*0.95,x1,height-windowHeight);//left
+ line(x1,height-windowHeight,x1*2,y1);//top left
+ 
+ switch(windowState)
+ {
+  case 0://locked
+  {
+    for(float i =x1*2 ; i<windowWidth;i+=windowWidth/30)
+    {
+      line(i,y1,i,y2);
+    }
+    for(float i = height-windowHeight; i<y2*0.95; i+=windowHeight/30)
+    {
+      line(x1,i,x2,i);
+    }
+    
+    fill(255);
+    
+    
+  }
+  case 1://enter credentials
+  {
+    
+  }
+  case 2://unlocked main work space
+  {
+    
+  }
+ }
+}
+  
   
