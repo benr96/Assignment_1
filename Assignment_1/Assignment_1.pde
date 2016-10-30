@@ -5,13 +5,14 @@
 
 ArrayList<Button> menu = new ArrayList<Button>();
 Button pos1,pos2,pos3,pos4,pos5;
+PImage bg;
 
 
 void setup()
 {
- //size(800,600,P3D);
+ //size(800,800,P3D);
  fullScreen(P3D,1);
- smooth(1);
+ smooth(4);
  frameRate(60);
   
  //objects
@@ -27,11 +28,14 @@ void setup()
  menu.add(pos3);
  menu.add(pos4);
  menu.add(pos5);
+ 
+ bg = loadImage("background.tif");
 }
 
 void draw()
 {
-  drawBackground();
+  background(bg);
+  //drawBackground();
   drawMenu();
   drawMainWindow();
   
@@ -42,6 +46,9 @@ void draw()
 
 }
 
+//due to extreme lag caused by this code I have decided to instead use an image for the background
+//this code is the code that was used to draw that image. This is a temporary solution as the image
+//must always be the same res as the screen. seek more satisfactory solution
 void drawBackground()
 {
   noStroke();
@@ -111,16 +118,17 @@ void drawMainWindow()
   case 0://locked
   {
     
-    for(float x = x1*2; x <windowWidth;x+=windowWidth/30)
+    for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
     {
-      for(float y = height-windowHeight;y<y2*0.95;y+=windowHeight/30)
+      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
       {
        point(x,y); 
       }
     }
+  
     fill(0,0,40,150);
     
-    loginWindow.drawBox((width/5)*2,height/2.3,width/5,height/5,0.9,0.8);
+   loginWindow.drawBox((width/5)*2,height/2.3,width/5,height/5,0.9,0.8);
   
   }
   case 1://enter credentials
