@@ -101,14 +101,11 @@ void drawMainWindow()
  float x2 = width-x1;
  float y2 = height*0.95;
  
- float loginWidth = width/5;
- float loginHeight = height/5;
- 
  float windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
  float windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
  
  box mainWindow = new box();
- box loginWindow = new box();
+ 
  
  noFill();
  mainWindow.drawBox(x1,y1,windowWidth,windowHeight,0.95,0.9);
@@ -125,13 +122,10 @@ void drawMainWindow()
        point(x,y); 
       }
     }
-  
-    fill(0,0,40,150);
     
-   loginWindow.drawBox((width/5)*2,height/2.3,width/5,height/5,0.9,0.8);
-  
+    drawLogin();
   }
-  case 1://enter credentials
+  case 1:
   {
     
   }
@@ -140,6 +134,50 @@ void drawMainWindow()
     
   }
  }
+}
+
+void drawLogin()
+{
+  float loginWidth = width/5;
+  float loginHeight = height/5;
+  float loginX = loginWidth*2;
+  float loginY = loginHeight*2.2;
+  String loginTitle = "Enter Login Details: ";
+  String userName = "Username: ";
+  String password = "Password: ";
+ 
+  box loginWindow = new box();
+  
+  //draw the login box
+  fill(0,0,40,150);
+  loginWindow.drawBox(loginX,loginY,loginWidth,loginHeight,0.9,0.8);
+
+  //draw the box title
+  fill(255);
+  textSize(20);
+  text(loginTitle,loginX+loginWidth*0.1,loginY+loginHeight*0.2);
+  line(loginX+loginWidth*0.1,loginY+loginHeight*0.22,loginX+loginWidth*0.1+textWidth(loginTitle),loginY+loginHeight*0.22);
+  
+  //draw username box
+  textSize(17);
+  text(userName,loginX+loginWidth*0.1,loginY+loginHeight*0.4);
+  fill(0,0,75,150);
+  rect((loginX+loginWidth*0.1)+textWidth(userName),(loginY+loginHeight*0.4)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
+  
+  //draw password box
+  fill(255);
+  text(password,loginX+loginWidth*0.1,loginY+loginHeight*0.6);
+  fill(0,0,75,150);
+  rect((loginX+loginWidth*0.1)+textWidth(password),(loginY+loginHeight*0.6)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
+  
+  //draw submit button
+  
+  
+  //draw override button
+  
+  
+  //call function to check if it is clicked
+  
 }
   
   
