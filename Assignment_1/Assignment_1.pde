@@ -9,9 +9,10 @@ Button pos1,pos2,pos3,pos4,pos5;
 
 void setup()
 {
- //size(800,800);
- fullScreen(P3D,2);
- smooth(8);
+ //size(800,600,P3D);
+ fullScreen(P3D,1);
+ smooth(1);
+ frameRate(60);
   
  //objects
  pos1 = new Button();
@@ -33,6 +34,12 @@ void draw()
   drawBackground();
   drawMenu();
   drawMainWindow();
+  
+  
+  if (frameCount % 60 == 0) {
+    println(frameRate);
+  }
+
 }
 
 void drawBackground()
@@ -87,34 +94,34 @@ void drawMainWindow()
  float x2 = width-x1;
  float y2 = height*0.95;
  
+ float loginWidth = width/5;
+ float loginHeight = height/5;
+ 
  float windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
  float windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
  
- line(x1*2,y1,windowWidth,y1);//top
- line(windowWidth,y1,windowWidth+x1,height-windowHeight);//top right
- line(x2,height-windowHeight,x2,y2*0.95);//right
- line(x2,y2*0.95,windowWidth,y2);//bottom right
- line(windowWidth,y2,x1*2,y2);//bottom
- line(x1*2,y2,x1,y2*0.95);//bottom left
- line(x1,y2*0.95,x1,height-windowHeight);//left
- line(x1,height-windowHeight,x1*2,y1);//top left
+ box mainWindow = new box();
+ box loginWindow = new box();
+ 
+ noFill();
+ mainWindow.drawBox(x1,y1,windowWidth,windowHeight,0.95,0.9);
  
  switch(windowState)
  {
   case 0://locked
   {
-    for(float i =x1*2 ; i<windowWidth;i+=windowWidth/30)
+    
+    for(float x = x1*2; x <windowWidth;x+=windowWidth/30)
     {
-      line(i,y1,i,y2);
+      for(float y = height-windowHeight;y<y2*0.95;y+=windowHeight/30)
+      {
+       point(x,y); 
+      }
     }
-    for(float i = height-windowHeight; i<y2*0.95; i+=windowHeight/30)
-    {
-      line(x1,i,x2,i);
-    }
+    fill(0,0,40,150);
     
-    fill(255);
-    
-    
+    loginWindow.drawBox((width/5)*2,height/2.3,width/5,height/5,0.9,0.8);
+  
   }
   case 1://enter credentials
   {
