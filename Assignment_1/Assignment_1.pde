@@ -11,7 +11,7 @@ PImage bg;
 void setup()
 {
  //size(800,800,P3D);
- fullScreen(P3D,1);
+ fullScreen(P3D,2);
  smooth(4);
  frameRate(60);
   
@@ -125,7 +125,7 @@ void drawMainWindow()
     
     drawLogin();
   }
-  case 1:
+  case 1://transitioning
   {
     
   }
