@@ -4,9 +4,10 @@
  */
 import controlP5.*;
 
-ArrayList<Button> menu = new ArrayList<Button>();
-Button pos1,pos2,pos3,pos4,pos5;
+ArrayList<button> menu = new ArrayList<button>();
+button pos1,pos2,pos3,pos4,pos5;
 PImage bg;
+int windowState = 0;
 
 
 void setup()
@@ -17,11 +18,11 @@ void setup()
  frameRate(60);
   
  //objects
- pos1 = new Button();
- pos2 = new Button();
- pos3 = new Button();
- pos4 = new Button();
- pos5 = new Button();
+ pos1 = new button();
+ pos2 = new button();
+ pos3 = new button();
+ pos4 = new button();
+ pos5 = new button();
  
  //adding objects to array list
  menu.add(pos1);
@@ -80,21 +81,21 @@ void drawMenu()
   {
     if(i==2)
     {
-      menu.get(i).drawButton(x,0,buttonWidth,buttonHeight+y*2);
+      menu.get(i).drawButton(x,0,buttonWidth,buttonHeight+y*2,150,255);
     }
     else
     {
-       menu.get(i).drawButton(x,y,buttonWidth,buttonHeight);
+       menu.get(i).drawButton(x,y,buttonWidth,buttonHeight,150,255);
     }
     
     x+=(width/size-1)+1;
   }
 }
+int boxOp = 150;
+int textOp = 255;
 
 void drawMainWindow()
 {
- int windowState = 0;
- 
  stroke(255);
  
  float x1 = width/25;
@@ -105,30 +106,36 @@ void drawMainWindow()
  float windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
  float windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
  
- box mainWindow = new box();
  
+ 
+ box mainWindow = new box();
  
  noFill();
  mainWindow.drawBox(x1,y1,windowWidth,windowHeight,0.95,0.9);
  
- switch(windowState)
- {
-  case 0://locked
-  {
-    
-    for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
+ for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
     {
       for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
       {
        point(x,y); 
       }
     }
-    
-    drawLogin();
+ 
+ switch(windowState)
+ {
+  case 0://locked
+  {
+    drawLogin(boxOp,textOp);
+    break;
   }
   case 1://transitioning
   {
     
+    boxOp-=2;
+    textOp-=3;
+    
+    drawLogin(boxOp,textOp);
+    break;
   }
   case 2://unlocked main work space
   {
@@ -137,7 +144,7 @@ void drawMainWindow()
  }
 }
 
-void drawLogin()
+void drawLogin(int boxOpacity,int textOpacity)
 {
   float loginWidth = width/5;
   float loginHeight = height/5;
@@ -151,16 +158,16 @@ void drawLogin()
   String userName = "Username: ";
   String password = "Password: ";
   
-  
- 
   box loginWindow = new box();
+  button submitButton = new button("Login",0);
+  stroke(255,255,255,boxOpacity);
   
   //draw the login box
-  fill(0,0,40,150);
+  fill(0,0,40,boxOpacity);
   loginWindow.drawBox(loginX,loginY,loginWidth,loginHeight,0.9,0.8);
 
   //draw the box title
-  fill(255);
+  fill(255,255,255,textOpacity);
   textSize(20);
   text(loginTitle,safeX,safeY);
   line(safeX,safeY*1.01,safeX+textWidth(loginTitle),safeY*1.01);
@@ -168,22 +175,29 @@ void drawLogin()
   //draw username box
   textSize(17);
   text(userName,safeX,safeY*1.1);
-  fill(0,0,75,150);
+  fill(0,0,75,boxOpacity);
   rect(safeX+textWidth(userName),(safeY*1.1)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
   
   //draw password box
-  fill(255);
+  fill(255,255,255,textOpacity);
   text(password,safeX,safeY*1.17);
-  fill(0,0,75,150);
+  fill(0,0,75,boxOpacity);
   rect(safeX+textWidth(password),(safeY*1.17)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
   
   //draw submit button
+  submitButton.drawButton(safeX,safeY*1.25,loginWidth/3,loginHeight/8,boxOpacity,textOpacity);
   
+  if(submitButton.value == 1)
+  {
+    windowState = 1;
+  }
+    
   
   //draw override button
   
   
   //call function to check if it is clicked
+  
   
 }
   

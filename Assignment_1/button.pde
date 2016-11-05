@@ -1,29 +1,32 @@
-class Button
+class button
 {
  String label;
  int value;//0 = not pressed 1 = pressed
  
- Button()
+ button()
  {
   label = "Default";
   value = 0;
  }
  
- Button(String label, int value)//Assigning values
+ button(String label, int value)//Assigning values
  {
    this.label = label;
    this.value = value;
  }
  
- void drawButton(float x, float y, float buttonWidth, float buttonHeight)
+ void drawButton(float x, float y, float buttonWidth, float buttonHeight,int boxOpacity, int textOpacity)
  { 
+   fill(0,0,40,boxOpacity);
+   stroke(255,255,255,boxOpacity);
+   
    isClicked(x,y,buttonWidth,buttonHeight);
    
    box Box = new box();
    
    Box.drawBox(x,y,buttonWidth,buttonHeight,0.9,0.8);
    
-   fill(255);
+   fill(255,255,255,textOpacity);
    textSize(buttonWidth/7);
    text(label,x+buttonWidth/4,y+buttonHeight/1.5);
  }
@@ -32,24 +35,11 @@ class Button
  {
    
    if(mouseX>x && mouseX<(x+buttonWidth) && mouseY>y && mouseY<y+buttonHeight)
-   {
-     stroke(255,0,0);
-     strokeWeight(1);
-     noFill();
-     
+   { 
      if(mousePressed)
      {
       this.value = 1; 
-      stroke(0,255,0);
-      strokeWeight(1);
-      noFill();
      }
-   }
-   else
-   {
-    stroke(255);
-    strokeWeight(1);
-    noFill();
    }
  }
  
