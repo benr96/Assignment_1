@@ -2,6 +2,7 @@
   Date started: 29/10/16
   Description: Assignment for Object Oriented Programming DT228
  */
+import controlP5.*;
 
 ArrayList<Button> menu = new ArrayList<Button>();
 Button pos1,pos2,pos3,pos4,pos5;
@@ -142,9 +143,15 @@ void drawLogin()
   float loginHeight = height/5;
   float loginX = loginWidth*2;
   float loginY = loginHeight*2.2;
+  
+  float safeX = loginX+loginWidth*0.1;
+  float safeY = loginY+loginHeight*0.2;
+  
   String loginTitle = "Enter Login Details: ";
   String userName = "Username: ";
   String password = "Password: ";
+  
+  
  
   box loginWindow = new box();
   
@@ -155,20 +162,20 @@ void drawLogin()
   //draw the box title
   fill(255);
   textSize(20);
-  text(loginTitle,loginX+loginWidth*0.1,loginY+loginHeight*0.2);
-  line(loginX+loginWidth*0.1,loginY+loginHeight*0.22,loginX+loginWidth*0.1+textWidth(loginTitle),loginY+loginHeight*0.22);
+  text(loginTitle,safeX,safeY);
+  line(safeX,safeY*1.01,safeX+textWidth(loginTitle),safeY*1.01);
   
   //draw username box
   textSize(17);
-  text(userName,loginX+loginWidth*0.1,loginY+loginHeight*0.4);
+  text(userName,safeX,safeY*1.1);
   fill(0,0,75,150);
-  rect((loginX+loginWidth*0.1)+textWidth(userName),(loginY+loginHeight*0.4)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
+  rect(safeX+textWidth(userName),(safeY*1.1)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
   
   //draw password box
   fill(255);
-  text(password,loginX+loginWidth*0.1,loginY+loginHeight*0.6);
+  text(password,safeX,safeY*1.17);
   fill(0,0,75,150);
-  rect((loginX+loginWidth*0.1)+textWidth(password),(loginY+loginHeight*0.6)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
+  rect(safeX+textWidth(password),(safeY*1.17)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
   
   //draw submit button
   
