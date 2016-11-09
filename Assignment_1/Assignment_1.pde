@@ -28,12 +28,14 @@ void setup()
  
   bg = loadImage("background.tif");
   icarus = new Logo(logoOpacity,0,0,"icarus.png");
+ // icarus = new Logo();
+
 }
 
 
 void draw()
 {
-  background(bg);
+  background(0);
   //drawBackground();
   drawMenu();
   drawMainWindow();
@@ -102,20 +104,22 @@ void drawMainWindow()
  box mainWindow = new box();
  
  noFill();
+ stroke(234,223,104);
  mainWindow.drawBox(x1,y1,windowWidth,windowHeight,0.95,0.9);
  
- for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
+
+ switch(windowState)
+ {
+  case 0://locked
+  {/*
+     for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
     {
       for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
       {
        point(x,y); 
       }
     }
- 
- switch(windowState)
- {
-  case 0://locked
-  {
+ */
     drawLogin(boxOp,textOp);
     break;
   }
@@ -178,7 +182,8 @@ void drawLogin(int boxOpacity,int textOpacity)
   
   box loginWindow = new box();
   button submitButton = new button("Login",0);
-  stroke(255,255,255,boxOpacity);
+  stroke(234,223,104,boxOpacity);
+  strokeWeight(3);
   
   //draw the login box
   fill(0,0,40,boxOpacity);
@@ -195,12 +200,18 @@ void drawLogin(int boxOpacity,int textOpacity)
   text(userName,safeX,safeY*1.1);
   fill(0,0,75,boxOpacity);
   rect(safeX+textWidth(userName),(safeY*1.1)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
+  //Default text
+  fill(234,223,104,textOpacity);
+  text("Administrator",safeX+textWidth(userName)+5,(safeY*1.1));
   
   //draw password box
   fill(255,255,255,textOpacity);
   text(password,safeX,safeY*1.17);
   fill(0,0,75,boxOpacity);
   rect(safeX+textWidth(password),(safeY*1.17)-(textAscent()+textDescent()),loginWidth/2,loginHeight/8);
+  //Default text
+  fill(234,223,104,textOpacity);
+  text("*************",safeX+textWidth(password)+5,(safeY*1.17));
   
   //draw submit button
   submitButton.drawButton(safeX,safeY*1.25,loginWidth/3,loginHeight/8,boxOpacity,textOpacity);

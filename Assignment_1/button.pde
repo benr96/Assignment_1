@@ -17,12 +17,21 @@ class button
  
  void drawButton(float x, float y, float buttonWidth, float buttonHeight,int boxOpacity, int textOpacity)
  { 
-   fill(0,0,40,boxOpacity);
-   stroke(255,255,255,boxOpacity);
+   fill(0,0,57,boxOpacity);
+   stroke(234,223,104,boxOpacity);
+   strokeWeight(2);
    
    isClicked(x,y,buttonWidth,buttonHeight);
    
    box Box = new box();
+   
+   if(this.value == 1)
+   {
+     buttonWidth = buttonWidth*0.95;
+     buttonHeight = buttonHeight*0.95;
+     x = x +(buttonWidth*0.025);
+     y = y +(buttonHeight*0.025);
+   }
    
    Box.drawBox(x,y,buttonWidth,buttonHeight,0.9,0.8);
    
