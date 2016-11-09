@@ -111,7 +111,7 @@ void drawMainWindow()
  switch(windowState)
  {
   case 0://locked
-  {/*
+  {
      for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
     {
       for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
@@ -119,7 +119,6 @@ void drawMainWindow()
        point(x,y); 
       }
     }
- */
     drawLogin(boxOp,textOp);
     break;
   }
@@ -143,18 +142,21 @@ void drawMainWindow()
       {
         icarus.opacity+=3;
       }
-    
+     
       icarus.rotateImage();
       icarus.drawImage();
-      println("after draw");
     }
     else
     {
       drawLogin(boxOp,textOp);
+       for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
+    {
+      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
+      {
+       point(x,y); 
+      }
     }
-    
-    
-    
+    }
     break;
   }
   case 2://unlocked main work space
@@ -162,6 +164,8 @@ void drawMainWindow()
     
   }
  }
+ 
+    
 }
 
 void drawLogin(int boxOpacity,int textOpacity)
