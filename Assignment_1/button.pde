@@ -5,7 +5,7 @@ class button
  
  button()
  {
-  label = "Default";
+  label = "default";
   value = 0;
  }
  

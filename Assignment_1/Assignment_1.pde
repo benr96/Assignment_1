@@ -2,37 +2,34 @@
   Date started: 29/10/16
   Description: Assignment for Object Oriented Programming DT228
  */
-import controlP5.*;
-
 ArrayList<button> menu = new ArrayList<button>();
-button pos1,pos2,pos3,pos4,pos5;
-PImage bg;
 int windowState = 0;
+int boxOp = 150;
+int textOp = 255;
+int logoOpacity = 0;
+Logo icarus;
+
+
+PImage bg;
 
 
 void setup()
 {
  //size(800,800,P3D);
- fullScreen(P3D,2);
- smooth(4);
- frameRate(60);
+ fullScreen(P3D,1);
   
- //objects
- pos1 = new button();
- pos2 = new button();
- pos3 = new button();
- pos4 = new button();
- pos5 = new button();
+  
+  for(int i=0 ;i<5;i++)
+  {
+   button pos = new button(); 
+   menu.add(pos);
+  }
  
- //adding objects to array list
- menu.add(pos1);
- menu.add(pos2);
- menu.add(pos3);
- menu.add(pos4);
- menu.add(pos5);
  
- bg = loadImage("background.tif");
+  bg = loadImage("background.tif");
+  icarus = new Logo(logoOpacity,0,0,"icarus.png");
 }
+
 
 void draw()
 {
@@ -41,11 +38,6 @@ void draw()
   drawMenu();
   drawMainWindow();
   
-  
-  if (frameCount % 60 == 0) {
-    println(frameRate);
-  }
-
 }
 
 //due to extreme lag caused by this code I have decided to instead use an image for the background
@@ -91,8 +83,7 @@ void drawMenu()
     x+=(width/size-1)+1;
   }
 }
-int boxOp = 150;
-int textOp = 255;
+
 
 void drawMainWindow()
 {
@@ -131,10 +122,35 @@ void drawMainWindow()
   case 1://transitioning
   {
     
-    boxOp-=2;
-    textOp-=3;
+    if(boxOp != 0)
+    {
+      boxOp-=2;
+    }
     
-    drawLogin(boxOp,textOp);
+    if(textOp != 0)
+    {
+      textOp-=3;
+    }
+    
+    if(boxOp == 0 && textOp == 0)
+    {
+      
+      if(icarus.opacity != 255)
+      {
+        icarus.opacity+=3;
+      }
+    
+      icarus.rotateImage();
+      icarus.drawImage();
+      println("after draw");
+    }
+    else
+    {
+      drawLogin(boxOp,textOp);
+    }
+    
+    
+    
     break;
   }
   case 2://unlocked main work space
@@ -157,6 +173,8 @@ void drawLogin(int boxOpacity,int textOpacity)
   String loginTitle = "Enter Login Details: ";
   String userName = "Username: ";
   String password = "Password: ";
+  
+  println("box opacity = " + boxOpacity + "\t" +"text opacity = " + textOpacity);
   
   box loginWindow = new box();
   button submitButton = new button("Login",0);
@@ -187,17 +205,13 @@ void drawLogin(int boxOpacity,int textOpacity)
   //draw submit button
   submitButton.drawButton(safeX,safeY*1.25,loginWidth/3,loginHeight/8,boxOpacity,textOpacity);
   
+  //if clicked change window state
   if(submitButton.value == 1)
   {
     windowState = 1;
   }
     
-  
-  //draw override button
-  
-  
-  //call function to check if it is clicked
-  
+  //draw override button  
   
 }
   
