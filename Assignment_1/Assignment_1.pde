@@ -60,11 +60,14 @@ void drawBackground()
 void drawMenu()
 {
   int size = menu.size();
-  float x = 0;
+  
+  
+  float buttonWidth = (width/size-1)*0.95;
+  float buttonHeight = (width/22)*0.95;
+  
+  float x = (buttonWidth*0.025) ;
   float y = height/20;
   
-  float buttonWidth = width/size-1;
-  float buttonHeight =width/22;
 
   stroke(0,0,200);
   
