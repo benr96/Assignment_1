@@ -104,8 +104,17 @@ void drawMainWindow()
  noFill();
  stroke(234,223,104);
  mainWindow.drawBox(x1,y1,windowWidth,windowHeight,0.95,0.9);
- 
 
+ if(windowState != 0 && windowState !=1)//not on locked window or transition
+ {
+  for(int i =0;i<menu.size();i++)
+  {
+   if(menu.get(i).value == 1)
+   {
+    windowState = i+3; 
+   }
+  }
+ }
  switch(windowState)
  {
   case 0://locked
@@ -157,9 +166,48 @@ void drawMainWindow()
     }
     break;
   }
-  case 2://unlocked main work space
+  case 2://unlocked
   {
+    for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
+    {
+      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
+      {
+       point(x,y); 
+      }
+    }
     
+    textSize(20);
+    text("Ready",width/2,height/2);
+    break;
+  }
+  case 3://first menu item
+  {
+    text("In first option",width/2,height/2);
+    break;
+  }
+  case 4://second menu item
+  {
+    text("in second option",width/2,height/2);
+    break;
+  }
+  case 5://third menu item
+  {
+    text("in third option",width/2,height/2);
+    break;
+  }
+  case 6://fourth menu item
+  {
+    text("in fourth option",width/2,height/2);
+    break;
+  }
+  case 7://fifth menu item
+  {
+    text("in fifth option",width/2,height/2);
+    break;
+  }
+  default://no window state selected
+  {
+   text("Error 404 : Page not found",width/2,height/2); 
   }
  }
  
@@ -227,5 +275,9 @@ void drawLogin(int boxOpacity,int textOpacity)
   //draw override button  
   
 }
+
+void drawDots(float x1, float y1, float windowWidth, float windowHeight)
+{
   
+}
   
