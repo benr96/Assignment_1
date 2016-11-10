@@ -36,8 +36,8 @@ class button
    Box.drawBox(x,y,buttonWidth,buttonHeight,0.9,0.8);
    
    fill(255,255,255,textOpacity);
-   textSize(buttonWidth/7);
-   text(label,x+buttonWidth/4,y+buttonHeight/1.5);
+   textSize(buttonWidth/10);
+   text(label,(x+(buttonWidth/2))-(textWidth(this.label)/2),y+buttonHeight/1.5);
  }
  
  void isClicked(float x, float y,float buttonWidth, float buttonHeight)//if clicked change appearance

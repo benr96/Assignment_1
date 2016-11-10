@@ -3,30 +3,32 @@
   Description: Assignment for Object Oriented Programming DT228
  */
 ArrayList<button> menu = new ArrayList<button>();
+
+String[] buttonNames = {"Star Map","Solar Sytem Map","Ship Status","Planet Data","Unassigned"};
 int windowState = 0;
 int boxOp = 150;
 int textOp = 255;
 int logoOpacity = 0;
 Logo icarus;
+boolean check = false;
 
 PImage bg;
 
 void setup()
 {
- //size(800,800,P3D);
- fullScreen(P3D,1);
-  
+  //size(800,800,P3D);
+  fullScreen(P3D,1);
   
   for(int i=0 ;i<5;i++)
   {
-   button pos = new button(); 
+   button pos = new button(buttonNames[i],0); 
    menu.add(pos);
   }
  
- 
+  
   bg = loadImage("background.tif");
   icarus = new Logo(logoOpacity,0,0,"icarus.png");
- // icarus = new Logo();
+  //icarus = new Logo();
 
 }
 
@@ -115,23 +117,26 @@ void drawMainWindow()
    }
   }
  }
+ else
+ {
+  for(int i =0;i<menu.size();i++)
+  {
+   if(menu.get(i).value == 1)
+   {
+    text("Locked",width/4,height/4); 
+   }
+  }
+ }
  switch(windowState)
  {
   case 0://locked
   {
-     for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
-    {
-      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
-      {
-       point(x,y); 
-      }
-    }
+    drawDots(x1, y1, windowWidth, windowHeight);
     drawLogin(boxOp,textOp);
     break;
   }
   case 1://transitioning
   {
-    
     if(boxOp != 0)
     {
       boxOp-=2;
@@ -142,42 +147,42 @@ void drawMainWindow()
       textOp-=3;
     }
     
+    //once login has fully fade start drawing the logo
     if(boxOp == 0 && textOp == 0)
     {
-      
-      if(icarus.opacity != 255)
+      //increase up to 400 (the actual transparency will cap at 255, going to 400 is for leaving it on the screen longer)
+      if(icarus.opacity>=0 && icarus.opacity<400 && check == false)
       {
-        icarus.opacity+=3;
+       icarus.opacity += 2; 
       }
-     
+      else
+      {
+        check = true;
+        icarus.opacity -=2; 
+      }
+      
+      if(icarus.opacity == 0 && check == true)
+      {
+       windowState = 2; 
+      }
+
       icarus.rotateImage();
       icarus.drawImage();
     }
-    else
+    else//otherwise keep drawing the fading login screen
     {
       drawLogin(boxOp,textOp);
-       for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
-    {
-      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
-      {
-       point(x,y); 
-      }
-    }
+      drawDots(x1, y1, windowWidth, windowHeight);
     }
     break;
   }
   case 2://unlocked
   {
-    for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
-    {
-      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
-      {
-       point(x,y); 
-      }
-    }
+   String ready = "Ready";
+    drawDots(x1, y1, windowWidth, windowHeight);
     
-    textSize(20);
-    text("Ready",width/2,height/2);
+    textSize(70);
+    text(ready,(width/2)-(textWidth(ready)/2),height/2);
     break;
   }
   case 3://first menu item
@@ -228,7 +233,7 @@ void drawLogin(int boxOpacity,int textOpacity)
   String userName = "Username: ";
   String password = "Password:  ";
   
-  println("box opacity = " + boxOpacity + "\t" +"text opacity = " + textOpacity);
+  //println("box opacity = " + boxOpacity + "\t" +"text opacity = " + textOpacity);
   
   box loginWindow = new box();
   button submitButton = new button("Login",0);
@@ -278,6 +283,12 @@ void drawLogin(int boxOpacity,int textOpacity)
 
 void drawDots(float x1, float y1, float windowWidth, float windowHeight)
 {
-  
+   for(float x = x1+windowWidth*0.05; x < x1+windowWidth*0.96;x+=windowWidth*0.9/20)
+    {
+      for(float y = y1+windowHeight*0.1;y<y1+windowHeight*0.91;y+=windowHeight*0.8/20)
+      {
+       point(x,y); 
+      }
+    }
 }
   
