@@ -9,9 +9,7 @@ int textOp = 255;
 int logoOpacity = 0;
 Logo icarus;
 
-
 PImage bg;
-
 
 void setup()
 {
@@ -39,7 +37,6 @@ void draw()
   //drawBackground();
   drawMenu();
   drawMainWindow();
-  
 }
 
 //due to extreme lag caused by this code I have decided to instead use an image for the background
@@ -98,9 +95,7 @@ void drawMainWindow()
  
  float windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
  float windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
- 
- 
- 
+
  box mainWindow = new box();
  
  noFill();
@@ -178,9 +173,9 @@ void drawLogin(int boxOpacity,int textOpacity)
   float safeX = loginX+loginWidth*0.1;
   float safeY = loginY+loginHeight*0.2;
   
-  String loginTitle = "Enter Login Details: ";
+  String loginTitle = "System Locked";
   String userName = "Username: ";
-  String password = "Password: ";
+  String password = "Password:  ";
   
   println("box opacity = " + boxOpacity + "\t" +"text opacity = " + textOpacity);
   

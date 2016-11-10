@@ -49,6 +49,10 @@ class button
      {
       this.value = 1; 
      }
+     else
+     {
+      this.value = 0; 
+     }
    }
  }
  
