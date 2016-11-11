@@ -4,7 +4,7 @@
  */
 ArrayList<button> menu = new ArrayList<button>();
 
-String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Planet Data","Unassigned"};
+String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Planet Data","Lock System"};
 int windowState = 0;
 int boxOp = 150;
 int textOp = 255;
@@ -134,6 +134,7 @@ void drawMainWindow()
  {
   case 0://locked
   {
+    
     drawDots(x1, y1, windowWidth, windowHeight);
     drawLogin(boxOp,textOp);
     break;
@@ -185,6 +186,10 @@ void drawMainWindow()
   {
    String ready = "Ready";
     drawDots(x1, y1, windowWidth, windowHeight);
+    boxOp = 150;
+    textOp = 255;
+    icarus.opacity = 0;
+    check =false;
     
     textSize(70);
     text(ready,(width/2)-(textWidth(ready)/2),height/2);
@@ -217,7 +222,7 @@ void drawMainWindow()
   case 7://fifth menu item
   {
     drawDots(x1, y1, windowWidth, windowHeight);
-    text("in fifth option",width/2,height/2);
+    windowState = 0;
     break;
   }
   default://no window state selected
@@ -226,8 +231,6 @@ void drawMainWindow()
    text("Error 404 : Page not found",width/2,height/2); 
   }
  }
- 
-    
 }
 
 void drawLogin(int boxOpacity,int textOpacity)
@@ -242,7 +245,7 @@ void drawLogin(int boxOpacity,int textOpacity)
   
   String loginTitle = "System Locked";
   String userName = "Username: ";
-  String password = "Password:  ";
+  String password = "Password: ";
   
   //println("box opacity = " + boxOpacity + "\t" +"text opacity = " + textOpacity);
   
