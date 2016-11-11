@@ -4,13 +4,15 @@
  */
 ArrayList<button> menu = new ArrayList<button>();
 
-String[] buttonNames = {"Star Map","Solar Sytem Map","Ship Status","Planet Data","Unassigned"};
+String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Planet Data","Unassigned"};
 int windowState = 0;
 int boxOp = 150;
 int textOp = 255;
 int logoOpacity = 0;
 Logo icarus;
 boolean check = false;
+
+PFont spaceAge;
 
 PImage bg;
 
@@ -25,7 +27,8 @@ void setup()
    menu.add(pos);
   }
  
-  
+  spaceAge = createFont("space_age.ttf",32);
+  textFont(spaceAge);
   bg = loadImage("background.tif");
   icarus = new Logo(logoOpacity,0,0,"icarus.png");
   //icarus = new Logo();
@@ -137,6 +140,8 @@ void drawMainWindow()
   }
   case 1://transitioning
   {
+    String initial = "Initializing Please Wait";
+    text(initial,x1+(windowWidth/2)-(textWidth(initial)/2),(y1+windowHeight)*0.85);
     if(boxOp != 0)
     {
       boxOp-=2;
