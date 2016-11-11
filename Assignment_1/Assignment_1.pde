@@ -187,31 +187,37 @@ void drawMainWindow()
   }
   case 3://first menu item
   {
+    drawDots(x1, y1, windowWidth, windowHeight);
     text("In first option",width/2,height/2);
     break;
   }
   case 4://second menu item
   {
+    drawDots(x1, y1, windowWidth, windowHeight);
     text("in second option",width/2,height/2);
     break;
   }
   case 5://third menu item
   {
+    drawDots(x1, y1, windowWidth, windowHeight);
     text("in third option",width/2,height/2);
     break;
   }
   case 6://fourth menu item
   {
+    drawDots(x1, y1, windowWidth, windowHeight);
     text("in fourth option",width/2,height/2);
     break;
   }
   case 7://fifth menu item
   {
+    drawDots(x1, y1, windowWidth, windowHeight);
     text("in fifth option",width/2,height/2);
     break;
   }
   default://no window state selected
   {
+    drawDots(x1, y1, windowWidth, windowHeight);
    text("Error 404 : Page not found",width/2,height/2); 
   }
  }
@@ -269,16 +275,13 @@ void drawLogin(int boxOpacity,int textOpacity)
   text("*************",safeX+textWidth(password)+5,(safeY*1.17));
   
   //draw submit button
-  submitButton.drawButton(safeX,safeY*1.25,loginWidth/3,loginHeight/8,boxOpacity,textOpacity);
+  submitButton.drawButton(safeX+(loginWidth*.15),safeY*1.25,loginWidth/2,loginHeight/6,boxOpacity,textOpacity);
   
   //if clicked change window state
   if(submitButton.value == 1)
   {
     windowState = 1;
   }
-    
-  //draw override button  
-  
 }
 
 void drawDots(float x1, float y1, float windowWidth, float windowHeight)
