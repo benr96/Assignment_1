@@ -3,6 +3,7 @@
   Description: Assignment for Object Oriented Programming DT228
  */
  
+ 
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();
 String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Planet Data","Lock System"};
@@ -21,16 +22,21 @@ float y2;
  
 float windowWidth;
 float windowHeight;
-
-//STAR MAP GRID VARIABLES
 float halfway;
 float border = 100;
+float rightSplit;
+float leftSplit;
 
 //PLOT STAR VARIABLES
 float starX1;
 float starX2;
 float starY1;
 float starY2;
+
+//SELECTED STARS VARIABLES
+int selection1 = 0;
+int selection2 = 0;
+float Dist = 0;
 
 //LOGIN WINDOW VARIABLES
 int boxOp = 150;
@@ -81,8 +87,10 @@ void setup()
   windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
   windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
   
-  //STAR MAP GRID VARIABLES
+  //useful variables
   halfway = x1+(windowWidth/2);
+  rightSplit = (halfway+(halfway/2)-border/2);
+  
   
   //PLOT STAR VARIABLES
   starX1 = x1+border;
@@ -241,11 +249,16 @@ void drawMainWindow()
     break;
   }
   case 3://first menu item
-  {
-    line(x1+(windowWidth/2),y1,x1+(windowWidth/2),y1+windowHeight);
+  {  
+    //line down middle
+    line(halfway,y1,halfway,y1+windowHeight);
+    
+    //line down right middle
+    line(rightSplit,y1,rightSplit,y2);
    
     drawGrid(x1,y1,windowWidth,windowHeight);
     plotStars();
+    drawLine();
     starInfo();
     
     break;
@@ -431,35 +444,116 @@ void plotStars()
 
 void starInfo()
 {
-  Star star1 = null;
-  Star star2 = null;
-  for(int i=0;i<stars.size();i++)
-  {
-    stars.get(i).isSelected();
-   
-    //if current star is selected and both star1 and star2 are not occupied 
-    if(stars.get(i).selected == true && star1 == null && star2 == null)
-    {
-      //assign current star to star1
-      star1 = stars.get(i);
-      line(star1.x,star1.y,mouseX,mouseY);
-    }
-    //if current star is select and star1 is occupied and star2 is not
-    else if(stars.get(i).selected == true && star1 != null && star2 == null)
-    {
-      //assign current star to star2
-      star2 = stars.get(i); 
-      line(star1.x,star1.y,star2.x,star2.y);
-    }
-    //otherwise if star is not selected
-    else
-    {
-        //reset star1 and star2 to null
-        star1 = null;
-        star2 = null;
+  float midpointLeft;
+  float midpointRight;
+  String title1 = "Selection 1:";
+  String title2 = "Selection 2:";
+  String name = "Name: ";
+  String distance = "Distance: ";
+  textSize(25);
+  
+  midpointLeft = ((halfway+rightSplit)/2);
+  midpointRight = ((rightSplit+x2)/2);
     
-    }
+  //LEFT SIDE TITLES
+  text(title1,midpointLeft-(textWidth(title1)/2),y1+50);
+  text(name,halfway+20,y1+100);
+  text(distance, halfway+20,y1+130);
+  
+  //RIGHT SIDE TITLES
+  text(title2,((midpointRight)-(textWidth(title2)/2)),y1+50);
+  text(name,rightSplit+20,y1+100);
+  text(distance,rightSplit+20,y1+130);
+  
+  if(selection1 != 0 && selection2 == 0)
+  {
+    Star star1 = stars.get(selection1);
+
+    //Star 1 info
+    text(star1.DisplayName,halfway+20+textWidth(name),y1+100);
+    text((String.format("%.3f",Dist)),halfway+20+textWidth(distance),y1+130);
+    text("Parsecs",halfway+90+textWidth(distance),y1+130);  
+  }
+  else if(selection1 != 0 && selection2 != 0)
+  {
+    Star star1 = stars.get(selection1);
+    Star star2 = stars.get(selection2);
+    
+     //Star 1 info
+    text(star1.DisplayName,halfway+20+textWidth(name),y1+100);
+    text((String.format("%.3f",Dist)),halfway+20+textWidth(distance),y1+130);
+    text("Parsecs",halfway+90+textWidth(distance),y1+130);  
+    
+    //Star 2 info
+    text(star2.DisplayName,rightSplit+20+textWidth(name),y1+100);
+    text((String.format("%.3f",Dist)),rightSplit+20+textWidth(distance),y1+130);
+    text("Parsecs",rightSplit+90+textWidth(distance),y1+130);  
+  }
+}
+
+void drawLine()
+{
+  if(selection1 != 0 && selection2 == 0)
+  {
+   Star star1 = stars.get(selection1);
+   line(star1.x,star1.y,mouseX,mouseY);
+   
+   float mouseXmap = map(mouseX,starX1,starX2,-5,5);
+   float mouseYmap = map(mouseY,starY1,starY2,-5,5);
+   
+   
+   Dist = sqrt(((mouseXmap-star1.Xg)*(mouseXmap-star1.Xg)) +((mouseYmap-star1.Yg)*(mouseYmap-star1.Yg)));
+   
+  }
+  //if both selected
+  else if(selection1 != 0 && selection2 != 0)
+  {
+    Star star1 = stars.get(selection1);
+    Star star2 = stars.get(selection2);
+    line(star1.x,star1.y,star2.x,star2.y);
+    
+    Dist = sqrt(((star2.Xg-star1.Xg)*(star2.Xg-star1.Xg)) +((star2.Yg-star1.Yg)*(star2.Yg-star1.Yg)));
   }
   
-  
 }
+
+void mousePressed()
+{
+  for(int i=0; i<stars.size();i++)
+  {    
+    stars.get(i).isSelected();
+    
+    //if current star is selected
+    if(stars.get(i).selected == true)
+    {  
+        //if first selection not filled
+        if(selection1 == 0)
+        {
+          //first select = current selection
+          println("1");
+          selection1 = i; 
+        }
+        //if second selection not fill and first selection fill
+        else if(selection2 == 0 && selection1 !=0)
+        {
+          //second selection = current selection
+          selection2 = i;
+          println("2");
+        }
+        //if 3rd selection made make selection 1 be current selection and unselect selection 2
+        else if(selection1 !=0 && selection2 !=0)
+        {
+          println("3");
+         selection1 = i;
+         selection2 = 0;
+        } 
+        else
+        {
+          println("4");
+          selection1 =0;
+          selection2 =0;
+        }
+          
+      }
+    }
+  }

@@ -53,6 +53,10 @@ class Star
    {
     this.selected = true;
    }
+   else
+   {
+    this.selected = false; 
+   }
   }
  }
  
