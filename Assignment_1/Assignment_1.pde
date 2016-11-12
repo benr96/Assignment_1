@@ -3,6 +3,8 @@
   Description: Assignment for Object Oriented Programming DT228
  */
 ArrayList<button> menu = new ArrayList<button>();
+ArrayList<Star> stars = new ArrayList<Star>();
+Table t;
 
 String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Planet Data","Lock System"};
 int windowState = 0;
@@ -13,13 +15,14 @@ Logo icarus;
 boolean check = false;
 
 PFont spaceAge;
+PFont arcon;
 
 PImage bg;
 
 void setup()
 {
   //size(800,800,P3D);
-  fullScreen(P3D,1);
+  fullScreen(P3D,2);
   
   for(int i=0 ;i<5;i++)
   {
@@ -27,11 +30,17 @@ void setup()
    menu.add(pos);
   }
  
-  spaceAge = createFont("space_age.ttf",32);
+  spaceAge = createFont("font1.ttf",50);
+  arcon = createFont("font5.otf",50);
+  
+  
   textFont(spaceAge);
   bg = loadImage("background.tif");
   icarus = new Logo(logoOpacity,0,0,"icarus.png");
   //icarus = new Logo();
+  
+  loadData();
+  printStars();
 
 }
 
@@ -130,6 +139,7 @@ void drawMainWindow()
    }
   }
  }
+ windowState =3;
  switch(windowState)
  {
   case 0://locked
@@ -197,8 +207,10 @@ void drawMainWindow()
   }
   case 3://first menu item
   {
-    drawDots(x1, y1, windowWidth, windowHeight);
-    text("In first option",width/2,height/2);
+    line(x1+(windowWidth/2),y1,x1+(windowWidth/2),y1+windowHeight);
+    
+    drawGrid(x1,y1,windowWidth,windowHeight);
+    
     break;
   }
   case 4://second menu item
@@ -302,4 +314,71 @@ void drawDots(float x1, float y1, float windowWidth, float windowHeight)
       }
     }
 }
+
+void drawGrid(float x1, float y1, float windowWidth, float windowHeight)
+{
+ 
+  float halfway = x1+(windowWidth/2);
+  float border = 100;
+  float lineGapX = ((windowWidth/2)-(border*2))/10;
+  float lineGapY =((windowHeight)-border*2)/10;
+  int i = -5;
   
+  strokeWeight(1);
+  textSize(20);
+  for(float x = x1+border; x <= halfway-(border-1); x+=lineGapX)
+  {
+   line(x,y1+border,x,y1+windowHeight-border); 
+   text(i++,x,y1+border-20);
+  }
+  
+  i = -5;
+  for(float y = y1+border; y <= y1+windowHeight-border;y+=lineGapY)
+  {
+   line(x1+border,y,halfway-border,y); 
+   text(i++,x1+border-30,y);
+  }
+  
+  plotStars(x1+border,halfway-border,y1+border,y1+windowHeight-border);
+}
+
+void loadData()
+{
+ t = loadTable("HabHYG15ly.csv","header");
+ 
+ for(TableRow row:t.rows())
+ {
+  Star s = new Star(row);
+  stars.add(s);
+ }
+}
+  
+void printStars()
+{
+ for(int i=0;i<stars.size();i++)
+ {
+  println(stars.get(i)); 
+ }
+}
+void plotStars(float x1,float x2,float y1, float y2)
+{
+     for(int i=0;i<stars.size();i++)
+     {
+      float starSize = stars.get(i).AbsMag;
+      String starName = stars.get(i).DisplayName;
+      
+      float x = map(stars.get(i).Xg,-5,5,x1,x2);
+      float y = map(stars.get(i).Yg,-5,5,y1,y2);
+      
+      stroke(0,255,0);
+      line(x-5,y,x+5,y);
+      line(x,y-5,x,y+5);
+      
+      noFill();
+      stroke(255,0,0);
+      ellipse(x,y,starSize,starSize);
+      
+      textFont(arcon,15);
+      text(starName,x+10,y);
+     }
+}
