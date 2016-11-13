@@ -9,9 +9,9 @@ class Star
  float Yg;
  float Zg;
  float AbsMag;
- float Age;
+ String Age;
  String Constellation;
- float SolarRadius;
+ String SolarRadius;
  
  //other fields
  float x;
@@ -53,9 +53,9 @@ class Star
   this.Yg = row.getFloat("Yg");
   this.Zg = row.getFloat("Zg");
   this.AbsMag = row.getFloat("AbsMag");
-  this.Age = row.getFloat("Age");
+  this.Age = row.getString("Age");
   this.Constellation = row.getString("Constellation");
-  this.SolarRadius = row.getFloat("SolarRadius");
+  this.SolarRadius = row.getString("SolarRadius");
   
   this.x = map(Xg,-5,5,starX1,starX2);
   this.y = map(Yg,-5,5,starY1,starY2);

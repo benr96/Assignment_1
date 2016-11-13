@@ -472,6 +472,11 @@ void starInfo()
   String currMag = "Absolute Magnitude: ";
   String coords = "Coordinates: ";
   String hab = "Habitable: ";
+  String gliese = "Gliese Name: ";
+  String spectrum = "Spectral Class: ";
+  String age = "Age: ";
+  String constellation = "Constellation: ";
+  String sRadius = "Solar Radius: ";
   textSize(25);
   
   midpointLeft = ((halfway+rightSplit)/2);
@@ -485,6 +490,12 @@ void starInfo()
   text(currMag,halfway+20,y1+160);
   text(coords,halfway+20,y1+190);
   text(hab,halfway+20,y1+220);
+  text(gliese,halfway+20,y1+250);
+  text(spectrum,halfway+20,y1+280);
+  text(age,halfway+20,y1+310);
+  text(constellation,halfway+20,y1+340);
+  text(sRadius,halfway+20,y1+370);
+  
   
   //RIGHT SIDE TITLES
   text(title2,((midpointRight)-(textWidth(title2)/2)),y1+50);
@@ -493,6 +504,11 @@ void starInfo()
   text(currMag,rightSplit+20,y1+160);
   text(coords,rightSplit+20,y1+190);
   text(hab,rightSplit+20,y1+220);
+  text(gliese,rightSplit+20,y1+250);
+  text(spectrum,rightSplit+20,y1+280);
+  text(age,rightSplit+20,y1+310);
+  text(constellation,rightSplit+20,y1+340);
+  text(sRadius,rightSplit+20,y1+370);
   
   //BELOW GRID CURRENT SYSTEM DETAILS
   text(current,x1+border,y1+windowHeight-(border*0.75));
@@ -523,6 +539,11 @@ void starInfo()
       +(star1.Zg) + ")"
       ,(halfway+20+textWidth(coords)),(y1+190));
     text(star1.hab,(halfway+20+textWidth(hab)),y1+220);
+    text(star1.Gliese,(halfway+20+textWidth(gliese)),y1+250);
+    text(star1.Spectrum,(halfway+20+textWidth(spectrum)),y1+280);
+    text(star1.Age,(halfway+20+textWidth(age)),y1+310);
+    text(star1.Constellation,(halfway+20+textWidth(constellation)),y1+340);
+    text(star1.SolarRadius,(halfway+20+textWidth(sRadius)),y1+370);
     
   }
   else if(selection1 != -1 && selection2 != -1)
@@ -542,6 +563,11 @@ void starInfo()
       +(star1.Zg) + ")"
       ,(halfway+20+textWidth(coords)),(y1+190));
     text(star1.hab,(halfway+20+textWidth(hab)),y1+220);
+    text(star1.Gliese,(halfway+20+textWidth(gliese)),y1+250);
+    text(star1.Spectrum,(halfway+20+textWidth(spectrum)),y1+280);
+    text(star1.Age,(halfway+20+textWidth(age)),y1+310);
+    text(star1.Constellation,(halfway+20+textWidth(constellation)),y1+340);
+    text(star1.SolarRadius,(halfway+20+textWidth(sRadius)),y1+370);
     
     //Star 2 info
     fill(0,255,0);
@@ -555,6 +581,11 @@ void starInfo()
       +(star2.Zg) + ")"
       ,(rightSplit+20+textWidth(coords)),(y1+190));
     text(star2.hab,(rightSplit+20+textWidth(hab)),y1+220);
+    text(star2.Gliese,(rightSplit+20+textWidth(gliese)),y1+250);
+    text(star2.Spectrum,(rightSplit+20+textWidth(spectrum)),y1+280);
+    text(star2.Age,(rightSplit+20+textWidth(age)),y1+310);
+    text(star2.Constellation,(rightSplit+20+textWidth(constellation)),y1+340);
+    text(star2.SolarRadius,(rightSplit+20+textWidth(sRadius)),y1+370);
   }
 }
 

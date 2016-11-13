@@ -1,39 +1,39 @@
 Hab?,Display Name,Gliese,Spectral Class,Xg,Yg,Zg,AbsMag,Age,Constellation,SolarRadius
-1,Sol,,G2V,0,0,0,4.85,4.6,N/A,1
-,Rigel Kentaurus B,Gl 559 B,K1V,1,-0.9,0,5.69237068,4.4,Centaurus,0.865
-,Barnard's Star,Gl 699,sdM4,1.5,0.9,0.4,13.24790128,10,Ophiuchus,0.196
-,Wolf 359,Gl 406,M6,-0.6,-1.2,2,16.55743932,0.1,Leo,0.16
-,Lalande 21185,Gl 411,M2V,-1.6,-0.1,2.3,10.44864499,5,Ursa Major,0.393
-,Sirius,Gl 244,A0m...,-1.8,-1.9,-0.4,1.464398907,0.225,Canis Major,1.711
-,UV Ceti A,Gl 65 A,dM5.5e,-1.1,0.5,-2.5,15.47291438,,Cetus,0.14
-,Ross 154,Gl 729,M3.5Ve,2.9,0.6,-0.5,13.09479628,1,Sagittarius,0.24
-,18 Epsilon Eridani,Gl 144,K2V,-2.1,-0.6,-2.4,6.192055687,0.4,Eridanus,0.735
-,Ross 248,Gl 905,dM6 e,-1,2.6,-0.9,14.78568497,,Andromeda,0.16
-1,Ross 128,Gl 447,M4.5V,0,-1.7,2.9,13.50256408,,Virgo,0.21
-,Lacaille 9352,Gl 887,M2/M3V,1.3,0.1,-3,9.7536535,,Piscis Austrinus,0.459
-,EZ Aquarii,Gl 866,M5 e,1.3,1.4,-2.8,15.00395131,,Aquarius,
-,Procyon,Gl 280,F5IV-V,-2.8,-1.7,0.8,2.661298621,1.87,Canis Minor,2.048
-,Struve 2398,Gl 725 B,K5,0,3.2,1.4,11.9802587,3,Draco,0.351
-,61 Cygni A,Gl 820,K5V,0.5,3.4,-0.4,7.500392855,6.1,Cygnus,0.665
-,GX Andromedae,Gl 15 A,M1V,-1.5,3,-1.1,10.31788307,,Andromeda,0.3863
-,Epsilon Indi,Gl 845,K5V,2.2,-1.3,-2.7,6.892656352,1.3,Indus,0.732
-1,Luyten's Star,Gl 273,M5,-3.2,-2,0.7,11.95192438,,Canis Minor,0.35
-,Kapteyn's Star,Gl 191,M0V,-1.1,-3,-2.3,10.88491382,11,Pictor,0.291
+1,Sol,N/A,G2V,0,0,0,4.85,4.6,N/A,1
+0,Rigel Kentaurus B,Gl 559 B,K1V,1,-0.9,0,5.69237068,4.4,Centaurus,0.865
+0,Barnard's Star,Gl 699,sdM4,1.5,0.9,0.4,13.24790128,10,Ophiuchus,0.196
+0,Wolf 359,Gl 406,M6,-0.6,-1.2,2,16.55743932,0.1,Leo,0.16
+0,Lalande 21185,Gl 411,M2V,-1.6,-0.1,2.3,10.44864499,5,Ursa Major,0.393
+0,Sirius,Gl 244,A0m...,-1.8,-1.9,-0.4,1.464398907,0.225,Canis Major,1.711
+0,UV Ceti A,Gl 65 A,dM5.5e,-1.1,0.5,-2.5,15.47291438,N/A,Cetus,0.14
+0,Ross 154,Gl 729,M3.5Ve,2.9,0.6,-0.5,13.09479628,1,Sagittarius,0.24
+0,18 Epsilon Eridani,Gl 144,K2V,-2.1,-0.6,-2.4,6.192055687,0.4,Eridanus,0.735
+0,Ross 248,Gl 905,dM6 e,-1,2.6,-0.9,14.78568497,N/A,Andromeda,0.16
+1,Ross 128,Gl 447,M4.5V,0,-1.7,2.9,13.50256408,N/A,Virgo,0.21
+0,Lacaille 9352,Gl 887,M2/M3V,1.3,0.1,-3,9.7536535,N/A,Piscis Austrinus,0.459
+0,EZ Aquarii,Gl 866,M5 e,1.3,1.4,-2.8,15.00395131,N/A,Aquarius,N/A
+0,Procyon,Gl 280,F5IV-V,-2.8,-1.7,0.8,2.661298621,1.87,Canis Minor,2.048
+0,Struve 2398,Gl 725 B,K5,0,3.2,1.4,11.9802587,3,Draco,0.351
+0,61 Cygni A,Gl 820,K5V,0.5,3.4,-0.4,7.500392855,6.1,Cygnus,0.665
+0,GX Andromedae,Gl 15 A,M1V,-1.5,3,-1.1,10.31788307,N/A,Andromeda,0.3863
+0,Epsilon Indi,Gl 845,K5V,2.2,-1.3,-2.7,6.892656352,1.3,Indus,0.732
+1,Luyten's Star,Gl 273,M5,-3.2,-2,0.7,11.95192438,N/A,Canis Minor,0.35
+0,Kapteyn's Star,Gl 191,M0V,-1.1,-3,-2.3,10.88491382,11,Pictor,0.291
 1,Lacaille 8760,Gl 825,M1/M2V,2.8,0.2,-2.8,8.688775957,0.4,Microscopium,0.51
-,DO Cephei,Gl 860 B,M6 V,-1,3.9,0,13.28552681,,Cepheus,0.35
-,V577 Monocerotis A,Gl 234 A,M4.5Ve,-3.4,-2.2,-0.4,13.05704817,,Monoceros,
-,GJ 1061,GJ 1061,M4.5,-0.8,-2.5,-3.4,14.86677961,,Horologium,
-,FL Virginis A,Gl 473,dM5.5eJ,0.4,-1.3,4.1,14.86931108,,Virgo,
-,Gl 563.2B,Gl 563.2B,M,3.3,-1.6,2.1,13.91755585,,,
-1,BD-12o4523,Gl 628,M4,3.9,0.5,1.7,11.93080683,,Ophiuchus,0.26
-,Gl 1,Gl 1,M2V,1,-0.3,-4.2,10.34230436,0.01,Sculptor,0.46
-,Van Maanen's Star,Gl 35,DG,-1.3,2,-3.7,14.15965094,3.13,Pisces,0.011
-,Hip 15689,,,-2.5,-0.9,-3.5,13.94442971,,,
+0,DO Cephei,Gl 860 B,M6 V,-1,3.9,0,13.28552681,N/A,Cepheus,0.35
+0,V577 Monocerotis A,Gl 234 A,M4.5Ve,-3.4,-2.2,-0.4,13.05704817,N/A,Monoceros,N/A
+0,GJ 1061,GJ 1061,M4.5,-0.8,-2.5,-3.4,14.86677961,N/A,Horologium,N/A
+0,FL Virginis A,Gl 473,dM5.5eJ,0.4,-1.3,4.1,14.86931108,N/A,Virgo,N/A
+0,Gl 563.2B,Gl 563.2B,M,3.3,-1.6,2.1,13.91755585,N/A,N/A,N/A
+1,BD-12o4523,Gl 628,M4,3.9,0.5,1.7,11.93080683,N/A,Ophiuchus,0.26
+0,Gl 1,Gl 1,M2V,1,-0.3,-4.2,10.34230436,0.01,Sculptor,0.46
+0,Van Maanen's Star,Gl 35,DG,-1.3,2,-3.7,14.15965094,3.13,Pisces,0.011
+0,Hip 15689,N/A,N/A,-2.5,-0.9,-3.5,13.94442971,N/A,N/A,N/A
 1,Gl 674,Gl 674,K5,4.3,-1.3,-0.5,11.0863535,0.55,Ara,0.41
-,Gl 687,Gl 687,M3.5Vvar,-0.6,3.6,2.4,10.90048702,,Draco,0.492
-,Gl 83.1,Gl 83.1,dM8 e,-2.6,1.6,-3.2,14.02930041,,Aries,
-,NN 3522,NN 3522,k,-2.9,-2.9,2.4,12.64124009,,,
-,Innes' Star,NN 3618,m,1.4,-4.3,-0.2,15.65957593,,Carina,
-,NN 3622,NN 3622,M6.5,-0.5,-3.4,3,17.32196137,,,
-,Gl 440,Gl 440,DC:,2,-4.1,-0.2,13.17628628,1.44,Musca,
-,Hip 114110,,,1.2,1.7,-4.1,13.91749009,,,
+0,Gl 687,Gl 687,M3.5Vvar,-0.6,3.6,2.4,10.90048702,N/A,Draco,0.492
+0,Gl 83.1,Gl 83.1,dM8 e,-2.6,1.6,-3.2,14.02930041,N/A,Aries,N/A
+0,NN 3522,NN 3522,k,-2.9,-2.9,2.4,12.64124009,N/A,N/A,N/A
+0,Innes' Star,NN 3618,m,1.4,-4.3,-0.2,15.65957593,N/A,Carina,N/A
+0,NN 3622,NN 3622,M6.5,-0.5,-3.4,3,17.32196137,N/A,N/A,N/A
+0,Gl 440,Gl 440,DC:,2,-4.1,-0.2,13.17628628,1.44,Musca,N/A
+0,Hip 114110,N/A,N/A,1.2,1.7,-4.1,13.91749009,N/A,N/A,N/A
