@@ -1,7 +1,7 @@
 class Star
 {
  //fields
- float hab;
+ String hab;
  String DisplayName;
  float Distance;
  float Xg;
@@ -16,8 +16,8 @@ class Star
  //default constructor
  Star()
  {
-  this.hab = 0;
-  this.DisplayName ="Default";
+  this.hab = "Unknown";
+  this.DisplayName ="Unknown";
   this.Distance = 0;
   this.Xg = 0;
   this.Yg = 0;
@@ -32,7 +32,15 @@ class Star
  //parameterised constructor
  Star(TableRow row,float starX1,float starX2, float starY1, float starY2)
  {
-  this.hab = row.getFloat("Hab?");
+  if(row.getInt("Hab?") == 1)
+  {
+    this.hab = "Yes";
+  }
+  else
+  {
+    this.hab = "No"; 
+  }
+  
   this.DisplayName = row.getString("Display Name");
   this.Distance = row.getFloat("Distance");
   this.Xg = row.getFloat("Xg");

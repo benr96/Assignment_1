@@ -11,6 +11,9 @@ String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Planet Data","Lock
 
 //STAR VARIABLES
 ArrayList<Star> stars = new ArrayList<Star>();
+Star currentStar = null;
+float currentDist1;
+float currentDist2;
 Table t;
 
 //MAIN WINDOW VARIABLE
@@ -34,8 +37,8 @@ float starY1;
 float starY2;
 
 //SELECTED STARS VARIABLES
-int selection1 = 0;
-int selection2 = 0;
+int selection1 = -1;
+int selection2 = -1;
 float Dist = 0;
 
 //LOGIN WINDOW VARIABLES
@@ -59,6 +62,7 @@ PImage bg;
 void setup()
 {
   fullScreen(P3D,2);
+  smooth(8);
   
   for(int i=0 ;i<5;i++)
   {
@@ -250,6 +254,15 @@ void drawMainWindow()
   }
   case 3://first menu item
   {  
+    float resetWidth = windowWidth/10;
+    button reset = new button("Reset",0);
+    reset.drawButton(halfway-resetWidth-border,y1+windowHeight-(border*0.75),resetWidth,windowHeight/15,150,255);
+    
+    if(reset.value == 1)
+    {
+     selection1 = -1;
+     selection2 = -1;
+    }
     //line down middle
     line(halfway,y1,halfway,y1+windowHeight);
     
@@ -409,7 +422,7 @@ void drawGrid(float x1, float y1, float windowWidth, float windowHeight)
 void loadData()
 {
   //load table from file containing star data
-  t = loadTable("HabHYG15ly.csv","header");
+  t = loadTable("starData.csv","header");
  
   //create object for each star and store them in and arraylist
   for(TableRow row:t.rows())
@@ -424,20 +437,24 @@ void plotStars()
 {
   for(int i=0;i<stars.size();i++)
   {
+    if(stars.get(i).DisplayName.equals("Sol"))
+    {
+     fill(255,0,0); 
+     currentStar = stars.get(i);
+    }
+    else
+    {
+     fill(30,144,255); 
+    }
+    
     String starName = stars.get(i).DisplayName;
-      
-    //drawing greed cross at each stars location
-    stroke(0,255,0);
-    line(stars.get(i).x-5,stars.get(i).y,stars.get(i).x+5,stars.get(i).y);
-    line(stars.get(i).x,stars.get(i).y-5,stars.get(i).x,stars.get(i).y+5);
-      
+   
     //drawing red circle around each stars location the size of the star
-    noFill();
-    stroke(255,0,0);
+    noStroke();
     ellipse(stars.get(i).x,stars.get(i).y,stars.get(i).AbsMag,stars.get(i).AbsMag);
       
     //displaying the stars name to the right of each star
-   // fill(255);
+    fill(255);
     text(starName,stars.get(i).x+10,stars.get(i).y);
   }
 }
@@ -450,69 +467,123 @@ void starInfo()
   String title2 = "Selection 2:";
   String name = "Name: ";
   String distance = "Distance: ";
+  String current  = "Current System : ";
+  String currMag = "Absolute Magnitude: ";
+  String coords = "Coordinates: ";
+  String hab = "Habitable: ";
   textSize(25);
   
   midpointLeft = ((halfway+rightSplit)/2);
   midpointRight = ((rightSplit+x2)/2);
     
+  fill(255);
   //LEFT SIDE TITLES
   text(title1,midpointLeft-(textWidth(title1)/2),y1+50);
   text(name,halfway+20,y1+100);
   text(distance, halfway+20,y1+130);
+  text(currMag,halfway+20,y1+160);
+  text(coords,halfway+20,y1+190);
+  text(hab,halfway+20,y1+220);
   
   //RIGHT SIDE TITLES
   text(title2,((midpointRight)-(textWidth(title2)/2)),y1+50);
   text(name,rightSplit+20,y1+100);
   text(distance,rightSplit+20,y1+130);
+  text(currMag,rightSplit+20,y1+160);
+  text(coords,rightSplit+20,y1+190);
+  text(hab,rightSplit+20,y1+220);
   
-  if(selection1 != 0 && selection2 == 0)
+  //BELOW GRID CURRENT SYSTEM DETAILS
+  text(current,x1+border,y1+windowHeight-(border*0.75));
+  text(currentStar.DisplayName,x1+border+textWidth(current),y1+windowHeight-(border*0.75));
+  textSize(20);
+  text(hab + currentStar.hab,(x1+border),(y1+windowHeight-(border*0.50)));
+  text(coords + "("
+      +(currentStar.Xg) + ", "
+      +(currentStar.Yg) + ", "
+      +(currentStar.Zg) + ")"
+      ,(x1+border),(y1+windowHeight-(border*0.25)));
+  textSize(25);
+
+  
+  if(selection1 != -1 && selection2 == -1)
   {
     Star star1 = stars.get(selection1);
 
     //Star 1 info
+    fill(255,0,0);
     text(star1.DisplayName,halfway+20+textWidth(name),y1+100);
-    text((String.format("%.3f",Dist)),halfway+20+textWidth(distance),y1+130);
-    text("Parsecs",halfway+90+textWidth(distance),y1+130);  
+    text((String.format("%.3f",currentDist1)),halfway+20+textWidth(distance),y1+130);
+    text("Parsecs",halfway+95+textWidth(distance),y1+130);
+    text(star1.AbsMag,halfway+20+textWidth(currMag),y1+160);
+    text("("
+      +(star1.Xg) + ", "
+      +(star1.Yg) + ", "
+      +(star1.Zg) + ")"
+      ,(halfway+20+textWidth(coords)),(y1+190));
+    text(star1.hab,(halfway+20+textWidth(hab)),y1+220);
+    
   }
-  else if(selection1 != 0 && selection2 != 0)
+  else if(selection1 != -1 && selection2 != -1)
   {
     Star star1 = stars.get(selection1);
     Star star2 = stars.get(selection2);
     
      //Star 1 info
+     fill(255,0,0);
     text(star1.DisplayName,halfway+20+textWidth(name),y1+100);
-    text((String.format("%.3f",Dist)),halfway+20+textWidth(distance),y1+130);
-    text("Parsecs",halfway+90+textWidth(distance),y1+130);  
+    text((String.format("%.3f",currentDist1)),halfway+20+textWidth(distance),y1+130);
+    text("Parsecs",halfway+95+textWidth(distance),y1+130);  
+    text(star1.AbsMag,halfway+20+textWidth(currMag),y1+160);
+    text("("
+      +(star1.Xg) + ", "
+      +(star1.Yg) + ", "
+      +(star1.Zg) + ")"
+      ,(halfway+20+textWidth(coords)),(y1+190));
+    text(star1.hab,(halfway+20+textWidth(hab)),y1+220);
     
     //Star 2 info
+    fill(0,255,0);
     text(star2.DisplayName,rightSplit+20+textWidth(name),y1+100);
-    text((String.format("%.3f",Dist)),rightSplit+20+textWidth(distance),y1+130);
-    text("Parsecs",rightSplit+90+textWidth(distance),y1+130);  
+    text((String.format("%.3f",currentDist2)),rightSplit+20+textWidth(distance),y1+130);
+    text("Parsecs",rightSplit+90+textWidth(distance),y1+130);      
+    text(star2.AbsMag,rightSplit+20+textWidth(currMag),y1+160);
+    text("("
+      +(star2.Xg) + ", "
+      +(star2.Yg) + ", "
+      +(star2.Zg) + ")"
+      ,(rightSplit+20+textWidth(coords)),(y1+190));
+    text(star2.hab,(rightSplit+20+textWidth(hab)),y1+220);
   }
 }
 
 void drawLine()
 {
-  if(selection1 != 0 && selection2 == 0)
+  stroke(255);
+  textSize(20);
+  if(selection1 != -1 && selection2 == -1)
   {
-   Star star1 = stars.get(selection1);
-   line(star1.x,star1.y,mouseX,mouseY);
+    Star star1 = stars.get(selection1);
    
-   float mouseXmap = map(mouseX,starX1,starX2,-5,5);
-   float mouseYmap = map(mouseY,starY1,starY2,-5,5);
+    fill(255,0,0);
+    text("1",star1.x-star1.radius,star1.y-star1.radius);
    
-   
-   Dist = sqrt(((mouseXmap-star1.Xg)*(mouseXmap-star1.Xg)) +((mouseYmap-star1.Yg)*(mouseYmap-star1.Yg)));
-   
+    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
   }
   //if both selected
-  else if(selection1 != 0 && selection2 != 0)
+  else if(selection1 != -1 && selection2 != -1)
   {
     Star star1 = stars.get(selection1);
     Star star2 = stars.get(selection2);
     line(star1.x,star1.y,star2.x,star2.y);
     
-    Dist = sqrt(((star2.Xg-star1.Xg)*(star2.Xg-star1.Xg)) +((star2.Yg-star1.Yg)*(star2.Yg-star1.Yg)));
+    fill(255,0,0);
+    text("1",star1.x-star1.radius,star1.y-star1.radius);
+    fill(0,255,0);
+    text("2",star2.x-star2.radius,star2.y-star2.radius);
+    
+    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
+    currentDist2 = sqrt(((currentStar.Xg-star2.Xg)*(currentStar.Xg-star2.Xg)) +((currentStar.Yg-star2.Yg)*(currentStar.Yg-star2.Yg)));
   }
   
 }
@@ -527,32 +598,23 @@ void mousePressed()
     if(stars.get(i).selected == true)
     {  
         //if first selection not filled
-        if(selection1 == 0)
+        if(selection1 == -1)
         {
           //first select = current selection
-          println("1");
           selection1 = i; 
         }
         //if second selection not fill and first selection fill
-        else if(selection2 == 0 && selection1 !=0)
+        else if(selection2 == -1 && selection1 !=-1)
         {
           //second selection = current selection
           selection2 = i;
-          println("2");
         }
         //if 3rd selection made make selection 1 be current selection and unselect selection 2
-        else if(selection1 !=0 && selection2 !=0)
+        else if(selection1 !=-1 && selection2 !=-1)
         {
-          println("3");
          selection1 = i;
-         selection2 = 0;
+         selection2 = -1;
         } 
-        else
-        {
-          println("4");
-          selection1 =0;
-          selection2 =0;
-        }
           
       }
     }
