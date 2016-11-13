@@ -37,9 +37,12 @@ float starY1;
 float starY2;
 
 //SELECTED STARS VARIABLES
+ArrayList<Star> selectedStars = new ArrayList<Star>();
+int selected =-1;
 int selection1 = -1;
 int selection2 = -1;
 float Dist = 0;
+boolean selectionCheck = false;
 
 //LOGIN WINDOW VARIABLES
 int boxOp = 150;
@@ -61,9 +64,9 @@ PImage bg;
 
 void setup()
 {
-  fullScreen(P3D,2);
+  fullScreen(P3D,1);
   smooth(8);
-  
+
   for(int i=0 ;i<5;i++)
   {
    button pos = new button(buttonNames[i],0); 
@@ -261,8 +264,10 @@ void drawMainWindow()
     
     if(reset.value == 1)
     {
-     selection1 = -1;
-     selection2 = -1;
+     
+      selected = -1; 
+      selectedStars.clear();
+    
     }
     //line down middle
     line(halfway,y1,halfway,y1+windowHeight);
@@ -460,6 +465,79 @@ void plotStars()
   }
 }
 
+
+void drawLine()
+{
+  stroke(255);
+  textSize(20);
+  
+
+   if(selected != -1)
+   {
+     selectedStars.add(stars.get(selected));
+     selected = -1;
+   }
+   
+   println(selectedStars.size());
+   if(selectedStars.size() == 1)
+   {
+    line(selectedStars.get(0).x,selectedStars.get(0).y,mouseX,mouseY);
+    text(1,(selectedStars.get(0).x)-(selectedStars.get(0).radius),(selectedStars.get(0).y)-(selectedStars.get(0).radius));
+    
+   }
+   else
+   {
+     for(int i=0;i<selectedStars.size()-1;i++)
+     {
+       float x1 = selectedStars.get(i).x; 
+       float y1 = selectedStars.get(i).y;
+       float x2 = selectedStars.get(i+1).x;
+       float y2 = selectedStars.get(i+1).y;
+       float rad1 = selectedStars.get(i).radius;
+       float rad2 = selectedStars.get(i+1).radius;
+   
+       line(x1,y1,x2,y2);
+       text(i+1,x1-rad1,y1-rad1);
+       text(i+2,x2-rad2,y2-rad2);
+      }
+   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*
+  if(selection1 != -1 && selection2 == -1)
+  {
+    Star star1 = stars.get(selection1);
+   
+    fill(255,0,0);
+    text("1",star1.x-star1.radius,star1.y-star1.radius);
+   
+    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
+  }
+  //if both selected
+  else if(selection1 != -1 && selection2 != -1)
+  {
+    Star star1 = stars.get(selection1);
+    Star star2 = stars.get(selection2);
+    line(star1.x,star1.y,star2.x,star2.y);
+    
+    fill(255,0,0);
+    text("1",star1.x-star1.radius,star1.y-star1.radius);
+    fill(0,255,0);
+    text("2",star2.x-star2.radius,star2.y-star2.radius);
+    
+    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
+    currentDist2 = sqrt(((currentStar.Xg-star2.Xg)*(currentStar.Xg-star2.Xg)) +((currentStar.Yg-star2.Yg)*(currentStar.Yg-star2.Yg)));
+    */
+  }
+
 void starInfo()
 {
   float midpointLeft;
@@ -589,37 +667,6 @@ void starInfo()
   }
 }
 
-void drawLine()
-{
-  stroke(255);
-  textSize(20);
-  if(selection1 != -1 && selection2 == -1)
-  {
-    Star star1 = stars.get(selection1);
-   
-    fill(255,0,0);
-    text("1",star1.x-star1.radius,star1.y-star1.radius);
-   
-    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
-  }
-  //if both selected
-  else if(selection1 != -1 && selection2 != -1)
-  {
-    Star star1 = stars.get(selection1);
-    Star star2 = stars.get(selection2);
-    line(star1.x,star1.y,star2.x,star2.y);
-    
-    fill(255,0,0);
-    text("1",star1.x-star1.radius,star1.y-star1.radius);
-    fill(0,255,0);
-    text("2",star2.x-star2.radius,star2.y-star2.radius);
-    
-    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
-    currentDist2 = sqrt(((currentStar.Xg-star2.Xg)*(currentStar.Xg-star2.Xg)) +((currentStar.Yg-star2.Yg)*(currentStar.Yg-star2.Yg)));
-  }
-  
-}
-
 void mousePressed()
 {
   for(int i=0; i<stars.size();i++)
@@ -629,28 +676,14 @@ void mousePressed()
     //if current star is selected
     if(stars.get(i).selected == true)
     {  
-        //if first selection not filled
-        if(selection1 == -1)
-        {
-          //first select = current selection
-          selection1 = i; 
-        }
-        //if second selection not fill and first selection fill
-        else if(selection2 == -1 && selection1 !=-1)
-        {
-          //second selection = current selection
-          selection2 = i;
-        }
-        //if 3rd selection made make selection 1 be current selection and unselect selection 2
-        else if(selection1 !=-1 && selection2 !=-1)
-        {
-         selection1 = i;
-         selection2 = -1;
-        } 
-          
-      }
-    }
+       if(selected == -1)
+       {
+         selected = i;
+         break;
+       }
+     }   
   }
+}
 
 void printStars()
 {
