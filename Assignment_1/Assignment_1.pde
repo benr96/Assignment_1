@@ -105,6 +105,7 @@ void setup()
   
   //FUNCTION CALLS
   loadData();
+ //printStars();
 }
 
 void draw()
@@ -619,3 +620,11 @@ void mousePressed()
       }
     }
   }
+
+void printStars()
+{
+ for(int i=0;i<stars.size();i++)
+ {
+  println(stars.get(i)); 
+ }
+}
