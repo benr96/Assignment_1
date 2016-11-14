@@ -57,6 +57,7 @@ boolean check = false;
 //FONTS
 PFont spaceAge;
 PFont arcon;
+PFont number;
 
 //IMAGES
 PImage bg;
@@ -66,7 +67,7 @@ PImage bg;
 void setup()
 {
   fullScreen(P3D,1);
-  smooth(8);
+  smooth(1);
   frameRate(60);
 
   for(int i=0 ;i<5;i++)
@@ -83,6 +84,7 @@ void setup()
  //FONTS
   spaceAge = createFont("font1.ttf",50);
   arcon = createFont("font5.otf",50);
+  number = createFont("font6.ttf",50);
   
   //IMAGES
   bg = loadImage("background.tif");
@@ -196,7 +198,7 @@ void drawMainWindow()
   }
  }
  
-// windowState =3;
+ windowState =3;
  //controlling which window state is being drawn
  switch(windowState)
  {
@@ -484,7 +486,7 @@ void plotStars()
 {
   for(int i=0;i<stars.size();i++)
   {
-    if(stars.get(i).DisplayName.equals("Sol"))
+    if(stars.get(i).DisplayName.equals(currentStar.DisplayName))
     {
      fill(255,0,0); 
    }
@@ -512,7 +514,8 @@ int current = 0;
 void drawLine()
 {
   stroke(255);
-  textSize(20);
+  textFont(number);
+  textSize(15);
   
 
    if(selected != -1)
@@ -523,35 +526,31 @@ void drawLine()
      selected = -1;
    }
   
-   if(selectedStars.size() == 1)
-   {
-     fill(255,0,255);
-     text(1,(selectedStars.get(0).x)-(selectedStars.get(0).radius),(selectedStars.get(0).y)-(selectedStars.get(0).radius));
-    
-   }
    else
    {
      for(int i=0;i<selectedStars.size()-1;i++)
      {
+       if(selectedStars.size() == 1)
+       {
+         fill(255,0,0);
+         text("1",(selectedStars.get(0).x)-(selectedStars.get(0).radius),(selectedStars.get(0).y)-(selectedStars.get(0).radius));
+       }
        if(selectedStars.get(i) != null && selectedStars.get(i+1) != null)
        {
          float x1 = selectedStars.get(i).x; 
          float y1 = selectedStars.get(i).y;
          float x2 = selectedStars.get(i+1).x;
          float y2 = selectedStars.get(i+1).y;
-         float rad1 = selectedStars.get(i).radius;
-         float rad2 = selectedStars.get(i+1).radius;
+         float rad2= selectedStars.get(i+1).radius;
    
          line(x1,y1,x2,y2);
-         fill(255,0,255);
-         text(i+1,x1-rad1,y1-rad1);
-         text(i+2,x2-rad2,y2-rad2);
-       }
-       else
-       {
+         fill(0,255,0);
+         text(i+2,x2-rad2*3,y2+rad2);
        }
       }
    }
+   
+   textFont(arcon);
 }
 
 void starInfo()
@@ -580,6 +579,7 @@ void starInfo()
   float yVal = y1+(border/2);
   
   //Current system data
+  fill(255);
   text(current,x1+border,y1+windowHeight-(border*0.75));
   text(currentStar.DisplayName,x1+border+textWidth(current),y1+windowHeight-(border*0.75));
   textSize(20);
@@ -592,9 +592,9 @@ void starInfo()
   textSize(25);
   
   
-  
   for(int i = page;i<page+2;i++)
   {
+    //TITLES FOR LEFT SIDE
     textSize(25);
     fill(255);
     text(title+i,midpointLeft-(textWidth(title)/2),rightY*yVal);
@@ -611,7 +611,8 @@ void starInfo()
     
     if(selectedStars.get(i-1) != null && selectedStars.get(i) == null)
     {
-      fill(255,0,0);
+      //INFO FOR LEFT SIDE
+      fill(30,144,255); 
       text(selectedStars.get(i-1).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);  
       text(selectedStars.get(i-1).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);  
       text((String.format("%.3f",selectedStars.get(i-1).currDist)),halfway+20+textWidth(distance),rightY*yVal+60);
@@ -631,6 +632,8 @@ void starInfo()
     }
     else if(selectedStars.get(i-1) != null && selectedStars.get(i) != null)
     {
+      //INFO FOR LEFT SIDE
+      fill(30,144,255); 
       text(selectedStars.get(i-1).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);
       text(selectedStars.get(i-1).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);  
       text(selectedStars.get(i-1).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);  
@@ -658,6 +661,7 @@ void starInfo()
   
   for(int j=page+2;j<page+4;j++)
   {
+    //TITLE FOR RIGHT SIDE
     textSize(25);
     fill(255);
     text(title+j,midpointRight-(textWidth(title)/2),rightY*yVal);
@@ -673,9 +677,10 @@ void starInfo()
     text(sRadius,rightSplit+20,rightY*yVal+300);
     
     
-     if(selectedStars.get(j-1) != null && selectedStars.get(j) == null)
+    if(selectedStars.get(j-1) != null && selectedStars.get(j) == null)
     {
-      fill(255,0,0);
+      //INFO FOR RIGHT SIDE
+      fill(30,144,255); 
       text(selectedStars.get(j-1).DisplayName,rightSplit+20+textWidth(name),rightY*yVal+30);  
       text((String.format("%.3f",selectedStars.get(j-1).currDist)),rightSplit+20+textWidth(distance),rightY*yVal+60);
       text("Parsecs",rightSplit+95+textWidth(distance),rightY*yVal+60);
@@ -695,8 +700,10 @@ void starInfo()
     }
     else if(selectedStars.get(j-1) != null && selectedStars.get(j) != null)
     {
-       text(selectedStars.get(j-1).DisplayName,rightSplit+20+textWidth(name),rightY*yVal+30);
-             text(selectedStars.get(j-1).DisplayName,rightSplit+20+textWidth(name),rightY*yVal+30);  
+      //INFO FOR RIGHT SIDE
+      fill(30,144,255); 
+      text(selectedStars.get(j-1).DisplayName,rightSplit+20+textWidth(name),rightY*yVal+30);
+      text(selectedStars.get(j-1).DisplayName,rightSplit+20+textWidth(name),rightY*yVal+30);  
       text((String.format("%.3f",selectedStars.get(j-1).currDist)),rightSplit+20+textWidth(distance),rightY*yVal+60);
       text("Parsecs",rightSplit+95+textWidth(distance),rightY*yVal+60);
       text(selectedStars.get(j-1).AbsMag,rightSplit+20+textWidth(currMag),rightY*yVal+90);
@@ -716,112 +723,6 @@ void starInfo()
     rightY+=1.4;
   }
 } 
- 
-
-  
-  /*
-  text(title+i+1,midpointLeft-(textWidth(title)/2),y1+50);
-    text(title+i+2,midpointRight-(textWidth(title)/2),y1+50);  
-    text(title+i+3,midpointLeft-(textWidth(title)/2),y1+(windowWidth/2));
-    text(title+i+4,midpointRight-(textWidth(title)/2),y1+(windowWidth/2));
-  fill(255);
-  //LEFT SIDE TITLES
-  text(title1,midpointLeft-(textWidth(title1)/2),y1+50);
-  text(name,halfway+20,y1+100);
-  text(distance, halfway+20,y1+130);
-  text(currMag,halfway+20,y1+160);
-  text(coords,halfway+20,y1+190);
-  text(hab,halfway+20,y1+220);
-  text(gliese,halfway+20,y1+250);
-  text(spectrum,halfway+20,y1+280);
-  text(age,halfway+20,y1+310);
-  text(constellation,halfway+20,y1+340);
-  text(sRadius,halfway+20,y1+370);
-  
-  
-  //RIGHT SIDE TITLES
-  text(title2,((midpointRight)-(textWidth(title2)/2)),y1+50);
-  text(name,rightSplit+20,y1+100);
-  text(distance,rightSplit+20,y1+130);
-  text(currMag,rightSplit+20,y1+160);
-  text(coords,rightSplit+20,y1+190);
-  text(hab,rightSplit+20,y1+220);
-  text(gliese,rightSplit+20,y1+250);
-  text(spectrum,rightSplit+20,y1+280);
-  text(age,rightSplit+20,y1+310);
-  text(constellation,rightSplit+20,y1+340);
-  text(sRadius,rightSplit+20,y1+370);
-  
-  //BELOW GRID CURRENT SYSTEM DETAILS
- 
-
-  
-  if(selection1 != -1 && selection2 == -1)
-  {
-    Star star1 = stars.get(selection1);
-
-    //Star 1 info
-    fill(255,0,0);
-    text(star1.DisplayName,halfway+20+textWidth(name),y1+100);
-    text((String.format("%.3f",currentDist1)),halfway+20+textWidth(distance),y1+130);
-    text("Parsecs",halfway+95+textWidth(distance),y1+130);
-    text(star1.AbsMag,halfway+20+textWidth(currMag),y1+160);
-    text("("
-      +(star1.Xg) + ", "
-      +(star1.Yg) + ", "
-      +(star1.Zg) + ")"
-      ,(halfway+20+textWidth(coords)),(y1+190));
-    text(star1.hab,(halfway+20+textWidth(hab)),y1+220);
-    text(star1.Gliese,(halfway+20+textWidth(gliese)),y1+250);
-    text(star1.Spectrum,(halfway+20+textWidth(spectrum)),y1+280);
-    text(star1.Age,(halfway+20+textWidth(age)),y1+310);
-    text(star1.Constellation,(halfway+20+textWidth(constellation)),y1+340);
-    text(star1.SolarRadius,(halfway+20+textWidth(sRadius)),y1+370);
-    
-  }
-  else if(selection1 != -1 && selection2 != -1)
-  {
-    Star star1 = stars.get(selection1);
-    Star star2 = stars.get(selection2);
-    
-     //Star 1 info
-     fill(255,0,0);
-    text(star1.DisplayName,halfway+20+textWidth(name),y1+100);
-    text((String.format("%.3f",currentDist1)),halfway+20+textWidth(distance),y1+130);
-    text("Parsecs",halfway+95+textWidth(distance),y1+130);  
-    text(star1.AbsMag,halfway+20+textWidth(currMag),y1+160);
-    text("("
-      +(star1.Xg) + ", "
-      +(star1.Yg) + ", "
-      +(star1.Zg) + ")"
-      ,(halfway+20+textWidth(coords)),(y1+190));
-    text(star1.hab,(halfway+20+textWidth(hab)),y1+220);
-    text(star1.Gliese,(halfway+20+textWidth(gliese)),y1+250);
-    text(star1.Spectrum,(halfway+20+textWidth(spectrum)),y1+280);
-    text(star1.Age,(halfway+20+textWidth(age)),y1+310);
-    text(star1.Constellation,(halfway+20+textWidth(constellation)),y1+340);
-    text(star1.SolarRadius,(halfway+20+textWidth(sRadius)),y1+370);
-    
-    //Star 2 info
-    fill(0,255,0);
-    text(star2.DisplayName,rightSplit+20+textWidth(name),y1+100);
-    text((String.format("%.3f",currentDist2)),rightSplit+20+textWidth(distance),y1+130);
-    text("Parsecs",rightSplit+90+textWidth(distance),y1+130);      
-    text(star2.AbsMag,rightSplit+20+textWidth(currMag),y1+160);
-    text("("
-      +(star2.Xg) + ", "
-      +(star2.Yg) + ", "
-      +(star2.Zg) + ")"
-      ,(rightSplit+20+textWidth(coords)),(y1+190));
-    text(star2.hab,(rightSplit+20+textWidth(hab)),y1+220);
-    text(star2.Gliese,(rightSplit+20+textWidth(gliese)),y1+250);
-    text(star2.Spectrum,(rightSplit+20+textWidth(spectrum)),y1+280);
-    text(star2.Age,(rightSplit+20+textWidth(age)),y1+310);
-    text(star2.Constellation,(rightSplit+20+textWidth(constellation)),y1+340);
-    text(star2.SolarRadius,(rightSplit+20+textWidth(sRadius)),y1+370);
-  }
-  */
-
 
 void mousePressed()
 {
