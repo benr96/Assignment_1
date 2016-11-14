@@ -18,6 +18,7 @@ class Star
  float y;
  float radius;
  boolean selected;
+ float currDist;
  
  //default constructor
  Star()
@@ -65,6 +66,8 @@ class Star
  
  void isSelected()
  {
+  this.currDist = sqrt(((currentStar.Xg-this.Xg)*(currentStar.Xg-this.Xg)) +((currentStar.Yg-this.Yg)*(currentStar.Yg-this.Yg)));
+
   if(mousePressed)
   {
    if(mouseX>x-radius && mouseX < x+radius && mouseY > y-radius && mouseY < y+radius)

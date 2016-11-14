@@ -72,6 +72,12 @@ void setup()
    button pos = new button(buttonNames[i],0); 
    menu.add(pos);
   }
+  
+  for(int i=0;i<39;i++)
+  {
+    selectedStars.add(null);
+  }
+  
  //FONTS
   spaceAge = createFont("font1.ttf",50);
   arcon = createFont("font5.otf",50);
@@ -436,6 +442,16 @@ void loadData()
     Star s = new Star(row,starX1,starX2,starY1,starY2);
     stars.add(s);
   }
+  
+  //choosing current star
+  for(int i=0;i<stars.size();i++)
+  {
+    if(stars.get(i).DisplayName.equals("Sol"))
+    {
+     currentStar = stars.get(i);
+    }
+  }
+  
 }
 
 //plotting stars on the grid 
@@ -446,8 +462,7 @@ void plotStars()
     if(stars.get(i).DisplayName.equals("Sol"))
     {
      fill(255,0,0); 
-     currentStar = stars.get(i);
-    }
+   }
     else
     {
      fill(30,144,255); 
@@ -465,6 +480,9 @@ void plotStars()
   }
 }
 
+int start = 0;
+int end = 39;
+int current = 0;
 
 void drawLine()
 {
@@ -474,76 +492,48 @@ void drawLine()
 
    if(selected != -1)
    {
-     selectedStars.add(stars.get(selected));
+     selectedStars.remove(current);
+     selectedStars.add(current,stars.get(selected));
+     current++;
      selected = -1;
    }
-   
-   println(selectedStars.size());
+  
    if(selectedStars.size() == 1)
    {
-    line(selectedStars.get(0).x,selectedStars.get(0).y,mouseX,mouseY);
-    text(1,(selectedStars.get(0).x)-(selectedStars.get(0).radius),(selectedStars.get(0).y)-(selectedStars.get(0).radius));
+     fill(255,0,255);
+     text(1,(selectedStars.get(0).x)-(selectedStars.get(0).radius),(selectedStars.get(0).y)-(selectedStars.get(0).radius));
     
    }
    else
    {
      for(int i=0;i<selectedStars.size()-1;i++)
      {
-       float x1 = selectedStars.get(i).x; 
-       float y1 = selectedStars.get(i).y;
-       float x2 = selectedStars.get(i+1).x;
-       float y2 = selectedStars.get(i+1).y;
-       float rad1 = selectedStars.get(i).radius;
-       float rad2 = selectedStars.get(i+1).radius;
+       if(selectedStars.get(i) != null && selectedStars.get(i+1) != null)
+       {
+         float x1 = selectedStars.get(i).x; 
+         float y1 = selectedStars.get(i).y;
+         float x2 = selectedStars.get(i+1).x;
+         float y2 = selectedStars.get(i+1).y;
+         float rad1 = selectedStars.get(i).radius;
+         float rad2 = selectedStars.get(i+1).radius;
    
-       line(x1,y1,x2,y2);
-       text(i+1,x1-rad1,y1-rad1);
-       text(i+2,x2-rad2,y2-rad2);
+         line(x1,y1,x2,y2);
+         fill(255,0,255);
+         text(i+1,x1-rad1,y1-rad1);
+         text(i+2,x2-rad2,y2-rad2);
+       }
+       else
+       {
+       }
       }
    }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  /*
-  if(selection1 != -1 && selection2 == -1)
-  {
-    Star star1 = stars.get(selection1);
-   
-    fill(255,0,0);
-    text("1",star1.x-star1.radius,star1.y-star1.radius);
-   
-    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
-  }
-  //if both selected
-  else if(selection1 != -1 && selection2 != -1)
-  {
-    Star star1 = stars.get(selection1);
-    Star star2 = stars.get(selection2);
-    line(star1.x,star1.y,star2.x,star2.y);
-    
-    fill(255,0,0);
-    text("1",star1.x-star1.radius,star1.y-star1.radius);
-    fill(0,255,0);
-    text("2",star2.x-star2.radius,star2.y-star2.radius);
-    
-    currentDist1 = sqrt(((currentStar.Xg-star1.Xg)*(currentStar.Xg-star1.Xg)) +((currentStar.Yg-star1.Yg)*(currentStar.Yg-star1.Yg)));
-    currentDist2 = sqrt(((currentStar.Xg-star2.Xg)*(currentStar.Xg-star2.Xg)) +((currentStar.Yg-star2.Yg)*(currentStar.Yg-star2.Yg)));
-    */
-  }
+}
 
 void starInfo()
 {
   float midpointLeft;
   float midpointRight;
-  String title1 = "Selection 1:";
-  String title2 = "Selection 2:";
+  String title = "Selection ";
   String name = "Name: ";
   String distance = "Distance: ";
   String current  = "Current System : ";
@@ -555,11 +545,79 @@ void starInfo()
   String age = "Age: ";
   String constellation = "Constellation: ";
   String sRadius = "Solar Radius: ";
-  textSize(25);
+  
   
   midpointLeft = ((halfway+rightSplit)/2);
   midpointRight = ((rightSplit+x2)/2);
+  
+  int page = 1;
+  float rightY = 1;
+  float yVal = y1+(border/2);
+  
+  
+  
+  for(int i = page;i<page+2;i++)
+  {
+    textSize(25);
+    fill(255);
+    text(title+i,midpointLeft-(textWidth(title)/2),rightY*yVal);
+    text(name,halfway+20,rightY*yVal+30);    
+    text(distance, halfway+20,rightY*yVal+60);
+    text(currMag,halfway+20,rightY*yVal+90);
+    text(coords,halfway+20,rightY*yVal+120);
+    text(hab,halfway+20,rightY*yVal+150);
+    text(gliese,halfway+20,rightY*yVal+180);
+    text(spectrum,halfway+20,rightY*yVal+210);
+    text(age,halfway+20,rightY*yVal+240);
+    text(constellation,halfway+20,rightY*yVal+270);
+    text(sRadius,halfway+20,rightY*yVal+300);
     
+    if(selectedStars.get(i-1) != null && selectedStars.get(i) == null)
+    {
+        fill(255,0,0);
+        text(selectedStars.get(i-1).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);
+        
+    }
+    else if(selectedStars.get(i-1) != null && selectedStars.get(i) != null)
+    {
+       text(selectedStars.get(i).DisplayName,halfway+20+textWidth(name),rightY*yVal+30);
+
+    }
+
+    
+    rightY+=1.4;
+  }
+  
+  rightY =1;
+  
+  for(int j=page+2;j<page+4;j++)
+  {
+    textSize(25);
+    fill(255);
+    text(title+j,midpointRight-(textWidth(title)/2),rightY*yVal);
+    text(name,rightSplit+20,rightY*yVal+30);
+    text(distance, rightSplit+20,rightY*yVal+60);
+    text(currMag,rightSplit+20,rightY*yVal+90);
+    text(coords,rightSplit+20,rightY*yVal+120);
+    text(hab,rightSplit+20,rightY*yVal+150);
+    text(gliese,rightSplit+20,rightY*yVal+180);
+    text(spectrum,rightSplit+20,rightY*yVal+210);
+    text(age,rightSplit+20,rightY*yVal+240);
+    text(constellation,rightSplit+20,rightY*yVal+270);
+    text(sRadius,rightSplit+20,rightY*yVal+300);
+    rightY+=1.4;
+  }
+  
+}
+  
+ 
+
+  
+  /*
+  text(title+i+1,midpointLeft-(textWidth(title)/2),y1+50);
+    text(title+i+2,midpointRight-(textWidth(title)/2),y1+50);  
+    text(title+i+3,midpointLeft-(textWidth(title)/2),y1+(windowWidth/2));
+    text(title+i+4,midpointRight-(textWidth(title)/2),y1+(windowWidth/2));
   fill(255);
   //LEFT SIDE TITLES
   text(title1,midpointLeft-(textWidth(title1)/2),y1+50);
@@ -665,7 +723,8 @@ void starInfo()
     text(star2.Constellation,(rightSplit+20+textWidth(constellation)),y1+340);
     text(star2.SolarRadius,(rightSplit+20+textWidth(sRadius)),y1+370);
   }
-}
+  */
+
 
 void mousePressed()
 {
