@@ -39,8 +39,6 @@ float starY2;
 //SELECTED STARS VARIABLES
 ArrayList<Star> selectedStars = new ArrayList<Star>();
 int selected =-1;
-int selection1 = -1;
-int selection2 = -1;
 float Dist = 0;
 boolean selectionCheck = false;
 int page = 1;
@@ -62,12 +60,16 @@ PFont number;
 //IMAGES
 PImage bg;
 
-
-
+//LOCAL SYSTEM MAP VARIABLES  
+ArrayList<Planet> planets = new ArrayList<Planet>();
+float sunSize;
+int planNum;
+float sunX;
+float sunY;
 void setup()
 {
   fullScreen(P3D,1);
-  smooth(1);
+  smooth(8);
   frameRate(60);
 
   for(int i=0 ;i<5;i++)
@@ -102,6 +104,7 @@ void setup()
  
  //main window dimensions
   windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
+  println(windowWidth);
   windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
   
   //useful variables
@@ -119,6 +122,28 @@ void setup()
   //FUNCTION CALLS
   loadData();
  //printStars();
+   sunX = x1+(windowWidth/2);
+   sunY = y1+(windowHeight/2);
+   sunSize = windowWidth/20;
+   float orbitRadius = sunSize;
+ 
+   
+    
+   planNum =5;
+    
+   println("Amount of Planets: "+planNum);
+   for(int i=0;i<planNum;i++)
+   {
+     float size = random((windowWidth/100),sunSize/2);
+     color strokeCol = color(random(0,255),random(0,255),random(0,255));
+     color fillCol = color(random(0,255),random(0,255),random(0,255)); 
+     println("Orbit Radius" + i +"  "+orbitRadius);
+     println("Size " + i + "  " +size);
+     orbitRadius = random(orbitRadius+(size*4), windowWidth/15);
+     
+     Planet p = new Planet(size,strokeCol,fillCol,orbitRadius);
+     planets.add(p);
+   }    
 }
 
 void draw()
@@ -197,9 +222,9 @@ void drawMainWindow()
    }
   }
  }
- 
- windowState =3;
+
  //controlling which window state is being drawn
+ windowState =4;
  switch(windowState)
  {
   case 0://locked
@@ -317,8 +342,21 @@ void drawMainWindow()
   }
   case 4://second menu item
   {
-    drawDots();
-    text("in second option",width/2,height/2);
+    pushMatrix();
+    translate(sunX,sunY);
+    rotateY(frameCount*0.001);
+    sphere(sunSize);
+    popMatrix();
+    
+    
+    pushMatrix();
+    translate(sunX,sunY);
+    for(int i=0;i<planets.size();i++)
+    {
+      planets.get(i).drawPlanet(); 
+      planets.get(i).updatePlanet();
+    }
+    popMatrix();
     break;
   }
   case 5://third menu item
@@ -473,7 +511,7 @@ void loadData()
   //choosing current star
   for(int i=0;i<stars.size();i++)
   {
-    if(stars.get(i).DisplayName.equals("Sol"))
+    if(stars.get(i).DisplayName.equals("Kaldwin"))
     {
      currentStar = stars.get(i);
     }
