@@ -2,7 +2,7 @@
   Date started: 29/10/16
   Description: Assignment for Object Oriented Programming DT228
  */
- 
+
  
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();
@@ -66,6 +66,14 @@ float sunSize;
 int planNum;
 float sunX;
 float sunY;
+float camX = 0;
+float camY = -500;
+float sliderWidth;
+float sliderHeight;
+float sliderX;
+float sliderY;
+boolean sliderCheck = false;
+
 void setup()
 {
   fullScreen(P3D,1);
@@ -104,7 +112,6 @@ void setup()
  
  //main window dimensions
   windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
-  println(windowWidth);
   windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
   
   //useful variables
@@ -126,22 +133,24 @@ void setup()
    sunY = y1+(windowHeight/2);
    sunSize = windowWidth/20;
    float orbitRadius = sunSize;
+ sliderWidth = border/2;
+sliderHeight = border*2;
+sliderX = x1+border;
+ sliderY = y1+(windowHeight/2)-(sliderHeight/2);
  
    
     
-   planNum =5;
+   planNum =(int)random(1,5);
     
-   println("Amount of Planets: "+planNum);
    for(int i=0;i<planNum;i++)
    {
-     float size = random((windowWidth/100),sunSize/2);
-     color strokeCol = color(random(0,255),random(0,255),random(0,255));
      color fillCol = color(random(0,255),random(0,255),random(0,255)); 
-     println("Orbit Radius" + i +"  "+orbitRadius);
-     println("Size " + i + "  " +size);
-     orbitRadius = random(orbitRadius+(size*4), windowWidth/15);
+     float size = random((windowWidth/100),sunSize/2);
+     float diameter = (size*2);
+
+     orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);
      
-     Planet p = new Planet(size,strokeCol,fillCol,orbitRadius);
+     Planet p = new Planet(size,fillCol,orbitRadius);
      planets.add(p);
    }    
 }
@@ -150,8 +159,10 @@ void draw()
 {
   textFont(spaceAge);
   background(0);
+  
   drawMenu();
   drawMainWindow();
+  
 }
 
 void drawMenu()
@@ -342,9 +353,63 @@ void drawMainWindow()
   }
   case 4://second menu item
   {
+    fill(0,0,57,boxOp);
+    stroke(234,223,104,boxOp);
+   
+    
+    if(mousePressed)
+    {
+      
+     if(mouseX > sliderX && mouseX <sliderX+sliderWidth && mouseY > sliderY-(sliderHeight/2) && mouseY <sliderY+sliderHeight)
+     {
+       if(sliderY >= y1+(border/2)+(sliderHeight/2) && sliderY <= y1+windowHeight-(border/2)-(sliderHeight/2))
+       {
+         sliderY = mouseY;
+       }
+       else
+       {
+        sliderY+=1; 
+       }
+     }
+    }
+    else
+    {
+   
+    }
+
+
+   
+    line(x1+border+(sliderWidth/2),y1+(border/2),x1+border+(sliderWidth/2),y1+windowHeight-(border/2));
+    rect(sliderX,sliderY-(sliderHeight/2),sliderWidth,sliderHeight);
+  
     pushMatrix();
+     
+
+
+    if(mousePressed)
+    {
+      
+      camY = lerp(camY,map(mouseY, 0, height, -height*3, height*3),0.01);
+      camera(camX,-camY,1000,sunX,sunY,0,0,1,0);
+
+    }
+    else
+    {
+      camera(camX,-camY,1000,sunX,sunY,0,0,1,0);
+    }
+      
+    
+    pushMatrix();
+   
     translate(sunX,sunY);
     rotateY(frameCount*0.001);
+   // directionalLight(126, 126, 126, 0, 0, -1);
+    //ambientLight(102, 102, 102,0,0,0);
+    pointLight(200,140,50,0,0,0);
+    ambientLight(100,70,25);
+    fill(200,140,50);
+    strokeWeight(0.5);
+    stroke(255,255,0);
     sphere(sunSize);
     popMatrix();
     
@@ -353,9 +418,21 @@ void drawMainWindow()
     translate(sunX,sunY);
     for(int i=0;i<planets.size();i++)
     {
+      rotateY(frameCount*0.003);
       planets.get(i).drawPlanet(); 
       planets.get(i).updatePlanet();
     }
+    popMatrix();
+    
+    pushMatrix();
+    translate(sunX,sunY);
+    rotateX(-1.6);
+    for(int i=0;i<planets.size();i++)
+    {
+     planets.get(i).drawOrbit(); 
+    }
+    popMatrix();
+    
     popMatrix();
     break;
   }

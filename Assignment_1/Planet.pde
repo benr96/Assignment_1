@@ -21,9 +21,9 @@ class Planet
    
  }
  
- Planet(float size, color strokeCol, color fillCol,float orbitRadius)
+ Planet(float size, color fillCol,float orbitRadius)
  {
-   this.strokeCol = strokeCol;
+
    this.fillCol = fillCol;
    this.size = size;
    this.orbitRadius = orbitRadius;
@@ -33,25 +33,35 @@ class Planet
 
  void drawPlanet()
  {
-   stroke(strokeCol);
+   noStroke();
    fill(fillCol);
    strokeWeight(0.5);
    
    pushMatrix();
    translate(x,y);
-   rotateY(angle);
+   rotateY(rot);
    sphere(size);
    popMatrix();
+
  }
+ 
+ void drawOrbit()
+ {
+   noFill();
+   stroke(255,0,0);
+   strokeWeight(1);
+   
+   ellipse(0,0,orbitRadius*2,orbitRadius*2);
+
+   
+  
+  
+ }
+ 
  
  void updatePlanet()
  {
-   rot = frameCount;
-   pushMatrix();
-   translate(sunX,sunY);
-   rotate(frameCount*0.005);
-   popMatrix();
-   
+   rot = frameCount*0.005;   
  }
   
  String toString()
