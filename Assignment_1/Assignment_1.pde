@@ -5,9 +5,10 @@
 void setup()
 {
   controlP5 = new ControlP5(this);
+  picker = new Picker(this);
   fullScreen(P3D,1);
-  smooth(8);
-  frameRate(60);
+  smooth(1);
+  frameRate(30);
 
   for(int i=0 ;i<5;i++)
   {
@@ -92,7 +93,10 @@ void setup()
  
  
  import controlP5.*;
+ import picking.*;
+ 
  ControlP5 controlP5;
+ Picker picker;
  
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();
@@ -392,6 +396,7 @@ void drawMainWindow()
     for(int i=0;i<planets.size();i++)
     {
       rotateY(frameCount*0.003);
+      picker.start(i);
       planets.get(i).drawPlanet(); 
       planets.get(i).updatePlanet();
     }
@@ -402,12 +407,24 @@ void drawMainWindow()
     rotateX(-1.6);
     for(int i=0;i<planets.size();i++)
     {
-     planets.get(i).drawOrbit(); 
+     planets.get(i).drawOrbit();
     }
+    
+    if(mousePressed)
+    {
+      int id = picker.get(mouseX, mouseY);
+      println(id);
+      if (id > -1)
+      {
+        planets.get(id).displayInfo();
+      }
+    }
+    
     popMatrix();
     
     popMatrix();
-    break;
+    
+ break;
   }
   case 5://third menu item
   {
@@ -438,6 +455,8 @@ void drawMainWindow()
   }
  }
 }
+
+
 
 void drawLogin()
 {

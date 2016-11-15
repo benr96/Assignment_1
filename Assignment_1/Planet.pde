@@ -52,16 +52,18 @@ class Planet
    strokeWeight(1);
    
    ellipse(0,0,orbitRadius*2,orbitRadius*2);
-
-   
-  
-  
  }
- 
  
  void updatePlanet()
  {
    rot = frameCount*0.005;   
+ }
+ 
+ void displayInfo()
+ {
+   textSize(70);
+   fill(255,0,0);
+   this.fillCol = color(255);
  }
   
  String toString()
