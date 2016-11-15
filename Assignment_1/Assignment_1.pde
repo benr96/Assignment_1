@@ -2,7 +2,97 @@
   Date started: 29/10/16
   Description: Assignment for Object Oriented Programming DT228
  */
+void setup()
+{
+  controlP5 = new ControlP5(this);
+  fullScreen(P3D,1);
+  smooth(8);
+  frameRate(60);
 
+  for(int i=0 ;i<5;i++)
+  {
+   button pos = new button(buttonNames[i],0); 
+   menu.add(pos);
+  }
+  
+  for(int i=0;i<39;i++)
+  {
+    selectedStars.add(null);
+  }
+  
+ //FONTS
+  spaceAge = createFont("font1.ttf",50);
+  arcon = createFont("font5.otf",50);
+  number = createFont("font6.ttf",50);
+  
+  //IMAGES
+  bg = loadImage("background.tif");
+  icarus = new Logo(logoOpacity,0,0,"icarus.png");
+  
+  //MAIN WINDOW VARIABLES
+  
+  //top left
+  x1 = width/25;
+  y1 = height/5;
+  
+  //bottom right
+  x2 = width-x1;
+  y2 = height*0.95;
+ 
+ //main window dimensions
+  windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
+  windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
+  
+  //useful variables
+  halfway = x1+(windowWidth/2);
+  rightSplit = (halfway+(halfway/2)-border/2);
+  
+  
+  //PLOT STAR VARIABLES
+  starX1 = x1+border;
+  starX2 = halfway-border;
+  starY1 = y1+border;
+  starY2 = y1+windowHeight-border;
+  
+  
+  //FUNCTION CALLS
+  loadData();
+ 
+  sunX = x1+(windowWidth/2);
+  sunY = y1+(windowHeight/2);
+  sunSize = windowWidth/20;
+  float orbitRadius = sunSize;
+  sliderWidth = border/2;
+  sliderHeight = windowHeight-(border*2);
+  sliderX = x1+border;
+  sliderY = y1+border;
+ 
+   
+    
+   planNum =(int)random(2,5);
+    
+   for(int i=0;i<planNum;i++)
+   {
+     color fillCol = color(random(0,255),random(0,255),random(0,255)); 
+     float size = random((windowWidth/100),sunSize/2);
+     float diameter = (size*2);
+
+     orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);
+     
+     Planet p = new Planet(size,fillCol,orbitRadius);
+     planets.add(p);
+   }    
+   
+   
+   
+   controlP5.addSlider("Rotate_Map",0,10,0,(int)sliderX,(int)sliderY,(int)sliderWidth,(int)sliderHeight).setColorActive((color(234,223,104,boxOp))).setColorBackground(color(0,0,255)).setColorForeground(color(234,223,104,boxOp));
+   
+
+}
+ 
+ 
+ import controlP5.*;
+ ControlP5 controlP5;
  
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();
@@ -74,86 +164,9 @@ float sliderX;
 float sliderY;
 boolean sliderCheck = false;
 
-void setup()
-{
-  fullScreen(P3D,1);
-  smooth(8);
-  frameRate(60);
+int Rotate_Map = 5;
 
-  for(int i=0 ;i<5;i++)
-  {
-   button pos = new button(buttonNames[i],0); 
-   menu.add(pos);
-  }
-  
-  for(int i=0;i<39;i++)
-  {
-    selectedStars.add(null);
-  }
-  
- //FONTS
-  spaceAge = createFont("font1.ttf",50);
-  arcon = createFont("font5.otf",50);
-  number = createFont("font6.ttf",50);
-  
-  //IMAGES
-  bg = loadImage("background.tif");
-  icarus = new Logo(logoOpacity,0,0,"icarus.png");
-  
-  //MAIN WINDOW VARIABLES
-  
-  //top left
-  x1 = width/25;
-  y1 = height/5;
-  
-  //bottom right
-  x2 = width-x1;
-  y2 = height*0.95;
- 
- //main window dimensions
-  windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
-  windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
-  
-  //useful variables
-  halfway = x1+(windowWidth/2);
-  rightSplit = (halfway+(halfway/2)-border/2);
-  
-  
-  //PLOT STAR VARIABLES
-  starX1 = x1+border;
-  starX2 = halfway-border;
-  starY1 = y1+border;
-  starY2 = y1+windowHeight-border;
-  
-  
-  //FUNCTION CALLS
-  loadData();
- //printStars();
-   sunX = x1+(windowWidth/2);
-   sunY = y1+(windowHeight/2);
-   sunSize = windowWidth/20;
-   float orbitRadius = sunSize;
- sliderWidth = border/2;
-sliderHeight = border*2;
-sliderX = x1+border;
- sliderY = y1+(windowHeight/2)-(sliderHeight/2);
- 
-   
-    
-   planNum =(int)random(1,5);
-    
-   for(int i=0;i<planNum;i++)
-   {
-     color fillCol = color(random(0,255),random(0,255),random(0,255)); 
-     float size = random((windowWidth/100),sunSize/2);
-     float diameter = (size*2);
 
-     orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);
-     
-     Planet p = new Planet(size,fillCol,orbitRadius);
-     planets.add(p);
-   }    
-}
 
 void draw()
 {
@@ -353,52 +366,12 @@ void drawMainWindow()
   }
   case 4://second menu item
   {
-    fill(0,0,57,boxOp);
-    stroke(234,223,104,boxOp);
-   
-    
-    if(mousePressed)
-    {
-      
-     if(mouseX > sliderX && mouseX <sliderX+sliderWidth && mouseY > sliderY-(sliderHeight/2) && mouseY <sliderY+sliderHeight)
-     {
-       if(sliderY >= y1+(border/2)+(sliderHeight/2) && sliderY <= y1+windowHeight-(border/2)-(sliderHeight/2))
-       {
-         sliderY = mouseY;
-       }
-       else
-       {
-        sliderY+=1; 
-       }
-     }
-    }
-    else
-    {
-   
-    }
-
-
-   
-    line(x1+border+(sliderWidth/2),y1+(border/2),x1+border+(sliderWidth/2),y1+windowHeight-(border/2));
-    rect(sliderX,sliderY-(sliderHeight/2),sliderWidth,sliderHeight);
-  
     pushMatrix();
-     
+ 
+    float rotMap = map(Rotate_Map,0,10,-500,500);
+    camY = lerp(camY,rotMap,0.01);
+    camera(camX,-camY,750,sunX,sunY,0,0,1,0);
 
-
-    if(mousePressed)
-    {
-      
-      camY = lerp(camY,map(mouseY, 0, height, -height*3, height*3),0.01);
-      camera(camX,-camY,1000,sunX,sunY,0,0,1,0);
-
-    }
-    else
-    {
-      camera(camX,-camY,1000,sunX,sunY,0,0,1,0);
-    }
-      
-    
     pushMatrix();
    
     translate(sunX,sunY);
