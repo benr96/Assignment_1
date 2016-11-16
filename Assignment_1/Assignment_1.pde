@@ -6,7 +6,7 @@ void setup()
 {
   controlP5 = new ControlP5(this);
   picker = new Picker(this);
-  fullScreen(P3D,1);
+  fullScreen(P3D,2);
   smooth(1);
   frameRate(30);
 
@@ -67,6 +67,11 @@ void setup()
   sliderHeight = windowHeight-(border*2);
   sliderX = x1+border;
   sliderY = y1+border;
+  
+ PIBX = x2-(border*3);
+ PIBY = y1+border;
+ PIBW = windowWidth/7;
+ PIBH = windowHeight/2;
  
    
     
@@ -74,13 +79,15 @@ void setup()
     
    for(int i=0;i<planNum;i++)
    {
-     color fillCol = color(random(0,255),random(0,255),random(0,255)); 
+     color fillCol = color(random(50,200),random(50,200),random(50,200)); 
      float size = random((windowWidth/100),sunSize/2);
      float diameter = (size*2);
+     float rot = random(0,TWO_PI);
+     float rotSpeed = random(0.001,0.03);
 
      orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);
      
-     Planet p = new Planet(size,fillCol,orbitRadius);
+     Planet p = new Planet(planetNames[i],size,fillCol,orbitRadius,rot,rotSpeed,color(255,0,0));
      planets.add(p);
    }    
    
@@ -169,6 +176,13 @@ float sliderY;
 boolean sliderCheck = false;
 
 int Rotate_Map = 5;
+String[] planetNames = {"Kaldwin A", "Kaldwin B", "Kaldwin C", "Kaldwin D", "Kaldwin E"};
+Planet select = null;
+
+float PIBX;
+float PIBY;
+float PIBW;
+float PIBH;
 
 
 
@@ -380,8 +394,7 @@ void drawMainWindow()
    
     translate(sunX,sunY);
     rotateY(frameCount*0.001);
-   // directionalLight(126, 126, 126, 0, 0, -1);
-    //ambientLight(102, 102, 102,0,0,0);
+   
     pointLight(200,140,50,0,0,0);
     ambientLight(100,70,25);
     fill(200,140,50);
@@ -395,8 +408,7 @@ void drawMainWindow()
     translate(sunX,sunY);
     for(int i=0;i<planets.size();i++)
     {
-      rotateY(frameCount*0.003);
-      picker.start(i);
+      planets.get(i).isClicked();
       planets.get(i).drawPlanet(); 
       planets.get(i).updatePlanet();
     }
@@ -405,24 +417,19 @@ void drawMainWindow()
     pushMatrix();
     translate(sunX,sunY);
     rotateX(-1.6);
+    
     for(int i=0;i<planets.size();i++)
     {
      planets.get(i).drawOrbit();
     }
     
-    if(mousePressed)
-    {
-      int id = picker.get(mouseX, mouseY);
-      println(id);
-      if (id > -1)
-      {
-        planets.get(id).displayInfo();
-      }
-    }
-    
     popMatrix();
     
     popMatrix();
+    
+
+    planetInfo();
+    
     
  break;
   }
@@ -454,6 +461,67 @@ void drawMainWindow()
     text("Error 404 : Page not found",width/2,height/2); 
   }
  }
+}
+
+
+
+
+box planetInfoBox = new box();
+
+void planetInfo()
+{
+  String radius = "Orbit Radius: ";
+  String size = "Planet Radius: ";
+  noLights();
+  fill(0,0,57,boxOp);
+  stroke(234,223,104,boxOp);
+  planetInfoBox.drawBox(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
+  
+  
+  for(int i=0;i<planets.size();i++)
+  {
+    if(planets.get(i).clicked == true)
+    {
+      select = planets.get(i);
+      planets.get(i).clicked = false;
+    }
+  }
+  
+  fill(255,0,0);
+  
+  
+    
+  if(select != null)
+  {
+    textFont(arcon,30);
+    fill(255);
+    text(select.name,PIBX+(PIBW/2)-(textWidth(select.name)/2),PIBY+(textAscent()-textDescent()));
+    stroke(255);
+    strokeWeight(3);
+    line(PIBX+(PIBW/2)-(textWidth(select.name)/2),PIBY+(textAscent()-textDescent())+5,PIBX+(PIBW/2)+(textWidth(select.name)/2),PIBY+(textAscent()-textDescent())+5);
+    
+    textSize(15);
+    text(radius,PIBX+20,PIBY+100);
+    text(select.orbitRadius, PIBX+20+textWidth(radius),PIBY+100);
+    
+    text(size,PIBX+20,PIBY+130);
+    text(select.size,PIBX+20+textWidth(size),PIBY+130);
+    
+    //select.rot = 0;
+   // select.rotSpeed = 0;
+    
+    pushMatrix();
+    translate(PIBX+(PIBW/2),PIBY+(PIBH*0.75));
+    select.drawPlanet();
+    popMatrix();
+    
+    
+  }
+  else
+  {
+   //click a planet for info 
+  }
+  
 }
 
 

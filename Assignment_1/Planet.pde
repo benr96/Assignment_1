@@ -1,34 +1,46 @@
 class Planet
 {
- float size;
- float x;
- float y;
- float angle;
- float rot;
- color strokeCol;
- color fillCol;
- float orbitRadius;
+  String name;
+  float size;
+  float x;
+  float y;
+  float z;
+  float angle;
+  float rot;
+  float rotSpeed;
+  color strokeCol;
+  color fillCol;
+  float orbitRadius;
+  color orbitCol;
+  boolean clicked = false;
  
  Planet()
  {
+   name = "Default";
    size = 0;
    x = 0;
    y = 0;
+   z = 0;
    angle = 0;
+   rot = 0;
+   rotSpeed = 0;
    strokeCol = color(255);
    fillCol = color(0);
    orbitRadius = 0;
    
  }
  
- Planet(float size, color fillCol,float orbitRadius)
+ Planet(String name, float size, color fillCol,float orbitRadius, float rot, float rotSpeed,color orbitCol)
  {
-
+   this.name = name;
    this.fillCol = fillCol;
    this.size = size;
    this.orbitRadius = orbitRadius;
-   x = 0 + orbitRadius * cos(angle);
-   y = 0 + orbitRadius * sin(angle);
+   this.rot = rot;
+   this.rotSpeed = rotSpeed;
+   x = 0 + orbitRadius;// * cos(angle);
+   y = 0; 
+   this.orbitCol = orbitCol;
  }
 
  void drawPlanet()
@@ -38,8 +50,8 @@ class Planet
    strokeWeight(0.5);
    
    pushMatrix();
-   translate(x,y);
-   rotateY(rot);
+   translate(x,0,z);
+   rotateY(frameRate*0.004);
    sphere(size);
    popMatrix();
 
@@ -48,7 +60,7 @@ class Planet
  void drawOrbit()
  {
    noFill();
-   stroke(255,0,0);
+   stroke(orbitCol);
    strokeWeight(1);
    
    ellipse(0,0,orbitRadius*2,orbitRadius*2);
@@ -56,15 +68,25 @@ class Planet
  
  void updatePlanet()
  {
-   rot = frameCount*0.005;   
+   rot+=rotSpeed;
+   x = 0 + orbitRadius *cos(rot);
+   z = 0 + orbitRadius *sin(rot);
  }
  
- void displayInfo()
- {
-   textSize(70);
-   fill(255,0,0);
-   this.fillCol = color(255);
- }
+void isClicked()
+{
+  float onScreenX = screenX(x,y,z);
+  float onScreenY = screenY(x,y,z);
+  
+  if(mousePressed)
+  {
+    if(mouseX > onScreenX-size && mouseX < onScreenX+size && mouseY > onScreenY-size && mouseY < onScreenY+size)
+    {
+      clicked = true;
+    }
+  }
+
+}
   
  String toString()
  {
