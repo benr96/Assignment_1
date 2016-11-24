@@ -1,4 +1,5 @@
 /*Author: Ben Ryan
+  Student Number: C15507277
   Date started: 29/10/16
   Description: Assignment for Object Oriented Programming DT228
  */
@@ -107,6 +108,92 @@ void setup()
      Planet p = new Planet(planetNames[i],size,fillCol,orbitRadius,rot,rotSpeed,color(255,0,0));
      planets.add(p);
    }    
+   
+   barsStart = x1+border*1.8;
+   
+   enginePowerSlider = controlP5.addSlider("Engine Power")
+                   .setPosition(barsStart-20,y1+(windowHeight/2)+20)
+                   .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
+                   .setRange(0,800)
+                   .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57))
+                   .setValue(100)
+                   .hide();
+                   
+  engineCoolingSlider = controlP5.addSlider("Engine Cooling")
+                   .setPosition(barsStart+(windowWidth/25)*2,y1+(windowHeight/2)+20)
+                   .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
+                   .setRange(0,800)
+                   .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57))
+                   .setValue(200)
+                   .hide();
+                   
+ shipVelocitySlider = controlP5.addSlider("Ship Speed")
+                   .setPosition(barsStart+((windowWidth/25)*4),y1+(windowHeight/2)+20)
+                   .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
+                   .setRange(0,800)
+                   .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57))
+                   .setValue(300)
+                   .hide();
+                   
+ weaponPowerSlider = controlP5.addSlider("Weapon Power")
+                   .setPosition(barsStart+((windowWidth/25)*6),y1+(windowHeight/2)+20)
+                   .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
+                   .setRange(0,800)
+                   .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57))
+                   .setValue(0)
+                   .hide();
+                   
+  weaponCoolingSlider = controlP5.addSlider("Weapons Cooling")
+                   .setPosition(barsStart+((windowWidth/25)*8),y1+(windowHeight/2)+20)
+                   .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
+                   .setRange(0,800)
+                   .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57))
+                   .setValue(0)
+                   .hide();
+                   
+  shieldPowerSlider = controlP5.addSlider("Shield Power")
+                   .setPosition(barsStart+((windowWidth/25)*10),y1+(windowHeight/2)+20)
+                   .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
+                   .setRange(0,800)
+                   .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57))
+                   .setValue(400)
+                   .hide();
+               
+  shieldToggle = controlP5.addToggle("Shields")
+                .setPosition(barsStart+((windowWidth/25)*12),y1+(windowHeight/2)+20)
+                .setSize((int)(windowWidth/20),(int)(windowHeight/20))
+                .setValue(false)
+                .setMode(ControlP5.SWITCH)
+                .hide();
+                
+  engineToggle = controlP5.addToggle("Engine")
+                .setPosition(barsStart+((windowWidth/25)*12),y1+(windowHeight/2)+100)
+                .setSize((int)(windowWidth/20),(int)(windowHeight/20))
+                .setValue(false)
+                .setMode(ControlP5.SWITCH)
+                .hide();
+                
+  weaponToggle = controlP5.addToggle("Weapons")
+                .setPosition(barsStart+((windowWidth/25)*12),y1+(windowHeight/2)+180)
+                .setSize((int)(windowWidth/20),(int)(windowHeight/20))
+                .setValue(false)
+                .setMode(ControlP5.SWITCH)
+                .hide();
+           
+             
+          
 }
 
 /*
@@ -122,6 +209,19 @@ import controlP5.*;//used in creating the sliders
 ControlP5 controlP5;
 controlP5.Slider localMapSlider;//slider for solar system tilt
 
+controlP5.Slider enginePowerSlider;
+controlP5.Slider engineCoolingSlider;
+controlP5.Slider shipVelocitySlider;
+controlP5.Toggle engineToggle;
+
+controlP5.Slider weaponPowerSlider;
+controlP5.Slider weaponCoolingSlider;
+controlP5.Toggle weaponToggle;
+
+controlP5.Slider shieldPowerSlider;
+controlP5.Toggle shieldToggle;
+
+
 float sliderWidth;
 float sliderHeight;
 float sliderX;
@@ -131,7 +231,7 @@ int Rotate_Map = 5;//slider default value
  
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();//holds buttons
-String[] buttonNames = {"Star Map","Sytem Map","Ship Status","Navigation","Lock System"};//button labels
+String[] buttonNames = {"Star Map","Sytem Map","Controls","Navigation","Lock System"};//button labels
 
 //STAR VARIABLES
 ArrayList<Star> stars = new ArrayList<Star>();//holds stars drawn
@@ -206,6 +306,8 @@ float PIBH;
 box planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
 
 float n;
+float barsStart;
+boolean error = false;
 
 void draw()
 {
@@ -325,6 +427,18 @@ void drawMainWindow()
 
 void windowControl()
 {
+  enginePowerSlider.hide();
+  engineCoolingSlider.hide();
+  enginePowerSlider.hide();
+  engineCoolingSlider.hide();
+  shipVelocitySlider.hide();
+  weaponPowerSlider.hide();
+  weaponCoolingSlider.hide();
+  shieldPowerSlider.hide();
+  shieldToggle.hide();
+  engineToggle.hide();
+  weaponToggle.hide();
+  
   localMapSlider.hide();
   windowState =5;
   switch(windowState)
@@ -525,21 +639,68 @@ void windowControl()
     }
     case 5://Ship Status
     {
-      float barsStart = x1+border*1.8;
+      int weaponHeatLevel;
+
+      
+      enginePowerSlider.show();
+      engineCoolingSlider.show();
+      enginePowerSlider.show();
+      engineCoolingSlider.show();
+      shipVelocitySlider.show();
+      weaponPowerSlider.show();
+      weaponCoolingSlider.show();
+      shieldPowerSlider.show();
+      shieldToggle.show();
+      engineToggle.show();
+      weaponToggle.show();
+      
+      if(enginePowerSlider.getValue() < shipVelocitySlider.getValue()-200)
+      {
+        enginePowerSlider.setValue(shipVelocitySlider.getValue()-200);
+      }
+      
+      if(shieldToggle.getValue() == 1)
+      {
+        shieldPowerSlider.setValue(0);
+      }
+      
+      if(engineToggle.getValue() == 1)
+      {
+        enginePowerSlider.setValue(0); 
+        shipVelocitySlider.setValue(0);
+        engineCoolingSlider.setValue(0);
+      }
+      
+      if(weaponToggle.getValue() == 1)
+      {
+        weaponPowerSlider.setValue(0);
+         weaponHeatLevel= 0;
+      }
+      else
+      {
+         weaponHeatLevel= (int)((weaponPowerSlider.getValue() - weaponCoolingSlider.getValue())/100)+2;
+      }
+      
+      int engineHeatLevel = (int)((enginePowerSlider.getValue()+shipVelocitySlider.getValue() - engineCoolingSlider.getValue())/100);
+      int enginePowerLevel = (int)enginePowerSlider.getValue()/100;
+      int weaponPowerLevel= (int)weaponPowerSlider.getValue()/100;
+      int shieldIntLevel= (int)((shieldPowerSlider.getValue())/100);
+      int shieldPowerLevel=(int)(shieldPowerSlider.getValue()/100);
+      
       
       box lower = new box(x1+20,y1+(windowHeight/2),windowWidth-40,(windowHeight/2)-20,0.95,0.8);
       box upper = new box(x1+20,y1+20,windowWidth-40,(windowHeight/2)-30,0.95,0.8);
       
+      bars engineHeat = new bars(barsStart,y1+40,"Engine Temp",engineHeatLevel);
+      bars enginePower = new bars(barsStart*2,y1+40,"Engine Power",enginePowerLevel);
+      bars weaponHeat = new bars(barsStart*3,y1+40,"Weapon Temp",weaponHeatLevel);
+      bars weaponPower = new bars(barsStart*4,y1+40,"Weapon Power",weaponPowerLevel);
+      bars shieldInt = new bars(barsStart*5,y1+40,"Shield Integrity",shieldIntLevel);
+      bars shieldPower = new bars(barsStart*6,y1+40,"Shield Power",shieldPowerLevel);
+    
+      
       lower.drawBox();
       upper.drawBox();
-      
-      bars engineHeat = new bars(barsStart,y1+40,"Engine Temp",4);
-      bars enginePower = new bars(barsStart*2,y1+40,"Engine Power",6);
-      bars weaponHeat = new bars(barsStart*3,y1+40,"Weapon Temp",8);
-      bars weaponPower = new bars(barsStart*4,y1+40,"Weapon Power",6);
-      bars shieldInt = new bars(barsStart*5,y1+40,"Shield Integrity",8);
-      bars shieldPower = new bars(barsStart*6,y1+40,"Shield Power",2);
-    
       
       engineHeat.drawBars();
       enginePower.drawBars();
@@ -547,6 +708,41 @@ void windowControl()
       weaponPower.drawBars();
       shieldInt.drawBars();
       shieldPower.drawBars();
+       
+      
+      textFont(arcon,50);
+      String ok = "All Systems Ok";
+      String warning = "WARNING";
+      
+      if(error != true)
+      {
+        fill(0,255,0);
+        stroke(0,255,0);
+        text(ok,(rightSplit-border)+(windowWidth/4)/2-textWidth(ok)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
+      }
+      else
+      {
+        fill(0);
+        stroke(0);
+      
+        if (millis() - n <= 500)
+        {  
+          fill(255,0,0);
+          stroke(255,0,0);
+        }
+        else if (millis() - n >= 1000)
+        {
+          n = millis();
+        }
+        
+         text(warning,(rightSplit-border)+(windowWidth/4)/2-textWidth(warning)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
+      }
+      
+      noFill();
+      box SystemCheck = new box(rightSplit-border,y1+windowHeight*0.60,windowWidth/4,windowHeight/8,0.9,0.9);
+      
+      
+      SystemCheck.drawBox();
       break;
     }
     case 6:

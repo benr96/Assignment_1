@@ -20,43 +20,37 @@ class box
   
  void drawBox()
  {
-   
+  
    float width10 = boxWidth*(1-XPercent);
    float width90 = boxWidth*XPercent;
    
    float height20 = boxHeight*(1-YPercent);
    float height80 = boxHeight*YPercent;
+
+   beginShape();
+   vertex(x+width10,y);
+   vertex(x+width90,y);
    
-   PShape boxShape;
+   vertex(x+width90,y);
+   vertex(x+boxWidth,y+height20);
    
-   boxShape = createShape();
+   vertex(x+boxWidth,y+height20);   
+   vertex(x+boxWidth,y+height80);
    
-   boxShape.beginShape();
-   boxShape.vertex(x+width10,y);
-   boxShape.vertex(x+width90,y);
+   vertex(x+boxWidth,y+height80);
+   vertex(x+width90,y+boxHeight);
    
-   boxShape.vertex(x+width90,y);
-   boxShape.vertex(x+boxWidth,y+height20);
+   vertex(x+width90,y+boxHeight);
+   vertex(x+width10,y+boxHeight);
    
-   boxShape.vertex(x+boxWidth,y+height20);
-   boxShape.vertex(x+boxWidth,y+height80);
+   vertex(x+width10,y+boxHeight);
+   vertex(x,y+height80);
    
-   boxShape.vertex(x+boxWidth,y+height80);
-   boxShape.vertex(x+width90,y+boxHeight);
+   vertex(x,y+height80);
+   vertex(x,y+height20);
    
-   boxShape.vertex(x+width90,y+boxHeight);
-   boxShape.vertex(x+width10,y+boxHeight);
-   
-   boxShape.vertex(x+width10,y+boxHeight);
-   boxShape.vertex(x,y+height80);
-   
-   boxShape.vertex(x,y+height80);
-   boxShape.vertex(x,y+height20);
-   
-   boxShape.vertex(x,y+height20);
-   boxShape.vertex(x+width10,y);
-   boxShape.endShape(CLOSE);
-   
-   shape(boxShape);
+   vertex(x,y+height20);
+   vertex(x+width10,y);
+   endShape(CLOSE);
  }
 }

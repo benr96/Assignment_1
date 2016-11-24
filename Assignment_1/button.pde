@@ -22,9 +22,7 @@ class button
    strokeWeight(2);
    
    isClicked(x,y,buttonWidth,buttonHeight);
-   
-   box Box = new box(x,y,buttonWidth,buttonHeight,0.9,0.8);
-   
+  
    if(this.value == 1)
    {
      buttonWidth = buttonWidth*0.95;
@@ -32,6 +30,8 @@ class button
      x = x +(buttonWidth*0.025);
      y = y +(buttonHeight*0.025);
    }
+   
+   box Box = new box(x,y,buttonWidth,buttonHeight,0.9,0.8);
    
    Box.drawBox();
    

@@ -34,7 +34,9 @@ class bars
      for(int i=amount;i>0;i--)
      {
        current = i;
+
        colourCheck();
+
        box bar = new box(x,y,barWidth,barHeight,0.9,0.9);
        
        bar.drawBox();
@@ -44,7 +46,7 @@ class bars
      }
      fill(0);
      
-     if(level > 5)
+     if(level > 5 && label != "Shield Integrity")
      {
        if (millis() - n <= 500)
        {  
@@ -54,6 +56,18 @@ class bars
        {
          n = millis();
        }
+     }
+     else if(level < 4 && label == "Shield Integrity" && shieldToggle.getValue() == 0)
+     {
+       if (millis() - n <= 500)
+       {  
+         fill(255,0,0);
+       }
+       else if (millis() - n >= 1000)
+       {
+         n = millis();
+       }
+
      }
      else
      {
@@ -65,13 +79,21 @@ class bars
    
    void colourCheck()
    {
-     if(current <= level && current > 5)
+     if(current <= level && current > 5 && label != "Shield Integrity")
      {
        fill(255,0,0); 
      }
-     else if(current <= level && current <= 5)
+     else if(current <= level && current > 3 && label == "Shield Integrity")
      {
        fill(0,255,0);
+     }
+     else if(current <= level && current <= 5 && label != "Shield Integrity")
+     {
+       fill(0,255,0);
+     }
+     else if(current <= level && current <= 3 && label == "Shield Integrity")
+     {
+       fill(255,0,0); 
      }
      else
      {
