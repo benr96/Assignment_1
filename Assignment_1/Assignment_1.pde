@@ -4,9 +4,10 @@
  */
 void setup()
 {
+  n = millis();
   //used for some ui features
   controlP5 = new ControlP5(this);
-  
+  /*
   //welcome back commander sound effect
   welcome = new SoundFile(this,"welcome.mp3");
   ambient = new SoundFile(this,"ambient.mp3");
@@ -14,11 +15,11 @@ void setup()
   error = new SoundFile(this,"sound2.mp3");
   
   ambient.loop();
-
-  fullScreen(P3D,2);//render in 3d fullscreen
+*/
+  fullScreen(P3D,1);//render in 3d fullscreen
   
   smooth(1);//AA x1
-  frameRate(60);//fps 30
+  frameRate(60);//fps 60
 
   //initialising buttons and adding them to an arrayList
   for(int i=0 ;i<5;i++)
@@ -108,17 +109,19 @@ void setup()
    }    
 }
 
+/*
 import processing.sound.*;
 SoundFile welcome;
 SoundFile ambient;
 SoundFile button;
 SoundFile error;
 boolean soundCheck = false;
+*/
 
 import controlP5.*;//used in creating the sliders
 ControlP5 controlP5;
-
 controlP5.Slider localMapSlider;//slider for solar system tilt
+
 float sliderWidth;
 float sliderHeight;
 float sliderX;
@@ -200,7 +203,9 @@ float PIBX;
 float PIBY;
 float PIBW;
 float PIBH;
-box planetInfoBox = new box();
+box planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
+
+float n;
 
 void draw()
 {
@@ -269,14 +274,14 @@ void drawMenu()
 void drawMainWindow()
 { 
   //new box object to draw the main window
-  box mainWindow = new box();
+  box mainWindow = new box(x1,y1,windowWidth,windowHeight,0.95,0.9);
  
   //main window colours
   noFill();
   stroke(234,223,104);
   
   //draw box
-  mainWindow.drawBox(x1,y1,windowWidth,windowHeight,0.95,0.9);
+  mainWindow.drawBox();
 
   //to make sure buttons can't be pressed when window is locked or in transition
   if(windowState != 0 && windowState !=1)
@@ -288,12 +293,12 @@ void drawMainWindow()
       {
         //change window state according to what button is pressed, +3 because window state 0 1 and 2 are not for buttons
         windowState = i+3; 
-        button.play();
+      //  button.play();
         delay(250);
       }
       else
       {
-        button.stop(); 
+       // button.stop(); 
       }
     }
   }
@@ -305,12 +310,12 @@ void drawMainWindow()
       if(menu.get(i).value == 1)
       {
         text("Locked",width/4,height/4); 
-        error.play();
+        //error.play();
         delay(250);
       }
       else
       {
-        error.stop(); 
+        //error.stop(); 
       }
     }
   }
@@ -320,20 +325,18 @@ void drawMainWindow()
 
 void windowControl()
 {
-  windowState =4;
+  localMapSlider.hide();
+  windowState =5;
   switch(windowState)
   {
     case 0://locked
     {
-      localMapSlider.hide();
       drawDots();
       drawLogin();
       break;
     }
     case 1://transitioning
-    {
-      localMapSlider.hide();
-      
+    {      
       String initial = "Initializing Please Wait";
       text(initial,x1+(windowWidth/2)-(textWidth(initial)/2),(y1+windowHeight)*0.85);
     
@@ -382,13 +385,13 @@ void windowControl()
     }
     case 2://unlocked
     {
+      /*
       if(soundCheck == false)
       {
         welcome.play();
         soundCheck = true;
       }
-      
-      localMapSlider.hide();
+      */
       textFont(spaceAge,70);
       String ready = "Welcome Back Commander";
       //drawDots();
@@ -397,9 +400,7 @@ void windowControl()
       break;
     }
     case 3://first menu item
-    {  
-      localMapSlider.hide();
-      
+    {        
       //reset button clears selected stars
       float resetWidth = windowWidth/10;
       float nextWidth = windowWidth/10;
@@ -522,23 +523,40 @@ void windowControl()
       planetInfo();  
       break;
     }
-    case 5://third menu item
+    case 5://Ship Status
     {
-      localMapSlider.hide();
-      drawDots();
-      text("in third option",width/2,height/2);
+      float barsStart = x1+border*1.8;
+      
+      box lower = new box(x1+20,y1+(windowHeight/2),windowWidth-40,(windowHeight/2)-20,0.95,0.8);
+      box upper = new box(x1+20,y1+20,windowWidth-40,(windowHeight/2)-30,0.95,0.8);
+      
+      lower.drawBox();
+      upper.drawBox();
+      
+      bars engineHeat = new bars(barsStart,y1+40,"Engine Temp",4);
+      bars enginePower = new bars(barsStart*2,y1+40,"Engine Power",6);
+      bars weaponHeat = new bars(barsStart*3,y1+40,"Weapon Temp",8);
+      bars weaponPower = new bars(barsStart*4,y1+40,"Weapon Power",6);
+      bars shieldInt = new bars(barsStart*5,y1+40,"Shield Integrity",8);
+      bars shieldPower = new bars(barsStart*6,y1+40,"Shield Power",2);
+    
+      
+      engineHeat.drawBars();
+      enginePower.drawBars();
+      weaponHeat.drawBars();
+      weaponPower.drawBars();
+      shieldInt.drawBars();
+      shieldPower.drawBars();
       break;
     }
-    case 6://fourth menu item
+    case 6:
     {
-      localMapSlider.hide();
       drawDots();
       text("in fourth option",width/2,height/2);
       break;
     }
     case 7://lock window
     {
-      localMapSlider.hide();
 
       //clear the arrayList an reinitailise to null
       selectedStars.clear();
@@ -597,7 +615,7 @@ void drawLogin()
   String password = "Password: ";
  
   //creating objects for login box and button
-  box loginWindow = new box();
+  box loginWindow = new box(loginX,loginY,loginWidth,loginHeight,0.9,0.8);
   button submitButton = new button("Login",0);
   
   //colour and weight of login box
@@ -606,7 +624,7 @@ void drawLogin()
   fill(100,0,0,boxOp);
   
   //draw the login box
-  loginWindow.drawBox(loginX,loginY,loginWidth,loginHeight,0.9,0.8);
+  loginWindow.drawBox();
 
   //draw the box title
   fill(255,255,255,textOp);
@@ -946,7 +964,7 @@ void planetInfo()
   noLights();
   fill(0,0,57);
   stroke(234,223,104);
-  planetInfoBox.drawBox(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
+  planetInfoBox.drawBox();
   
   
   for(int i=0;i<planets.size();i++)

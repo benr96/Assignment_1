@@ -1,6 +1,24 @@
 class box
 {
- void drawBox(float x, float y, float boxWidth,float boxHeight,float XPercent,float YPercent)
+  float x;
+  float y; 
+  float boxWidth;
+  float boxHeight;
+  float XPercent;
+  float YPercent;
+  
+ box(float x, float y, float boxWidth,float boxHeight,float XPercent,float YPercent)
+ {
+   this.x = x;
+   this.y = y; 
+   this.boxWidth = boxWidth;
+   this.boxHeight = boxHeight;
+   this.XPercent = XPercent;
+  this.YPercent = YPercent;
+   
+ }
+  
+ void drawBox()
  {
    
    float width10 = boxWidth*(1-XPercent);

@@ -23,7 +23,7 @@ class button
    
    isClicked(x,y,buttonWidth,buttonHeight);
    
-   box Box = new box();
+   box Box = new box(x,y,buttonWidth,buttonHeight,0.9,0.8);
    
    if(this.value == 1)
    {
@@ -33,7 +33,7 @@ class button
      y = y +(buttonHeight*0.025);
    }
    
-   Box.drawBox(x,y,buttonWidth,buttonHeight,0.9,0.8);
+   Box.drawBox();
    
    fill(255,255,255,textOpacity);
    textSize(buttonWidth/10);
