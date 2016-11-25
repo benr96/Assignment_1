@@ -640,7 +640,13 @@ void windowControl()
     case 5://Ship Status
     {
       int weaponHeatLevel;
-
+      ArrayList<String> errors = new ArrayList<String>();
+      String error1 = "Engine Power Overload";
+      String error2 = "Engine Overheating";
+      String error3 = "Weapons Power Overload";
+      String error4 = "Weapons Overheating";
+      String error5 = "Shield Power Overload";
+      String error6 = "Shield Integrity Failing";
       
       enginePowerSlider.show();
       engineCoolingSlider.show();
@@ -662,6 +668,7 @@ void windowControl()
       if(shieldToggle.getValue() == 1)
       {
         shieldPowerSlider.setValue(0);
+        error = false;
       }
       
       if(engineToggle.getValue() == 1)
@@ -669,12 +676,15 @@ void windowControl()
         enginePowerSlider.setValue(0); 
         shipVelocitySlider.setValue(0);
         engineCoolingSlider.setValue(0);
+        
+        error = false;
       }
       
       if(weaponToggle.getValue() == 1)
       {
-        weaponPowerSlider.setValue(0);
+         weaponPowerSlider.setValue(0);
          weaponHeatLevel= 0;
+         error = false;
       }
       else
       {
@@ -708,11 +718,58 @@ void windowControl()
       weaponPower.drawBars();
       shieldInt.drawBars();
       shieldPower.drawBars();
+      
+      if(engineHeatLevel > 5)
+      {
+        error = true; 
+        errors.add(error2);
+      }
+      else
+      {
+        error = false; 
+      }
+      
+      if(enginePowerLevel > 5)
+      {
+        error = true;
+        errors.add(error1);
+      }
+      
+      if(weaponHeatLevel > 5)
+      {
+        error = true;
+        errors.add(error4);
+      }
+      
+      if(weaponPowerLevel > 5)
+      {
+        error = true;
+        errors.add(error3);
+      }
+      
+      if(shieldPowerLevel > 5)
+      {
+        error = true;
+        errors.add(error5);
+      }
+      
+      if((shieldIntLevel <4 && shieldToggle.getValue() ==0))
+      {
+        error = true;
+        errors.add(error6);
+      }
        
       
       textFont(arcon,50);
       String ok = "All Systems Ok";
       String warning = "WARNING";
+      
+      fill(255,0,0);
+      for(int i=0;i<errors.size();i++)
+      {
+        textSize(30);
+        text(errors.get(i), rightSplit-border,(y1+(windowHeight*0.80)+(textAscent()*i)));
+      }
       
       if(error != true)
       {
@@ -741,6 +798,7 @@ void windowControl()
       noFill();
       box SystemCheck = new box(rightSplit-border,y1+windowHeight*0.60,windowWidth/4,windowHeight/8,0.9,0.9);
       
+
       
       SystemCheck.drawBox();
       break;
