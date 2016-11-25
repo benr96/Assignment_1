@@ -17,7 +17,7 @@ void setup()
   
   ambient.loop();
 */
-  fullScreen(P3D,1);//render in 3d fullscreen
+  fullScreen(P3D,2);//render in 3d fullscreen
   //size(1366,768,P3D);
   smooth(1);//AA x1
   frameRate(60);//fps 60
@@ -85,33 +85,62 @@ void setup()
   sliderHeight = windowHeight-(border*2);
   sliderX = x1+border;
   sliderY = y1+border;
-  localMapSlider = controlP5.addSlider("Rotate_Map",0,10,0,(int)sliderX,(int)sliderY,(int)sliderWidth,(int)sliderHeight).setColorActive((color(234,223,104,boxOp))).setColorBackground(color(0,0,255)).setColorForeground(color(234,223,104,boxOp)).hide();
+  localMapSlider = controlP5.addSlider("Tilt Map",0,10,5,(int)sliderX,(int)sliderY,(int)sliderWidth,(int)sliderHeight) .setColorBackground(color(255))
+                   .setColorActive((color(0,0,57)))
+                   .setColorForeground(color(0,0,57)).hide();
   
   //planet info box 
   PIBX = x2-(border*3);
   PIBY = y1+border;
   PIBW = windowWidth/7;
   PIBH = windowHeight/2;
+  
+  planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
  
   float orbitRadius = sunSize;
+  
+  earth = loadImage("earth.jpg");
+  dust = loadImage("venus.gif");
+  ice = loadImage("ice.jpg");
+  jupiter = loadImage("jupiter.jpg");
+  sun = loadImage("sun.png");
+  
+  noStroke();
+  sunS = createShape(SPHERE,sunSize);
+  sunS.setTexture(sun);
+  
+  textures.add(earth);
+  textures.add(dust);
+  textures.add(ice);
+  textures.add(jupiter);  
     
   planNum =(int)random(2,5);//random amount of planets between 2 and 5
     
    for(int i=0;i<planNum;i++)
    {
-     color fillCol = color(random(50,200),random(50,200),random(50,200)); //random color
      float size = random((windowWidth/100),sunSize/2);//random size
      float diameter = (size*2);//used in limited the random range of the next planets orbit radius
      float rot = random(0,TWO_PI);//random start position
-     float rotSpeed = random(0.001,0.03);//random rotation speed
+     float rotSpeed = random(0.001,0.01);//random rotation speed
      orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);//random orbit radius limited by the previous orbit radius and the size of the last planet so they don't overlap
      
      //creating and adding planets to the arrayList
-     Planet p = new Planet(planetNames[i],size,fillCol,orbitRadius,rot,rotSpeed,color(255,0,0));
+     Planet p = new Planet(planetNames[i],size,orbitRadius,rot,rotSpeed,color(255,0,0),textures.get(i));
      planets.add(p);
    }    
    
    barsStart = x1+border*1.8;
+   
+   localMapSliderRot = controlP5.addSlider("Simulation Speed")
+                     .setPosition(x1+(border*5),y1+(windowHeight*0.9))
+                     .setSize((int)(windowWidth*0.40),(int)(windowHeight/20))
+                     .setRange(-5,5)
+                     .setColorBackground(color(255))
+                     .setColorActive((color(0,0,57)))
+                     .setColorForeground(color(0,0,57))
+                     .setValue((int)0)
+                     .hide();
+                       
    
    enginePowerSlider = controlP5.addSlider("Engine Power")
                    .setPosition(barsStart-20,y1+(windowHeight/2)+20)
@@ -207,6 +236,7 @@ boolean soundCheck = false;
 import controlP5.*;//used in creating the sliders
 ControlP5 controlP5;
 controlP5.Slider localMapSlider;//slider for solar system tilt
+controlP5.Slider localMapSliderRot;
 
 controlP5.Slider enginePowerSlider;
 controlP5.Slider engineCoolingSlider;
@@ -302,12 +332,20 @@ float PIBX;
 float PIBY;
 float PIBW;
 float PIBH;
-box planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
+box planetInfoBox;
 
 float n;
 float barsStart;
 boolean error = false;
 boolean critical = false; 
+
+ArrayList<PImage> textures = new ArrayList<PImage>();
+PImage earth;
+PImage dust;
+PImage ice;
+PImage sun;
+PImage jupiter;
+PShape sunS;
 
 void draw()
 {
@@ -440,9 +478,10 @@ void windowControl()
   shieldToggle.hide();
   engineToggle.hide();
   weaponToggle.hide();
+  localMapSliderRot.hide();
   
   localMapSlider.hide();
-  //windowState =5;
+  windowState =4;
   switch(windowState)
   {
     case 0://locked
@@ -573,35 +612,29 @@ void windowControl()
     case 4://second menu item
     {
       localMapSlider.show();
+      localMapSliderRot.show();
+      
+      for(int i=0;i<planets.size();i++)
+      {
+        planets.get(i).rotSpeed = planets.get(i).rotSpeedSave + localMapSliderRot.getValue()/100;
+      }
       
       pushMatrix();
       
       //lerp camera position to the value of the slider which is mapped to a new range
-      float rotMap = map(Rotate_Map,0,10,-500,500);
+      float rotMap = map(localMapSlider.getValue(),0,10,-500,500);
       camY = lerp(camY,rotMap,0.01);
       camera(camX,-camY,750,sunX,sunY,0,0,1,0);
 
       pushMatrix();
-      
-      
       translate(sunX,sunY);//translate to where sun will be drawn
-      rotateY(frameCount*0.001);//rotate sun
-   
-      pointLight(200,140,50,0,0,0);//to simulate sun light
-      ambientLight(100,70,25);//to help light up the scene a bit more so the parts of planets not facing sun can be seen
-      
-      //appearance of sun
-      fill(200,140,50);
-      strokeWeight(0.5);
-      stroke(255,255,0);
-      
-      sphere(sunSize);//draw sun
-      
+      rotateY(-frameCount*0.001);//rotate sun
+      shape(sunS);
+      pointLight(255,255,255,0,0,0);//to simulate sun light
+      ambientLight(50,50,50);//to help light up the scene a bit more so the parts of planets not facing sun can be seen
       popMatrix();
-    
-    
+
       pushMatrix();
-      
       translate(sunX,sunY);//translate to sun centre
       
       //loop through planets arrayList doing various things
@@ -609,16 +642,9 @@ void windowControl()
       {
         planets.get(i).isClicked();//check if the planet is clicked
         
-        if(planets.get(i) == select)
-        {
-          fill(planets.get(i).fillCol);
-          text(planets.get(i).name,planets.get(i).x-(textWidth(planets.get(i).name)/2)-planets.get(i).size,planets.get(i).y-planets.get(i).size,planets.get(i).z); 
-       
-        }
         planets.get(i).drawPlanet();//draw the planet
         planets.get(i).updatePlanet();//update the planets position
       }
-      
       popMatrix();
     
       pushMatrix();
@@ -651,8 +677,6 @@ void windowControl()
       String error6 = "Shield Integrity Failing";
       String error7 = "Reactor Failure has Occured";
       String error8 = "Reactor Failure Imminent";
-      
-    
       
       enginePowerSlider.show();
       engineCoolingSlider.show();
@@ -1249,6 +1273,7 @@ void planetInfo()
 {
   String radius = "Orbit Radius: ";
   String size = "Planet Radius: ";
+  String probeText = "Probe Launched";
   noLights();
   fill(0,0,57);
   stroke(234,223,104);
@@ -1266,8 +1291,8 @@ void planetInfo()
   
   fill(255,0,0);
   
+  button probe = new button("Launch Probe",0);
   
-    
   if(select != null)
   {
     textFont(arcon,30);
@@ -1284,15 +1309,21 @@ void planetInfo()
     text(size,PIBX+20,PIBY+130);
     text(select.size,PIBX+20+textWidth(size),PIBY+130);
     
+    textSize(30);
+    probe.drawButton(PIBX+(PIBW/4),PIBY+PIBH/2.5,PIBW/2,PIBH/8,150,255);
+    
+    if(probe.value == 1 || select.probeCheck == true)
+    {
+      textSize(30);
+      fill(0,255,0);
+      text(probeText,PIBX+(PIBW/2)-textWidth(probeText)/2,PIBY+PIBH/1.7);
+      select.probeCheck = true;
+    }
+    
     pushMatrix();
     translate(PIBX+(PIBW/2),PIBY+PIBH*0.75);
-    
-    fill(select.fillCol);
-    stroke(0);
-    strokeWeight(0.5);
-   // rotateY(frameCount*0.005);
-   // sphere(select.size*2);
-    ellipse(0,0,select.size*3,select.size*3);
+
+    shape(select.planet);
     popMatrix();
     
     

@@ -8,11 +8,13 @@ class Planet
   float angle;
   float rot;
   float rotSpeed;
-  color strokeCol;
-  color fillCol;
+  float rotSpeedSave;
   float orbitRadius;
   color orbitCol;
   boolean clicked = false;
+  PImage texture;
+  PShape planet;
+  boolean probeCheck = false;
  
  Planet()
  {
@@ -24,16 +26,13 @@ class Planet
    angle = 0;
    rot = 0;
    rotSpeed = 0;
-   strokeCol = color(255);
-   fillCol = color(0);
    orbitRadius = 0;
    
  }
  
- Planet(String name, float size, color fillCol,float orbitRadius, float rot, float rotSpeed,color orbitCol)
+ Planet(String name, float size,float orbitRadius, float rot, float rotSpeed,color orbitCol, PImage texture)
  {
    this.name = name;
-   this.fillCol = fillCol;
    this.size = size;
    this.orbitRadius = orbitRadius;
    this.rot = rot;
@@ -41,18 +40,19 @@ class Planet
    x = 0 + orbitRadius;// * cos(angle);
    y = 0; 
    this.orbitCol = orbitCol;
+   this.texture = texture;
+   noStroke();
+   planet = createShape(SPHERE,size);
+   rotSpeedSave = this.rotSpeed;
  }
 
  void drawPlanet()
  {
-   noStroke();
-   fill(fillCol);
-   strokeWeight(0.5);
-   
    pushMatrix();
    translate(x,0,z);
-   rotateY(frameRate*0.004);
-   sphere(size);
+   planet.rotateY(rotSpeed);
+   planet.setTexture(texture);
+   shape(planet);
    popMatrix();
 
  }
