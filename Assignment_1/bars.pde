@@ -46,7 +46,7 @@ class bars
      }
      fill(0);
      
-     if(level > 5 && label != "Shield Integrity")
+     if(level > 5 && label != "Shield Integrity" || critical == true)
      {
        if (millis() - n <= 500)
        {  

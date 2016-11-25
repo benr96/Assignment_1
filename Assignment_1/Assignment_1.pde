@@ -18,9 +18,11 @@ void setup()
   ambient.loop();
 */
   fullScreen(P3D,1);//render in 3d fullscreen
-  
+  //size(1366,768,P3D);
   smooth(1);//AA x1
   frameRate(60);//fps 60
+  
+ 
 
   //initialising buttons and adding them to an arrayList
   for(int i=0 ;i<5;i++)
@@ -191,9 +193,6 @@ void setup()
                 .setValue(false)
                 .setMode(ControlP5.SWITCH)
                 .hide();
-           
-             
-          
 }
 
 /*
@@ -308,6 +307,7 @@ box planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
 float n;
 float barsStart;
 boolean error = false;
+boolean critical = false; 
 
 void draw()
 {
@@ -317,6 +317,8 @@ void draw()
   
   drawMenu();//draw the buttons
   drawMainWindow();//draw the main window and control its contents
+  
+  println(frameRate);
 }
 
 void loadData()
@@ -440,7 +442,7 @@ void windowControl()
   weaponToggle.hide();
   
   localMapSlider.hide();
-  windowState =5;
+  //windowState =5;
   switch(windowState)
   {
     case 0://locked
@@ -647,6 +649,10 @@ void windowControl()
       String error4 = "Weapons Overheating";
       String error5 = "Shield Power Overload";
       String error6 = "Shield Integrity Failing";
+      String error7 = "Reactor Failure has Occured";
+      String error8 = "Reactor Failure Imminent";
+      
+    
       
       enginePowerSlider.show();
       engineCoolingSlider.show();
@@ -683,6 +689,7 @@ void windowControl()
       if(weaponToggle.getValue() == 1)
       {
          weaponPowerSlider.setValue(0);
+         weaponCoolingSlider.setValue(0);
          weaponHeatLevel= 0;
          error = false;
       }
@@ -719,65 +726,85 @@ void windowControl()
       shieldInt.drawBars();
       shieldPower.drawBars();
       
-      if(engineHeatLevel > 5)
+      
+      if((enginePowerLevel+weaponPowerLevel+shieldPowerLevel) > 20 || critical == true)
       {
-        error = true; 
-        errors.add(error2);
+         error = true;
+         errors.add(error7);
+         shieldToggle.setValue(1);
+         engineToggle.setValue(1);
+         weaponToggle.setValue(1);
+         critical = true;
       }
       else
       {
-        error = false; 
-      }
+        if((enginePowerLevel+weaponPowerLevel+shieldPowerLevel) > 15)
+        {
+          error = true; 
+          errors.add(error8);
+        }
+        
+        if(engineHeatLevel > 5)
+        {
+          error = true; 
+          errors.add(error2);
+        }
+        else
+        {
+          error = false; 
+        }
+        
+        if(enginePowerLevel > 5)
+        {
+          error = true;
+          errors.add(error1);
+        }
+        
+        if(weaponHeatLevel > 5)
+        {
+          error = true;
+          errors.add(error4);
+        }
+        
+        if(weaponPowerLevel > 5)
+        {
+          error = true;
+          errors.add(error3);
+        }
+        
+        if(shieldPowerLevel > 5)
+        {
+          error = true;
+          errors.add(error5);
+        }
+        
+        if((shieldIntLevel <4 && shieldToggle.getValue() ==0))
+        {
+          error = true;
+          errors.add(error6);
+        }
       
-      if(enginePowerLevel > 5)
-      {
-        error = true;
-        errors.add(error1);
       }
-      
-      if(weaponHeatLevel > 5)
-      {
-        error = true;
-        errors.add(error4);
-      }
-      
-      if(weaponPowerLevel > 5)
-      {
-        error = true;
-        errors.add(error3);
-      }
-      
-      if(shieldPowerLevel > 5)
-      {
-        error = true;
-        errors.add(error5);
-      }
-      
-      if((shieldIntLevel <4 && shieldToggle.getValue() ==0))
-      {
-        error = true;
-        errors.add(error6);
-      }
-       
-      
+
       textFont(arcon,50);
       String ok = "All Systems Ok";
       String warning = "WARNING";
+      String criticalS = "System Critical";
       
       fill(255,0,0);
+      textSize(30);
       for(int i=0;i<errors.size();i++)
       {
-        textSize(30);
         text(errors.get(i), rightSplit-border,(y1+(windowHeight*0.80)+(textAscent()*i)));
       }
       
-      if(error != true)
+      if(error != true && critical !=true)
       {
         fill(0,255,0);
         stroke(0,255,0);
         text(ok,(rightSplit-border)+(windowWidth/4)/2-textWidth(ok)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
       }
-      else
+      else if( error == true && critical !=true)
       {
         fill(0);
         stroke(0);
@@ -792,7 +819,14 @@ void windowControl()
           n = millis();
         }
         
-         text(warning,(rightSplit-border)+(windowWidth/4)/2-textWidth(warning)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
+        text(warning,(rightSplit-border)+(windowWidth/4)/2-textWidth(warning)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
+      }
+      else if(critical == true)
+      {
+        text(criticalS,(rightSplit-border)+(windowWidth/4)/2-textWidth(warning)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
+        
+        delay(3000);
+        exit();
       }
       
       noFill();
