@@ -21,6 +21,7 @@ void setup()
   //size(1366,768,P3D);
   smooth(1);//AA x1
   frameRate(60);//fps 60
+  imageMode(CENTER);
   
  
 
@@ -43,7 +44,7 @@ void setup()
   number = createFont("font6.ttf",50);//used for numbers on the star map
   
   //IMAGES
-  icarus = new Logo(logoOpacity,0,0,"icarus.png");//loading screen
+  icarus = new Logo(logoOpacity,width/2,height/2,"icarus.png");//loading screen
   
   //MAIN WINDOW VARIABLES
   
@@ -225,6 +226,7 @@ void setup()
                 
                 picW = width/2;
                 picH = height/2;
+                rot = 0;
 }
 
 /*
@@ -263,7 +265,7 @@ int Rotate_Map = 5;//slider default value
  
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();//holds buttons
-String[] buttonNames = {"Star Map","Sytem Map","Controls","Navigation","Lock System"};//button labels
+String[] buttonNames = {"Star Map","Sytem Map","Controls","Probes","Lock System"};//button labels
 
 //STAR VARIABLES
 ArrayList<Star> stars = new ArrayList<Star>();//holds stars drawn
@@ -354,6 +356,7 @@ float e;
 float picW;
 float picH;
 PShape selectedPlanet;
+float rot;
 
 void draw()
 {
@@ -870,7 +873,6 @@ void windowControl()
     }
     case 6:
     {
-      float rot = 0;
       ArrayList<Planet> probes = new ArrayList<Planet>();
       for(int i=0;i<planets.size();i++)
       {
@@ -878,6 +880,7 @@ void windowControl()
         {
           Planet p = planets.get(i);
           probes.add(p);
+          
         }
       }
       
@@ -905,35 +908,34 @@ void windowControl()
           if(probes.get(i).clicked  == true)
           {
             pushMatrix();
-            imageMode(CENTER);
+
             
-            println(e);
-            if(e == -1)
+            if(e == -1 && probes.get(i).size < 330)
             {
-             planets.get(i).size+=30;
+             probes.get(i).size+=30;
              e=0;
             }
-            else if( e == 1)
+            else if(e == 1 && probes.get(i).size>50)
             {
-              planets.get(i).size-=30;
+              probes.get(i).size-=30;
               e=0;
             }
-            
-
+           
             noStroke();
-            
+            println(probes.get(i).size);
             selectedPlanet = createShape(SPHERE,probes.get(i).size);
             selectedPlanet.setTexture(probes.get(i).texture);
             pushMatrix();
             translate(x1+(windowWidth/2),y1+(windowHeight/2));
-            if(mousePressed)
-            {
-              rot = map(mouseX,0,width,0,TWO_PI);
-              rotateY(rot);
-            }
+            rotateY(rot);
             shape(selectedPlanet);
             popMatrix();
             popMatrix();
+            
+            if(probes.get(i).texture == earth)
+            {
+          
+            }
           }
         }        
       }
@@ -1416,6 +1418,13 @@ void planetInfo()
 void mouseWheel(MouseEvent event)
 {
  e = event.getCount(); 
+}
+
+void mouseDragged()
+{
+  float k = rot;
+  float r = map(mouseX,0,width,0,TWO_PI);
+  rot = lerp(k,r,0.05);
 }
 
 void mousePressed()
