@@ -114,7 +114,7 @@ void setup()
   textures.add(ice);
   textures.add(jupiter);  
     
-  planNum =(int)random(2,5);//random amount of planets between 2 and 5
+  planNum =4;//(int)random(2,5);//random amount of planets between 2 and 5
     
    for(int i=0;i<planNum;i++)
    {
@@ -222,6 +222,9 @@ void setup()
                 .setValue(false)
                 .setMode(ControlP5.SWITCH)
                 .hide();
+                
+                picW = width/2;
+                picH = height/2;
 }
 
 /*
@@ -347,6 +350,11 @@ PImage sun;
 PImage jupiter;
 PShape sunS;
 
+float e;
+float picW;
+float picH;
+PShape selectedPlanet;
+
 void draw()
 {
   textFont(spaceAge);
@@ -356,7 +364,7 @@ void draw()
   drawMenu();//draw the buttons
   drawMainWindow();//draw the main window and control its contents
   
-  println(frameRate);
+  //println(frameRate);
 }
 
 void loadData()
@@ -436,7 +444,6 @@ void drawMainWindow()
         //change window state according to what button is pressed, +3 because window state 0 1 and 2 are not for buttons
         windowState = i+3; 
       //  button.play();
-        delay(250);
       }
       else
       {
@@ -481,7 +488,6 @@ void windowControl()
   localMapSliderRot.hide();
   
   localMapSlider.hide();
-  windowState =4;
   switch(windowState)
   {
     case 0://locked
@@ -491,7 +497,7 @@ void windowControl()
       break;
     }
     case 1://transitioning
-    {      
+    {    
       String initial = "Initializing Please Wait";
       text(initial,x1+(windowWidth/2)-(textWidth(initial)/2),(y1+windowHeight)*0.85);
     
@@ -539,7 +545,8 @@ void windowControl()
       break;
     }
     case 2://unlocked
-    {
+    { 
+      tint(255);
       /*
       if(soundCheck == false)
       {
@@ -555,7 +562,7 @@ void windowControl()
       break;
     }
     case 3://first menu item
-    {        
+    {  
       //reset button clears selected stars
       float resetWidth = windowWidth/10;
       float nextWidth = windowWidth/10;
@@ -611,6 +618,7 @@ void windowControl()
     }
     case 4://second menu item
     {
+
       localMapSlider.show();
       localMapSliderRot.show();
       
@@ -667,6 +675,7 @@ void windowControl()
     }
     case 5://Ship Status
     {
+                              
       int weaponHeatLevel;
       ArrayList<String> errors = new ArrayList<String>();
       String error1 = "Engine Power Overload";
@@ -848,9 +857,7 @@ void windowControl()
       else if(critical == true)
       {
         text(criticalS,(rightSplit-border)+(windowWidth/4)/2-textWidth(warning)/2,(y1+windowHeight*0.60)+(windowHeight/8)/2+textAscent()/2);
-        
-        delay(3000);
-        exit();
+
       }
       
       noFill();
@@ -863,8 +870,79 @@ void windowControl()
     }
     case 6:
     {
-      drawDots();
-      text("in fourth option",width/2,height/2);
+      float rot = 0;
+      ArrayList<Planet> probes = new ArrayList<Planet>();
+      for(int i=0;i<planets.size();i++)
+      {
+        if(planets.get(i).probeCheck == true)
+        {
+          Planet p = planets.get(i);
+          probes.add(p);
+        }
+      }
+      
+      if(probes.size() !=0)
+      {
+        for(int i=0;i<probes.size();i++)
+        {
+          pushMatrix();
+          translate(x1+border,(y1+border)+(windowHeight/4)*i);
+          if(mouseX > x1+border-planets.get(i).size && mouseX < x1+border+planets.get(i).size && mouseY > ((y1+border)+(windowHeight/4)*i)-planets.get(i).size && mouseY < ((y1+border)+(windowHeight/4)*i)+planets.get(i).size && mousePressed)
+          {
+            probes.get(i).clicked = true;
+            for(int j = 0;j<probes.size();j++)
+            {
+              if(probes.get(j) != probes.get(i))
+              {
+                probes.get(j).clicked = false;
+              }
+            }
+          }
+          
+          shape(probes.get(i).planet);
+          popMatrix();
+          
+          if(probes.get(i).clicked  == true)
+          {
+            pushMatrix();
+            imageMode(CENTER);
+            
+            println(e);
+            if(e == -1)
+            {
+             planets.get(i).size+=30;
+             e=0;
+            }
+            else if( e == 1)
+            {
+              planets.get(i).size-=30;
+              e=0;
+            }
+            
+
+            noStroke();
+            
+            selectedPlanet = createShape(SPHERE,probes.get(i).size);
+            selectedPlanet.setTexture(probes.get(i).texture);
+            pushMatrix();
+            translate(x1+(windowWidth/2),y1+(windowHeight/2));
+            if(mousePressed)
+            {
+              rot = map(mouseX,0,width,0,TWO_PI);
+              rotateY(rot);
+            }
+            shape(selectedPlanet);
+            popMatrix();
+            popMatrix();
+          }
+        }        
+      }
+      else
+      {
+        text("No Probes Launched. Launch probes from Local System Menu",width/2,height/2); 
+      }
+
+
       break;
     }
     case 7://lock window
@@ -1333,6 +1411,11 @@ void planetInfo()
    //click a planet for info 
   }
   
+}
+
+void mouseWheel(MouseEvent event)
+{
+ e = event.getCount(); 
 }
 
 void mousePressed()
