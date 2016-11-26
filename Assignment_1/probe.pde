@@ -1,4 +1,0 @@
-class probe extends Planet
-{
-  
-}

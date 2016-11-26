@@ -2,6 +2,7 @@ class Planet
 {
   String name;
   float size;
+  float origSize;
   float x;
   float y;
   float z;
@@ -44,6 +45,7 @@ class Planet
    noStroke();
    planet = createShape(SPHERE,size);
    rotSpeedSave = this.rotSpeed;
+   origSize = this.size;
  }
 
  void drawPlanet()

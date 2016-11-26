@@ -227,6 +227,11 @@ void setup()
                 picW = width/2;
                 picH = height/2;
                 rot = 0;
+                
+                for(probeInfo p:probeinfo)
+                {
+                  println(p);
+                }
 }
 
 /*
@@ -318,7 +323,7 @@ PImage bg;
 
 //LOCAL SYSTEM MAP VARIABLES  
 ArrayList<Planet> planets = new ArrayList<Planet>();
-String[] planetNames = {"Kaldwin A", "Kaldwin B", "Kaldwin C", "Kaldwin D", "Kaldwin E"};//planet names
+String[] planetNames = {"Miranda", "Ariel", "Persephone", "Osiris"};//planet names
 Planet select = null;//used for saving the selected planet
 
 float sunSize;//radius of sun
@@ -357,6 +362,8 @@ float picW;
 float picH;
 PShape selectedPlanet;
 float rot;
+Table t1;
+ArrayList<probeInfo> probeinfo = new ArrayList<probeInfo>();
 
 void draw()
 {
@@ -374,6 +381,7 @@ void loadData()
 {
   //load table from file containing star data
   t = loadTable("starData.csv","header");
+  t1 = loadTable("probeData.csv","header");
  
   //create object for each star and store them in and arraylist
   for(TableRow row:t.rows())
@@ -382,10 +390,16 @@ void loadData()
     stars.add(s);
   }
   
+  for(TableRow row:t1.rows())
+  {
+    probeInfo p = new probeInfo(row);
+    probeinfo.add(p);
+  }
+  
   //choosing current star
   for(int i=0;i<stars.size();i++)
   {
-    if(stars.get(i).DisplayName.equals("Kaldwin"))
+    if(stars.get(i).DisplayName.equals("River"))
     {
       currentStar = stars.get(i);
     }
@@ -873,6 +887,7 @@ void windowControl()
     }
     case 6:
     {
+      textFont(arcon,30);
       ArrayList<Planet> probes = new ArrayList<Planet>();
       for(int i=0;i<planets.size();i++)
       {
@@ -890,7 +905,7 @@ void windowControl()
         {
           pushMatrix();
           translate(x1+border,(y1+border)+(windowHeight/4)*i);
-          if(mouseX > x1+border-planets.get(i).size && mouseX < x1+border+planets.get(i).size && mouseY > ((y1+border)+(windowHeight/4)*i)-planets.get(i).size && mouseY < ((y1+border)+(windowHeight/4)*i)+planets.get(i).size && mousePressed)
+          if(mouseX > x1+border-planets.get(i).origSize && mouseX < x1+border+planets.get(i).origSize && mouseY > ((y1+border)+(windowHeight/4)*i)-planets.get(i).origSize && mouseY < ((y1+border)+(windowHeight/4)*i)+planets.get(i).origSize && mousePressed)
           {
             probes.get(i).clicked = true;
             for(int j = 0;j<probes.size();j++)
@@ -901,7 +916,7 @@ void windowControl()
               }
             }
           }
-          
+          text(probes.get(i).name,-textWidth(probes.get(i).name)/2,probes.get(i).origSize*2);
           shape(probes.get(i).planet);
           popMatrix();
           
