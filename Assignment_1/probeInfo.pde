@@ -1,28 +1,28 @@
 class probeInfo
 {
   String type;
-  boolean inhabited;
-  boolean intelligent;
+  String inhabited;
+  String intelligent;
   float temperature;
   float oxygen;
   float nitrogen;
   float carbonDioxide;
   float other;
-  boolean breathable;
-  boolean water;
+  String breathable;
+  String water;
   
   probeInfo()
   {
     type = "default";
-    inhabited = false;
-    intelligent = false;
+    inhabited = "N/A";
+    intelligent = "N/A";
     temperature = 0;
     oxygen = 0;
     nitrogen = 0;
     carbonDioxide = 0;
     other = 0;
-    breathable = false;
-    water = false;
+    breathable = "N/A";
+    water = "N/A";
   }
   
   probeInfo(TableRow row)
@@ -31,20 +31,20 @@ class probeInfo
     
     if(row.getInt("Inhabited") == 1)
     {
-      inhabited = true;
+      inhabited = "Yes";
     }
     else
     {
-      inhabited = false; 
+      inhabited = "No"; 
     }
     
     if(row.getInt("Intelligent") == 1)
     {
-      intelligent = true;
+      intelligent = "Yes";
     }
     else
     {
-      intelligent = false; 
+      intelligent = "No"; 
     }
     
     temperature = row.getFloat("Temperature");
@@ -55,20 +55,20 @@ class probeInfo
     
     if(row.getInt("Breathable") == 1)
     {
-      breathable = true;
+      breathable = "Yes";
     }
     else
     {
-      breathable = false;
+      breathable = "No";
     }
     
     if(row.getInt("Water") == 1)
     {
-      water= true;
+      water= "Yes";
     }
     else
     {
-      water = false;
+      water = "No";
     }
 
   }

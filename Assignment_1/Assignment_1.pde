@@ -17,8 +17,8 @@ void setup()
   
   ambient.loop();
 */
-  fullScreen(P3D,2);//render in 3d fullscreen
-  //size(1366,768,P3D);
+  //fullScreen(P3D,2);//render in 3d fullscreen
+  size(1366,768,P3D);
   smooth(1);//AA x1
   frameRate(60);//fps 60
   imageMode(CENTER);
@@ -228,10 +228,6 @@ void setup()
                 picH = height/2;
                 rot = 0;
                 
-                for(probeInfo p:probeinfo)
-                {
-                  println(p);
-                }
 }
 
 /*
@@ -364,6 +360,8 @@ PShape selectedPlanet;
 float rot;
 Table t1;
 ArrayList<probeInfo> probeinfo = new ArrayList<probeInfo>();
+ArrayList<Planet> probes = new ArrayList<Planet>();
+
 
 void draw()
 {
@@ -887,8 +885,9 @@ void windowControl()
     }
     case 6:
     {
+      probes = new ArrayList<Planet>();
+
       textFont(arcon,30);
-      ArrayList<Planet> probes = new ArrayList<Planet>();
       for(int i=0;i<planets.size();i++)
       {
         if(planets.get(i).probeCheck == true)
@@ -937,7 +936,6 @@ void windowControl()
             }
            
             noStroke();
-            println(probes.get(i).size);
             selectedPlanet = createShape(SPHERE,probes.get(i).size);
             selectedPlanet.setTexture(probes.get(i).texture);
             pushMatrix();
@@ -947,10 +945,7 @@ void windowControl()
             popMatrix();
             popMatrix();
             
-            if(probes.get(i).texture == earth)
-            {
-          
-            }
+            probeInfo();
           }
         }        
       }
@@ -1428,6 +1423,73 @@ void planetInfo()
    //click a planet for info 
   }
   
+}
+
+void probeInfo()
+{
+  probeInfo selectedProbe = new probeInfo();
+  for(int i=0;i<probes.size();i++)
+  {
+    if(probes.get(i).clicked == true)
+    {
+      if(probes.get(i).texture == earth)
+      {
+        selectedProbe = probeinfo.get(0);
+      }
+      
+      if(probes.get(i).texture == ice)
+      {
+        selectedProbe = probeinfo.get(1);
+      }
+      
+      if(probes.get(i).texture == dust)
+      {
+        selectedProbe = probeinfo.get(2);
+      }
+     
+      if(probes.get(i).texture == jupiter)
+      {
+        selectedProbe = probeinfo.get(3);
+      }
+    }
+  }
+  
+  fill(0,0,57);
+  stroke(234,223,104);
+  
+  float infoX = rightSplit;
+  float infoY = y1+border/2;
+  float infoW = windowWidth/5;
+  float infoH = windowHeight/2;
+  float half = infoX+(infoW/2);
+  float top = infoY+border/2;
+  
+  String classification = "Classification: "+selectedProbe.type;
+  String inhabited = "Inhabited: "+selectedProbe.inhabited;
+  String intelligent = "Intelligent: "+selectedProbe.intelligent;
+  String temperature = "Temperature: "+selectedProbe.temperature+"C";
+  String oxygen = "Oxygen: " +selectedProbe.oxygen+"%";
+  String nitrogen = "Nitrogen: " +selectedProbe.nitrogen+"%";
+  String carbon = "Carbon Dioxide: " +selectedProbe.carbonDioxide+"%";
+  String other = "Other: " +selectedProbe.other+"%";
+  String breathe = "Breathable: " +selectedProbe.breathable;
+  String water = "Water: " +selectedProbe.water;
+  
+  box probeBox = new box(infoX,infoY,infoW,infoH,0.9,0.9);
+  probeBox.drawBox();
+  
+  fill(255);
+  textSize(20);
+  text(classification,half-textWidth(classification)/2,top+textAscent()*0);
+  text(inhabited,half-textWidth(inhabited)/2,top+textAscent()*2);
+  text(intelligent,half-textWidth(intelligent)/2,top+textAscent()*4);
+  text(temperature,half-textWidth(temperature)/2,top+textAscent()*6);
+  text(oxygen,half-textWidth(oxygen)/2,top+textAscent()*8);
+  text(nitrogen,half-textWidth(nitrogen)/2,top+textAscent()*10);
+  text(carbon,half-textWidth(carbon)/2,top+textAscent()*12);
+  text(other,half-textWidth(other)/2,top+textAscent()*14);
+  text(breathe,half-textWidth(breathe)/2,top+textAscent()*16);
+  text(water,half-textWidth(water)/2,top+textAscent()*18);
 }
 
 void mouseWheel(MouseEvent event)
