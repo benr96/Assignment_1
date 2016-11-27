@@ -17,8 +17,8 @@ void setup()
   
   ambient.loop();
 */
-  //fullScreen(P3D,2);//render in 3d fullscreen
-  size(1366,768,P3D);
+  fullScreen(P3D,2);//render in 3d fullscreen
+  //size(1366,768,P3D);
   smooth(1);//AA x1
   frameRate(60);//fps 60
   imageMode(CENTER);
@@ -227,6 +227,7 @@ void setup()
                 picW = width/2;
                 picH = height/2;
                 rot = 0;
+                rad =new radar(x1+(windowWidth*0.84),y1+(windowHeight*0.775),windowWidth/12);
                 
 }
 
@@ -361,6 +362,7 @@ float rot;
 Table t1;
 ArrayList<probeInfo> probeinfo = new ArrayList<probeInfo>();
 ArrayList<Planet> probes = new ArrayList<Planet>();
+radar rad;
 
 
 void draw()
@@ -1490,6 +1492,8 @@ void probeInfo()
   text(other,half-textWidth(other)/2,top+textAscent()*14);
   text(breathe,half-textWidth(breathe)/2,top+textAscent()*16);
   text(water,half-textWidth(water)/2,top+textAscent()*18);
+  
+  rad.drawRadar();
 }
 
 void mouseWheel(MouseEvent event)
