@@ -36,7 +36,7 @@ class button
    Box.drawBox();
    
    fill(255,255,255,textOpacity);
-   textSize(buttonWidth/10);
+   textSize(buttonWidth/11);
    text(label,(x+(buttonWidth/2))-(textWidth(this.label)/2),y+buttonHeight/1.5);
  }
  

@@ -6,21 +6,20 @@
 void setup()
 {
   n = millis();
+  m = millis();
+  o = millis();
   //used for some ui features
   controlP5 = new ControlP5(this);
-  /*
-  //welcome back commander sound effect
+  
   welcome = new SoundFile(this,"welcome.mp3");
-  ambient = new SoundFile(this,"ambient.mp3");
-  button = new SoundFile(this,"sound1.mp3");
-  error = new SoundFile(this,"sound2.mp3");
+  ambient = new SoundFile(this,"ambient.wav");
+  errorS = new SoundFile(this,"sound2.mp3");
   
   ambient.loop();
-*/
-  fullScreen(P3D,2);//render in 3d fullscreen
+
+  fullScreen(P3D,1);//render in 3d fullscreen
   //size(1366,768,P3D);
-  smooth(1);//AA x1
-  frameRate(60);//fps 60
+  smooth(8);//AA x1
   imageMode(CENTER);
   
  
@@ -231,14 +230,15 @@ void setup()
                 
 }
 
-/*
+
 import processing.sound.*;
 SoundFile welcome;
+boolean soundCheckWelcome= false;
 SoundFile ambient;
-SoundFile button;
-SoundFile error;
-boolean soundCheck = false;
-*/
+SoundFile errorS;
+boolean soundCheckerrorS = false;
+
+
 
 import controlP5.*;//used in creating the sliders
 ControlP5 controlP5;
@@ -267,7 +267,7 @@ int Rotate_Map = 5;//slider default value
  
  //BUTTON VARIABLES
 ArrayList<button> menu = new ArrayList<button>();//holds buttons
-String[] buttonNames = {"Star Map","Sytem Map","Controls","Probes","Lock System"};//button labels
+String[] buttonNames = {"Star Map","Local System","Controls","Probes","Lock System"};//button labels
 
 //STAR VARIABLES
 ArrayList<Star> stars = new ArrayList<Star>();//holds stars drawn
@@ -342,6 +342,8 @@ float PIBH;
 box planetInfoBox;
 
 float n;
+float m;
+float o;
 float barsStart;
 boolean error = false;
 boolean critical = false; 
@@ -364,6 +366,7 @@ ArrayList<probeInfo> probeinfo = new ArrayList<probeInfo>();
 ArrayList<Planet> probes = new ArrayList<Planet>();
 radar rad;
 
+boolean lockedCheck = false;
 
 void draw()
 {
@@ -399,7 +402,7 @@ void loadData()
   //choosing current star
   for(int i=0;i<stars.size();i++)
   {
-    if(stars.get(i).DisplayName.equals("River"))
+    if(stars.get(i).DisplayName.equals("Solaris"))
     {
       currentStar = stars.get(i);
     }
@@ -460,28 +463,34 @@ void drawMainWindow()
       {
         //change window state according to what button is pressed, +3 because window state 0 1 and 2 are not for buttons
         windowState = i+3; 
-      //  button.play();
       }
-      else
-      {
-       // button.stop(); 
-      }
-    }
-  }
-  //if buttons are clicked but window is still locked print locked, change to a padlock symbol later
+   }
+  
+}
+  //if buttons are clicked but window is still locked
   else
   {
     for(int i =0;i<menu.size();i++)
     {
-      if(menu.get(i).value == 1)
+      if(menu.get(i).value == 1 || lockedCheck == true)
       {
-        text("Locked",width/4,height/4); 
-        //error.play();
-        delay(250);
-      }
-      else
-      {
-        //error.stop(); 
+        fill(255,0,0);
+        if(soundCheckerrorS == false)
+        {
+           errorS.play();
+           soundCheckerrorS = true;
+        }
+
+       if (millis()-m <= 1000)
+       {  
+         lockedCheck = true;
+       }
+       else
+       {
+         lockedCheck = false;
+         soundCheckerrorS = false;
+         m = millis();
+       }
       }
     }
   }
@@ -564,21 +573,51 @@ void windowControl()
     case 2://unlocked
     { 
       tint(255);
-      /*
-      if(soundCheck == false)
+      
+      if(soundCheckWelcome == false)
       {
         welcome.play();
-        soundCheck = true;
+        soundCheckWelcome = true;
       }
-      */
-      textFont(spaceAge,70);
-      String ready = "Welcome Back Commander";
+      
+      textFont(arcon,windowWidth/25);
+      String ready = "System Initialized";
+      String report = "Systems Report Summary: ";
+      String security = "System Security Level: ";
+      String systems = "Critical Systems Report: ";
+      String seeMore = "See other systems in the 'Controls' menu";
+      String ok = "Ok";
+      String current = "Current Location: "+currentStar.DisplayName;
+      String inhabited = "Inhabited System";
+      
       //drawDots();
       //consider adding report on this page, something about security, systems report etc
-      text(ready,(width/2)-(textWidth(ready)/2),height/2);
+      fill(0,255,0);
+      text(ready,(width/2)-(textWidth(ready)/2),y1+border*1);
+      
+      fill(0,0,255);
+      text(report,x1+border,y1+border*2);
+      
+      textSize(windowWidth/35);
+      fill(255);
+      text(security,x1+border,y1+border*3);
+      text(systems,x1+border,y1+border*3.5);
+      textSize(windowWidth/40);
+      text(seeMore,x1+border,y1+border*4);
+      text(inhabited,x1+border,y1+border*5.5);
+      textSize(windowWidth/35);
+      text(current,x1+border,y1+border*5);
+      
+      
+      fill(0,255,0);
+      text(ok,x1+border+textWidth(security),y1+border*3);
+      text(ok,x1+border+textWidth(systems),y1+border*3.5);
+      
+      
+      
       break;
     }
-    case 3://first menu item
+    case 3://Star Map
     {  
       //reset button clears selected stars
       float resetWidth = windowWidth/10;
@@ -609,7 +648,7 @@ void windowControl()
       nextPage.drawButton(rightSplit+40+nextWidth,y1+windowHeight-(border*0.75),nextWidth,windowHeight/15,150,255);
     
       //change page by 4 because of how drawing each page works, it goes from the value of page+3, so each page prints 4 from the arrayList
-      if(nextPage.value == 1 && page < selectedStars.size()-5)
+      if(nextPage.value == 1 && page < selectedStars.size()-6)
       {
         page+=4;
         delay(250);
@@ -888,7 +927,8 @@ void windowControl()
     case 6:
     {
       probes = new ArrayList<Planet>();
-
+      boolean clickCheck = false;
+      
       textFont(arcon,30);
       for(int i=0;i<planets.size();i++)
       {
@@ -917,6 +957,7 @@ void windowControl()
               }
             }
           }
+          
           text(probes.get(i).name,-textWidth(probes.get(i).name)/2,probes.get(i).origSize*2);
           shape(probes.get(i).planet);
           popMatrix();
@@ -924,7 +965,7 @@ void windowControl()
           if(probes.get(i).clicked  == true)
           {
             pushMatrix();
-
+            clickCheck = true;
             
             if(e == -1 && probes.get(i).size < 330)
             {
@@ -949,11 +990,20 @@ void windowControl()
             
             probeInfo();
           }
-        }        
+        }       
       }
       else
       {
-        text("No Probes Launched. Launch probes from Local System Menu",width/2,height/2); 
+        textSize(windowWidth/30);
+        String probeLaunch = "No Probes Launched. Launch probes from Local System Menu";
+        text(probeLaunch,x1+(windowWidth/2)-textWidth(probeLaunch)/2,height/2); 
+      }
+      
+      if(clickCheck == false && probes.size()!=0)
+      {
+        textSize(windowWidth/30);
+        String selectProbe = "Select a planet to view data";
+        text(selectProbe,x1+(windowWidth/2)-textWidth(selectProbe)/2,height/2); 
       }
 
 
@@ -978,6 +1028,7 @@ void windowControl()
       textOp = 255;
       icarus.opacity = 0;
       check =false;
+      soundCheckWelcome = false;
       break;
     }
     default://no window state selected
@@ -1024,7 +1075,23 @@ void drawLogin()
   
   //colour and weight of login box
   stroke(234,223,104,boxOp);
-  strokeWeight(3);
+  if(lockedCheck == true)
+  {
+    if (millis() - n <= 100)
+    {  
+      strokeWeight(3);
+      stroke(234,223,104,boxOp);
+    }
+    else if (millis() - n >= 200)
+    {
+      stroke(255);
+      strokeWeight(5);
+      n = millis();
+    }
+  }
+
+  
+  
   fill(100,0,0,boxOp);
   
   //draw the login box
@@ -1136,7 +1203,7 @@ void drawLine()
   }
   else
   {
-    for(int i=0;i<selectedStars.size();i++)
+    for(int i=0;i<selectedStars.size()-4;i++)
     {
       //due to the way selectStars and drawing lines works I need a seperate text draw for the first ones number
       if(selectedStars.get(0) != null)
@@ -1366,11 +1433,16 @@ void planetInfo()
   String radius = "Orbit Radius: ";
   String size = "Planet Radius: ";
   String probeText = "Probe Launched";
+  String probeText2 = "See 'Probes' menu for data";
+  String click = "Select a planet";
   noLights();
   fill(0,0,57);
   stroke(234,223,104);
   planetInfoBox.drawBox();
   
+  fill(255);
+  textSize(windowWidth/30);
+  text("System: " +currentStar.DisplayName,x1+(windowWidth/2)-(textWidth("System: "+currentStar.DisplayName)/2),y1+(textAscent()-textDescent()));
   
   for(int i=0;i<planets.size();i++)
   {
@@ -1406,9 +1478,10 @@ void planetInfo()
     
     if(probe.value == 1 || select.probeCheck == true)
     {
-      textSize(30);
+      textSize(PIBW/15);
       fill(0,255,0);
       text(probeText,PIBX+(PIBW/2)-textWidth(probeText)/2,PIBY+PIBH/1.7);
+      text(probeText2,PIBX+(PIBW/2)-textWidth(probeText2)/2,PIBY+(PIBH/1.7)+textAscent());
       select.probeCheck = true;
     }
     
@@ -1422,7 +1495,9 @@ void planetInfo()
   }
   else
   {
-   //click a planet for info 
+    textFont(arcon,PIBW/10);
+    fill(255);
+    text(click,PIBX+(PIBW/2)-(textWidth(click)/2),PIBY+(textAscent()-textDescent()));
   }
   
 }
