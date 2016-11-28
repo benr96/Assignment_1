@@ -6,8 +6,7 @@ class radar
   float cY;
   float radius; 
   float diameter;
-  float pX = 50;
-  float pY = 50;
+  PVector dot = new PVector(50,50);
   float distPoint = 0;
   float intensity = 255;
   
@@ -19,8 +18,8 @@ class radar
    this.diameter = radius*2;
    pushMatrix();
    translate(cX,cY);
-   pX = random(-(diameter/3),(diameter/3));
-   pY = random(-(diameter/3),(diameter/3));
+   dot.x = random(-(diameter/3),(diameter/3));
+   dot.y = random(-(diameter/3),(diameter/3));
    popMatrix();
   }
 
@@ -41,24 +40,20 @@ class radar
       pushMatrix();
       translate(cX,cY);
       
-      if(pX > -(diameter/2) && pX < (diameter/2) && pY > -(diameter/2) && pY < (diameter/2))
+      if(dot.x > -(diameter/2) && dot.x < (diameter/2) && dot.y > -(diameter/2) && dot.y < (diameter/2))
       {
-        println("adding");
-        pX += random(-40,40);  
-        pY += random(-40,40); 
+        dot.x += random(-40,40);  
+        dot.y += random(-40,40); 
       }
       else
       {
-        println("new");
-        pX = random(-(diameter/2),(diameter/2));
-        pY = random(-(diameter/2),(diameter/2));
+        dot.x = random(-(diameter/2),(diameter/2));
+        dot.y = random(-(diameter/2),(diameter/2));
       }
 
-      distPoint = dist(0,0,pX,pY);
+      distPoint = dist(0,0,dot.x,dot.y);
       popMatrix();
     }
-   println(pX+","+pY);
-
     
     
     radius = radius+speed;
@@ -72,7 +67,7 @@ class radar
       translate(cX,cY);
       strokeWeight(5);
       stroke(255,0,0);
-      point(pX, pY);
+      point(dot.x, dot.y);
       popMatrix();
     }
 

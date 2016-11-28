@@ -17,7 +17,7 @@ void setup()
   
   ambient.loop();
 
-  //fullScreen(P3D,1);//render in 3d fullscreen
+  //fullScreen(P3D,2);//render in 3d fullscreen
   size(1366,768,P3D);
   smooth(8);//AA x1
   imageMode(CENTER);
@@ -378,8 +378,6 @@ void draw()
   
   drawMenu();//draw the buttons
   drawMainWindow();//draw the main window and control its contents
-  
-  //println(frameRate);
 }
 
 void loadData()
@@ -516,7 +514,6 @@ void windowControl()
   localMapSliderRot.hide();
   
   localMapSlider.hide();
-  //windowState =3;  
   
   switch(windowState)
   {
@@ -623,11 +620,6 @@ void windowControl()
       text(ok,x1+border+textWidth(systems),y1+border*3.5);
       textSize(windowWidth/40);
       text(ok,x1+border+textWidth(status),y1+border*6);
-
-      
-      
-      
-      
       break;
     }
     case 3://Star Map
@@ -941,14 +933,13 @@ void windowControl()
       probes = new ArrayList<Planet>();
       boolean clickCheck = false;
       
-      textFont(arcon,30);
+      textFont(arcon,width/80);
       for(int i=0;i<planets.size();i++)
       {
         if(planets.get(i).probeCheck == true)
         {
           Planet p = planets.get(i);
           probes.add(p);
-          
         }
       }
       
@@ -979,12 +970,12 @@ void windowControl()
             pushMatrix();
             clickCheck = true;
             
-            if(e == -1 && probes.get(i).size < 330)
+            if(e == -1 && probes.get(i).size < windowHeight/3)
             {
              probes.get(i).size+=30;
              e=0;
             }
-            else if(e == 1 && probes.get(i).size>50)
+            else if(e == 1 && probes.get(i).size>windowHeight/10)
             {
               probes.get(i).size-=30;
               e=0;
@@ -1111,7 +1102,7 @@ void drawLogin()
 
   //draw the box title
   fill(255,255,255,textOp);
-  textSize(20);
+  textSize(width/100);
   text(loginTitle,safeX,safeY);
   line(safeX,safeY*1.01,safeX+textWidth(loginTitle),safeY*1.01);
   
@@ -1154,7 +1145,7 @@ void drawGrid(float x1, float y1, float windowWidth, float windowHeight)
   
   //line thickness and font
   strokeWeight(1);
-  textFont(arcon,15);
+  textFont(arcon,width/110);
 
   //drawing vertical lines
   for(float x = x1+border; x <= halfway-(border-1); x+=lineGapX)
@@ -1167,7 +1158,7 @@ void drawGrid(float x1, float y1, float windowWidth, float windowHeight)
   i = -5;
   
   //drawing horizontal lines
-  for(float y = y1+border; y <= y1+windowHeight-border;y+=lineGapY)
+  for(float y = y1+border; y <= y1+windowHeight-(border-1);y+=lineGapY)
   {
     line(x1+border,y,halfway-border,y); 
     text(i++,x1+border-30,y);
@@ -1204,7 +1195,7 @@ void drawLine()
 {
   stroke(255);
   textFont(number);
-  textSize(15);
+  textSize(width/110);
 
   //if a star has been selected remove the current node from the arrayList(which is null) and add the selected star in its place
   if(selected != -1 && current < 39)
@@ -1280,11 +1271,11 @@ void starInfo()
   {
     text("Select a star to see its information",halfway+20,yVal);
   }
-  
+  textSize(width/65);
   //draw the left side (first two) sets of info 
   for(int i = page;i<page+2;i++)
   {
-    textSize(width/60);
+    
     
     //again due to the way selectedStars works I need a seperate if to make sure it still draws even if there is only one selected star
     if(selectedStars.get(i-1) != null && selectedStars.get(i) == null)
@@ -1363,7 +1354,6 @@ void starInfo()
   //for drawing right side (second 2) sets of info
   for(int j=page+2;j<page+4;j++)
   {
-    textSize(width/60);
     
     //again due to the way selectedStars works I need a seperate if to make sure it still draws even if there is only one selected staR
     if(selectedStars.get(j-1) != null && selectedStars.get(j) == null)
@@ -1574,7 +1564,7 @@ void probeInfo()
   probeBox.drawBox();
   
   fill(255);
-  textSize(20);
+  textSize(width/90);
   text(classification,half-textWidth(classification)/2,top+textAscent()*0);
   text(inhabited,half-textWidth(inhabited)/2,top+textAscent()*2);
   text(intelligent,half-textWidth(intelligent)/2,top+textAscent()*4);
