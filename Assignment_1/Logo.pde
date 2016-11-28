@@ -27,7 +27,7 @@ class Logo
  void drawImage()
  {
    tint(255,this.opacity);
-   image(img,cX,cY);
+   image(img,cX,cY,windowHeight/2,windowHeight/2);
  }
  
  void rotateImage()

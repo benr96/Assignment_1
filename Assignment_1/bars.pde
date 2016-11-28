@@ -4,7 +4,7 @@ class bars
    int level;
    int current = amount;
    float barWidth = width/15;
-   float barHeight = height/35;
+   float barHeight = height/45;
    float x;
    float y;
    String label;
@@ -19,7 +19,7 @@ class bars
    
    void drawBars()
    {
-     textFont(arcon,30);
+     textFont(arcon,windowWidth/60);
      
      float textPosX = x+(barWidth/2)-(textWidth(label)/2);
      float textPosY = y+((barHeight+10)*amount)+textAscent();
