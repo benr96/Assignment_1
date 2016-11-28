@@ -1,3 +1,4 @@
+//for holding data from probeData file on each type of planet
 class probeInfo
 {
   String type;
@@ -27,6 +28,7 @@ class probeInfo
   
   probeInfo(TableRow row)
   {
+    //interpreting data from file
     type = row.getString("Type");
     
     if(row.getInt("Inhabited") == 1)

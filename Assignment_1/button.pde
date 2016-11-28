@@ -1,7 +1,7 @@
 class button
 {
  String label;
- int value;//0 = not pressed 1 = pressed
+ int value;
  
  button()
  {
@@ -15,14 +15,17 @@ class button
    this.value = value;
  }
  
+ //used to draw all buttons
  void drawButton(float x, float y, float buttonWidth, float buttonHeight,int boxOpacity, int textOpacity)
  { 
    fill(0,0,57,boxOpacity);
    stroke(234,223,104,boxOpacity);
    strokeWeight(2);
    
+   //check if clicked before drawing
    isClicked(x,y,buttonWidth,buttonHeight);
   
+   //if clicked reduce size
    if(this.value == 1)
    {
      buttonWidth = buttonWidth*0.95;

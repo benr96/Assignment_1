@@ -1,42 +1,23 @@
 /*Author: Ben Ryan
   Student Number: C15507277
-  Date started: 29/10/16
-  Description: Assignment for Object Oriented Programming DT228
+  Assignment for Object Oriented Programming DT228
  */
+ 
 void setup()
 {
-  n = millis();
-  m = millis();
-  o = millis();
-  //used for some ui features
+  fullScreen(P3D);
+  
+  smooth(8);
+  imageMode(CENTER);
+
+  //used for sliders and switches
   controlP5 = new ControlP5(this);
   
+  //sounds
   welcome = new SoundFile(this,"welcome.mp3");
   ambient = new SoundFile(this,"ambient.wav");
   errorS = new SoundFile(this,"sound2.mp3");
-  
   ambient.loop();
-
-  //fullScreen(P3D,2);//render in 3d fullscreen
-  size(1366,768,P3D);
-  smooth(8);//AA x1
-  imageMode(CENTER);
-  
-  border = width/19.2;
- 
-
-  //initialising buttons and adding them to an arrayList
-  for(int i=0 ;i<5;i++)
-  {
-   button pos = new button(buttonNames[i],0); 
-   menu.add(pos);
-  }
-  
-  //filling selectedStars with null so to avoid array out of bounds exception
-  for(int i=0;i<39;i++)
-  {
-    selectedStars.add(null);
-  }
   
   //FONTS
   spaceAge = createFont("font1.ttf",50);//used for buttons
@@ -45,8 +26,37 @@ void setup()
   
   //IMAGES
   icarus = new Logo(logoOpacity,width/2,height/2,"icarus.png");//loading screen
+  earth = loadImage("earth.jpg");
+  dust = loadImage("venus.gif");
+  ice = loadImage("ice.jpg");
+  jupiter = loadImage("jupiter.jpg");
+  sun = loadImage("sun.png");
   
-  //MAIN WINDOW VARIABLES
+  textures.add(earth);
+  textures.add(dust);
+  textures.add(ice);
+  textures.add(jupiter);  
+  
+  //used for timing various events
+  n = millis();
+  m = millis();
+  o = millis();
+  
+  //used in placing things on screen
+  border = width/19.2;
+ 
+  //initialising buttons and adding them to an arrayList
+  for(int i=0 ;i<5;i++)
+  {
+    button pos = new button(buttonNames[i],0); 
+    menu.add(pos);
+  }
+  
+  //filling selectedStars with null so to avoid array out of bounds exception
+  for(int i=0;i<39;i++)
+  {
+    selectedStars.add(null);
+  }
   
   //top left
   x1 = width/25;
@@ -60,7 +70,7 @@ void setup()
   windowWidth = sqrt((x1-x2)*(x1-x2)+(y1-y1)*(y1-y1));
   windowHeight = sqrt((x1-x1)*(x1-x1)+(y1-y2)*(y1-y2));
   
-  //useful variables
+  //useful variables for positioning inside main window
   halfway = x1+(windowWidth/2);
   rightSplit = (halfway+(halfway/2)-border/2);
   
@@ -69,11 +79,6 @@ void setup()
   starX2 = halfway-border;
   starY1 = y1+border;
   starY2 = y1+windowHeight-border;
-  
-  //FUNCTION CALLS
-  loadData();
- 
-  //LOCAL SOLAR SYSTEM VARIABLES
   
   //centre sun in middle of main window
   sunX = x1+(windowWidth/2);
@@ -89,50 +94,8 @@ void setup()
   localMapSlider = controlP5.addSlider("Tilt Map",0,10,5,(int)sliderX,(int)sliderY,(int)sliderWidth,(int)sliderHeight) .setColorBackground(color(255))
                    .setColorActive((color(0,0,57)))
                    .setColorForeground(color(0,0,57)).hide();
-  
-  //planet info box 
-  PIBX = x2-(border*3);
-  PIBY = y1+border;
-  PIBW = windowWidth/7;
-  PIBH = windowHeight/2;
-  
-  planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
- 
-  float orbitRadius = sunSize;
-  
-  earth = loadImage("earth.jpg");
-  dust = loadImage("venus.gif");
-  ice = loadImage("ice.jpg");
-  jupiter = loadImage("jupiter.jpg");
-  sun = loadImage("sun.png");
-  
-  noStroke();
-  sunS = createShape(SPHERE,sunSize);
-  sunS.setTexture(sun);
-  
-  textures.add(earth);
-  textures.add(dust);
-  textures.add(ice);
-  textures.add(jupiter);  
-    
-  planNum =4;//(int)random(2,5);//random amount of planets between 2 and 5
-    
-   for(int i=0;i<planNum;i++)
-   {
-     float size = random((windowWidth/100),sunSize/2);//random size
-     float diameter = (size*2);//used in limited the random range of the next planets orbit radius
-     float rot = random(0,TWO_PI);//random start position
-     float rotSpeed = random(0.001,0.01);//random rotation speed
-     orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);//random orbit radius limited by the previous orbit radius and the size of the last planet so they don't overlap
-     
-     //creating and adding planets to the arrayList
-     Planet p = new Planet(planetNames[i],size,orbitRadius,rot,rotSpeed,color(255,0,0),textures.get(i));
-     planets.add(p);
-   }    
-   
-   barsStart = x1+border*1.8;
-   
-   localMapSliderRot = controlP5.addSlider("Simulation Speed")
+                   
+  localMapSliderRot = controlP5.addSlider("Simulation Speed")
                      .setPosition(x1+(border*5),y1+(windowHeight*0.9))
                      .setSize((int)(windowWidth*0.40),(int)(windowHeight/20))
                      .setRange(-5,5)
@@ -141,9 +104,37 @@ void setup()
                      .setColorForeground(color(0,0,57))
                      .setValue((int)0)
                      .hide();
-                       
-   
-   enginePowerSlider = controlP5.addSlider("Engine Power")
+  
+  //planet info box 
+  PIBX = x2-(border*3);
+  PIBY = y1+border;
+  PIBW = windowWidth/7;
+  PIBH = windowHeight/2;
+  
+  planetInfoBox = new box(PIBX,PIBY,PIBW,PIBH,0.83,0.9);
+
+  planNum = 4;
+  float orbitRadius = sunSize;
+    
+  //generates a solar system with 4 planets at random sizes, positions and speeds once every the program runs, so every time it's a little different 
+  for(int i=0;i<planNum;i++)
+  {
+    float size = random((windowWidth/100),sunSize/2);//random size
+    float diameter = (size*2);//used in limited the random range of the next planets orbit radius
+    float rot = random(0,TWO_PI);//random start position
+    float rotSpeed = random(0.001,0.01);//random rotation speed
+    orbitRadius = random(orbitRadius+(diameter*2), windowWidth/15);//random orbit radius limited by the previous orbit radius and the size of the last planet so they don't overlap
+     
+    //creating and adding planets to the arrayList     
+    Planet p = new Planet(planetNames[i],size,orbitRadius,rot,rotSpeed,color(255,0,0),textures.get(i));
+    planets.add(p);
+  }    
+  
+  //used to draw control bars
+  barsStart = x1+border*1.8;
+
+  //sliders used for controls
+  enginePowerSlider = controlP5.addSlider("Engine Power")
                    .setPosition(barsStart-20,y1+(windowHeight/2)+20)
                    .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
                    .setRange(0,800)
@@ -163,7 +154,7 @@ void setup()
                    .setValue(200)
                    .hide();
                    
- shipVelocitySlider = controlP5.addSlider("Ship Speed")
+  shipVelocitySlider = controlP5.addSlider("Ship Speed")
                    .setPosition(barsStart+((windowWidth/25)*4),y1+(windowHeight/2)+20)
                    .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
                    .setRange(0,800)
@@ -173,7 +164,7 @@ void setup()
                    .setValue(300)
                    .hide();
                    
- weaponPowerSlider = controlP5.addSlider("Weapon Power")
+  weaponPowerSlider = controlP5.addSlider("Weapon Power")
                    .setPosition(barsStart+((windowWidth/25)*6),y1+(windowHeight/2)+20)
                    .setSize((int)(windowWidth/25),(int)((windowHeight/2)-border))
                    .setRange(0,800)
@@ -224,14 +215,19 @@ void setup()
                 .setMode(ControlP5.SWITCH)
                 .hide();
                 
-                picW = width/2;
-                picH = height/2;
-                rot = 0;
-                rad =new radar(x1+(windowWidth*0.84),y1+(windowHeight*0.775),windowWidth/12);
+  rot = 0;
+  rad =new radar(x1+(windowWidth*0.84),y1+(windowHeight*0.775),windowWidth/12);
+  
+  //load data from files
+  loadData();
+  
+  noStroke();
+  sunS = createShape(SPHERE,sunSize);
+  sunS.setTexture(sun);
                 
 }
 
-
+//SOUND
 import processing.sound.*;
 SoundFile welcome;
 boolean soundCheckWelcome= false;
@@ -239,8 +235,7 @@ SoundFile ambient;
 SoundFile errorS;
 boolean soundCheckerrorS = false;
 
-
-
+//SLIDERS AND SWITCHES
 import controlP5.*;//used in creating the sliders
 ControlP5 controlP5;
 controlP5.Slider localMapSlider;//slider for solar system tilt
@@ -257,7 +252,6 @@ controlP5.Toggle weaponToggle;
 
 controlP5.Slider shieldPowerSlider;
 controlP5.Toggle shieldToggle;
-
 
 float sliderWidth;
 float sliderHeight;
@@ -342,13 +336,17 @@ float PIBW;
 float PIBH;
 box planetInfoBox;
 
+//timing variables
 float n;
 float m;
 float o;
+
+//controls variab;es
 float barsStart;
 boolean error = false;
 boolean critical = false; 
 
+//textures
 ArrayList<PImage> textures = new ArrayList<PImage>();
 PImage earth;
 PImage dust;
@@ -357,17 +355,18 @@ PImage sun;
 PImage jupiter;
 PShape sunS;
 
+//solar system variables
 float e;
-float picW;
-float picH;
 PShape selectedPlanet;
 float rot;
 Table t1;
 ArrayList<probeInfo> probeinfo = new ArrayList<probeInfo>();
 ArrayList<Planet> probes = new ArrayList<Planet>();
+
 radar rad;
 
 boolean lockedCheck = false;
+
 button probe = new button("Launch Probe",0);
 
 void draw()
@@ -386,7 +385,6 @@ void loadData()
   t = loadTable("starData.csv","header");
   t1 = loadTable("probeData.csv","header");
  
-  //create object for each star and store them in and arraylist
   for(TableRow row:t.rows())
   {
     Star s = new Star(row,starX1,starX2,starY1,starY2);
@@ -407,7 +405,6 @@ void loadData()
       currentStar = stars.get(i);
     }
   }
-  
 }
 
 void drawMenu()
@@ -433,7 +430,7 @@ void drawMenu()
     }
     else
     {
-       menu.get(i).drawButton(x,y,buttonWidth,buttonHeight,150,255);
+      menu.get(i).drawButton(x,y,buttonWidth,buttonHeight,150,255);
     }
     
     //increment the start position of the button to where next button should start
@@ -464,9 +461,8 @@ void drawMainWindow()
         //change window state according to what button is pressed, +3 because window state 0 1 and 2 are not for buttons
         windowState = i+3; 
       }
-   }
-  
-}
+    }
+  }
   //if buttons are clicked but window is still locked
   else
   {
@@ -477,29 +473,31 @@ void drawMainWindow()
         fill(255,0,0);
         if(soundCheckerrorS == false)
         {
-           errorS.play();
-           soundCheckerrorS = true;
+          //play error sound
+          errorS.play();
+          soundCheckerrorS = true;
         }
 
-       if (millis()-m <= 1000)
-       {  
-         lockedCheck = true;
-       }
-       else
-       {
-         lockedCheck = false;
-         soundCheckerrorS = false;
-         m = millis();
-       }
+        //timer for flashing login box
+        if (millis()-m <= 1000)
+        {  
+          lockedCheck = true;
+        }
+        else
+        {
+          lockedCheck = false;
+          soundCheckerrorS = false;
+          m = millis();
+        }
       }
     }
-  }
-  
+  }  
   windowControl();
 }
 
 void windowControl()
 {
+  //hide all the controlP5 elements until they are needed
   enginePowerSlider.hide();
   engineCoolingSlider.hide();
   enginePowerSlider.hide();
@@ -581,6 +579,7 @@ void windowControl()
         soundCheckWelcome = true;
       }
       
+      //system report summary variables
       textFont(arcon,windowWidth/25);
       String ready = "System Initialized";
       String report = "Systems Report Summary: ";
@@ -592,8 +591,6 @@ void windowControl()
       String inhabited = "Inhabited System";
       String status = "Security Status: ";
       
-      //drawDots();
-      //consider adding report on this page, something about security, systems report etc
       fill(0,255,0);
       text(ready,(width/2)-(textWidth(ready)/2),y1+border*1);
       
@@ -612,8 +609,6 @@ void windowControl()
       
       textSize(windowWidth/35);
       text(current,x1+border,y1+border*5);
-      
-      
       
       fill(0,255,0);
       text(ok,x1+border+textWidth(security),y1+border*3);
@@ -679,34 +674,37 @@ void windowControl()
     }
     case 4://second menu item
     {
-
+      //show relevant sliders
       localMapSlider.show();
       localMapSliderRot.show();
       
+      //set the planets rotation speed to whatever it was when originally chosen(random), + the value of the slider/100
       for(int i=0;i<planets.size();i++)
       {
         planets.get(i).rotSpeed = planets.get(i).rotSpeedSave + localMapSliderRot.getValue()/100;
       }
       
       pushMatrix();
-      
+     
       //lerp camera position to the value of the slider which is mapped to a new range
       float rotMap = map(localMapSlider.getValue(),0,10,-500,500);
       camY = lerp(camY,rotMap,0.01);
       camera(camX,-camY,750,sunX,sunY,0,0,1,0);
 
       pushMatrix();
+      
       translate(sunX,sunY);//translate to where sun will be drawn
       rotateY(-frameCount*0.001);//rotate sun
       shape(sunS);
       pointLight(255,255,255,0,0,0);//to simulate sun light
       ambientLight(50,50,50);//to help light up the scene a bit more so the parts of planets not facing sun can be seen
+      
       popMatrix();
 
       pushMatrix();
+      
       translate(sunX,sunY);//translate to sun centre
       
-      //loop through planets arrayList doing various things
       for(int i=0;i<planets.size();i++)
       {
         planets.get(i).isClicked();//check if the planet is clicked
@@ -714,12 +712,12 @@ void windowControl()
         planets.get(i).drawPlanet();//draw the planet
         planets.get(i).updatePlanet();//update the planets position
       }
+      
       popMatrix();
     
       pushMatrix();
       
       translate(sunX,sunY);//translate to sun centre
-      
       rotateX(-1.6);//rotate about the x axis
     
       //draw the orbits of the planets
@@ -736,7 +734,7 @@ void windowControl()
     }
     case 5://Ship Status
     {
-                              
+      //warning indicators                     
       int weaponHeatLevel;
       ArrayList<String> errors = new ArrayList<String>();
       String error1 = "Engine Power Overload";
@@ -748,6 +746,7 @@ void windowControl()
       String error7 = "Reactor Failure has Occured";
       String error8 = "Reactor Failure Imminent";
       
+      //show relevant sliders/switches
       enginePowerSlider.show();
       engineCoolingSlider.show();
       enginePowerSlider.show();
@@ -760,17 +759,20 @@ void windowControl()
       engineToggle.show();
       weaponToggle.show();
       
+      //engine power can be no more than 200 behind ship velocity
       if(enginePowerSlider.getValue() < shipVelocitySlider.getValue()-200)
       {
         enginePowerSlider.setValue(shipVelocitySlider.getValue()-200);
       }
       
+      //shield off
       if(shieldToggle.getValue() == 1)
       {
         shieldPowerSlider.setValue(0);
         error = false;
       }
       
+      //engine off
       if(engineToggle.getValue() == 1)
       {
         enginePowerSlider.setValue(0); 
@@ -780,6 +782,7 @@ void windowControl()
         error = false;
       }
       
+      //weapons off
       if(weaponToggle.getValue() == 1)
       {
          weaponPowerSlider.setValue(0);
@@ -798,17 +801,17 @@ void windowControl()
       int shieldIntLevel= (int)((shieldPowerSlider.getValue())/100);
       int shieldPowerLevel=(int)(shieldPowerSlider.getValue()/100);
       
-      
+      //upper and lower boxes
       box lower = new box(x1+20,y1+(windowHeight/2),windowWidth-40,(windowHeight/2)-20,0.95,0.8);
       box upper = new box(x1+20,y1+20,windowWidth-40,(windowHeight/2)-30,0.95,0.8);
       
+      //the level indicators
       bars engineHeat = new bars(barsStart,y1+40,"Engine Temp",engineHeatLevel);
       bars enginePower = new bars(barsStart*2,y1+40,"Engine Power",enginePowerLevel);
       bars weaponHeat = new bars(barsStart*3,y1+40,"Weapon Temp",weaponHeatLevel);
       bars weaponPower = new bars(barsStart*4,y1+40,"Weapon Power",weaponPowerLevel);
       bars shieldInt = new bars(barsStart*5,y1+40,"Shield Integrity",shieldIntLevel);
       bars shieldPower = new bars(barsStart*6,y1+40,"Shield Power",shieldPowerLevel);
-    
       
       lower.drawBox();
       upper.drawBox();
@@ -820,6 +823,7 @@ void windowControl()
       shieldInt.drawBars();
       shieldPower.drawBars();
       
+      //if total power output is over 20 shut all controls down, display critical error messages
       if((enginePowerLevel+weaponPowerLevel+shieldPowerLevel) > 20 || critical == true)
       {
          error = true;
@@ -831,11 +835,14 @@ void windowControl()
       }
       else
       {
+        //if total power output is over 15 warn of imminent shut down
         if((enginePowerLevel+weaponPowerLevel+shieldPowerLevel) > 15)
         {
           error = true; 
           errors.add(error8);
         }
+        
+        //display other error messages
         
         if(engineHeatLevel > 5)
         {
@@ -902,6 +909,7 @@ void windowControl()
         fill(0);
         stroke(0);
       
+        //used for flashing warning on and off
         if (millis() - n <= 500)
         {  
           fill(255,0,0);
@@ -922,14 +930,13 @@ void windowControl()
       
       noFill();
       box SystemCheck = new box(rightSplit-border,y1+windowHeight*0.60,windowWidth/4,windowHeight/8,0.9,0.9);
-      
 
-      
       SystemCheck.drawBox();
       break;
     }
     case 6:
     {
+      //arraylist to hold the planets which contain a probe
       probes = new ArrayList<Planet>();
       boolean clickCheck = false;
       
@@ -943,12 +950,16 @@ void windowControl()
         }
       }
       
+      //if probes are launched
       if(probes.size() !=0)
       {
         for(int i=0;i<probes.size();i++)
         {
           pushMatrix();
+          
           translate(x1+border,(y1+border)+(windowHeight/4)*i);
+          
+          //planet selected
           if(mouseX > x1+border-planets.get(i).origSize && mouseX < x1+border+planets.get(i).origSize && mouseY > ((y1+border)+(windowHeight/4)*i)-planets.get(i).origSize && mouseY < ((y1+border)+(windowHeight/4)*i)+planets.get(i).origSize && mousePressed)
           {
             probes.get(i).clicked = true;
@@ -961,19 +972,24 @@ void windowControl()
             }
           }
           
+          //planet names
           text(probes.get(i).name,-textWidth(probes.get(i).name)/2,probes.get(i).origSize*2);
+          
           shape(probes.get(i).planet);
+          
           popMatrix();
           
+          //if selected
           if(probes.get(i).clicked  == true)
           {
             pushMatrix();
             clickCheck = true;
             
+            //e comes from mouse scroll function, for changing size of planet
             if(e == -1 && probes.get(i).size < windowHeight/3)
             {
-             probes.get(i).size+=30;
-             e=0;
+              probes.get(i).size+=30;
+              e=0;
             }
             else if(e == 1 && probes.get(i).size>windowHeight/10)
             {
@@ -984,10 +1000,14 @@ void windowControl()
             noStroke();
             selectedPlanet = createShape(SPHERE,probes.get(i).size);
             selectedPlanet.setTexture(probes.get(i).texture);
+            
             pushMatrix();
+            
             translate(x1+(windowWidth/2),y1+(windowHeight/2));
+            //rot comes from mouse dragged function
             rotateY(rot);
             shape(selectedPlanet);
+            
             popMatrix();
             popMatrix();
             
@@ -997,6 +1017,7 @@ void windowControl()
       }
       else
       {
+        //if no probes launched instruct user on how to launch them
         textSize(windowWidth/30);
         String probeLaunch = "No Probes Launched. Launch probes from Local System Menu";
         text(probeLaunch,x1+(windowWidth/2)-textWidth(probeLaunch)/2,height/2); 
@@ -1008,15 +1029,14 @@ void windowControl()
         String selectProbe = "Select a planet to view data";
         text(selectProbe,x1+(windowWidth/2)-textWidth(selectProbe)/2,height/2); 
       }
-
-
       break;
     }
     case 7://lock window
     {
 
-      //clear the arrayList an reinitailise to null
+      //clear the arrayList and reinitailise to null
       selectedStars.clear();
+      
       for(int i=0;i<40;i++)
       {
         selectedStars.add(null);
@@ -1033,11 +1053,6 @@ void windowControl()
       check =false;
       soundCheckWelcome = false;
       break;
-    }
-    default://no window state selected
-    {
-      drawDots();
-      text("Error 404 : Page not found",width/2,height/2); 
     }
   }
 }
@@ -1078,6 +1093,8 @@ void drawLogin()
   
   //colour and weight of login box
   stroke(234,223,104,boxOp);
+  
+  //when button clicked while still locked flash the colours
   if(lockedCheck == true)
   {
     if (millis() - n <= 100)
@@ -1092,8 +1109,6 @@ void drawLogin()
       n = millis();
     }
   }
-
-  
   
   fill(100,0,0,boxOp);
   
@@ -1127,7 +1142,7 @@ void drawLogin()
   //draw submit button
   submitButton.drawButton(safeX+(loginWidth*.15),safeY*1.25,loginWidth/2,loginHeight/6,boxOp,textOp);
   
-  //if login button is clicked change window state to transitionign
+  //if login button is clicked change window state to transitioning
   if(submitButton.value == 1)
   {
     windowState = 1;
@@ -1180,7 +1195,6 @@ void plotStars()
     
     String starName = stars.get(i).DisplayName;
    
-    //drawing red circle around each stars location the size of the star
     noStroke();
     ellipse(stars.get(i).x,stars.get(i).y,stars.get(i).AbsMag,stars.get(i).AbsMag);
       
@@ -1191,6 +1205,7 @@ void plotStars()
   }
 }
 
+//draws lines and info
 void drawLine()
 {
   stroke(255);
@@ -1272,12 +1287,12 @@ void starInfo()
     text("Select a star to see its information",halfway+20,yVal);
   }
   textSize(width/65);
+  
   //draw the left side (first two) sets of info 
   for(int i = page;i<page+2;i++)
   {
-    
-    
-    //again due to the way selectedStars works I need a seperate if to make sure it still draws even if there is only one selected star
+
+    //due to the way selectedStars works I need a seperate if to make sure it still draws even if there is only one selected star
     if(selectedStars.get(i-1) != null && selectedStars.get(i) == null)
     {
       //TITLES
@@ -1314,7 +1329,7 @@ void starInfo()
     }
     else if(selectedStars.get(i-1) != null && selectedStars.get(i) != null)
     {
-      //TITLE
+      //TITLES
       fill(255);
       text(title+i,midpointLeft-(textWidth(title)/2),rightY*yVal);
       text(name,halfway+20,rightY*yVal+textAscent()*1.3);    
@@ -1355,7 +1370,7 @@ void starInfo()
   for(int j=page+2;j<page+4;j++)
   {
     
-    //again due to the way selectedStars works I need a seperate if to make sure it still draws even if there is only one selected staR
+    //due to the way selectedStars works I need a seperate if to make sure it still draws even if there is only one selected star
     if(selectedStars.get(j-1) != null && selectedStars.get(j) == null)
     {
       //TITLES
@@ -1438,16 +1453,20 @@ void planetInfo()
   String probeText = "Probe Launched";
   String probeText2 = "See 'Probes' menu for data";
   String click = "Select a planet";
+  
   noLights();
+  
+  //box on the right
   fill(0,0,57);
   stroke(234,223,104);
   planetInfoBox.drawBox();
   
+  //name of current system
   fill(255);
   textSize(windowWidth/30);
   text("System: " +currentStar.DisplayName,x1+(windowWidth/2)-(textWidth("System: "+currentStar.DisplayName)/2),y1+(textAscent()-textDescent()));
   
-  
+  //checking if a planet is selected
   for(int i=0;i<planets.size();i++)
   {
     if(planets.get(i).clicked == true)
@@ -1459,8 +1478,7 @@ void planetInfo()
   
   fill(255,0,0);
   
-
-  
+  //if a planet has been selected display info
   if(select != null)
   {
     textFont(arcon,30);
@@ -1477,6 +1495,7 @@ void planetInfo()
     text(size,PIBX+20,PIBY+130);
     text(select.size,PIBX+20+textWidth(size),PIBY+130);
     
+    //launching probe
     if(probe.value == 1 || select.probeCheck == true)
     {
       textSize(PIBW/10);
@@ -1492,14 +1511,12 @@ void planetInfo()
       probe.drawButton(PIBX+(PIBW/4),PIBY+PIBH*0.5,PIBW/2,PIBH/8,150,255); 
     }
 
-    
     pushMatrix();
+    
     translate(PIBX+(PIBW/2),PIBY+PIBH*0.75);
-
     shape(select.planet);
+    
     popMatrix();
-    
-    
   }
   else
   {
@@ -1512,6 +1529,7 @@ void planetInfo()
 
 void probeInfo()
 {
+  //which info to show based on what texture is on the selected planet
   probeInfo selectedProbe = new probeInfo();
   for(int i=0;i<probes.size();i++)
   {
@@ -1539,6 +1557,7 @@ void probeInfo()
     }
   }
   
+  //displaying info
   fill(0,0,57);
   stroke(234,223,104);
   
@@ -1579,11 +1598,13 @@ void probeInfo()
   rad.drawRadar();
 }
 
+//used in chaning size of selected planet in 'Probes' menu
 void mouseWheel(MouseEvent event)
 {
  e = event.getCount(); 
 }
 
+//used for rotating selected planet in 'Probes' menu
 void mouseDragged()
 {
   float k = rot;
@@ -1591,6 +1612,7 @@ void mouseDragged()
   rot = lerp(k,r,0.05);
 }
 
+//used for selecting stars in 'Star Map'
 void mousePressed()
 {
   for(int i=0; i<stars.size();i++)

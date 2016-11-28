@@ -1,6 +1,5 @@
 class Star
 {
- //fields from file
  String hab;
  String DisplayName;
  String Gliese;
@@ -12,15 +11,12 @@ class Star
  String Age;
  String Constellation;
  String SolarRadius;
- 
- //other fields
  float x;
  float y;
  float radius;
  boolean selected;
  float currDist;
  
- //default constructor
  Star()
  {
   this.hab = "Unknown";
@@ -35,7 +31,6 @@ class Star
   this.selected = false;
  }
  
- //parameterised constructor
   Star(TableRow row,float starX1,float starX2, float starY1, float starY2)
   {
     if(row.getInt("Hab?") == 1)
@@ -47,22 +42,21 @@ class Star
       this.hab = "No"; 
     }
   
-  this.DisplayName = row.getString("Display Name");
-  this.Gliese = row.getString("Gliese");
-  this.Spectrum = row.getString("Spectral Class");
-  this.Xg = row.getFloat("Xg");
-  this.Yg = row.getFloat("Yg");
-  this.Zg = row.getFloat("Zg");
-  this.AbsMag = row.getFloat("AbsMag");
-  this.Age = row.getString("Age");
-  this.Constellation = row.getString("Constellation");
-  this.SolarRadius = row.getString("SolarRadius");
-  
-  this.x = map(Xg,-5,5,starX1,starX2);
-  this.y = map(Yg,-5,5,starY1,starY2);
-  this.radius = AbsMag/2;
-  this.selected = false;
- }
+    this.DisplayName = row.getString("Display Name");
+    this.Gliese = row.getString("Gliese");
+    this.Spectrum = row.getString("Spectral Class");
+    this.Xg = row.getFloat("Xg");
+    this.Yg = row.getFloat("Yg");
+    this.Zg = row.getFloat("Zg");
+    this.AbsMag = row.getFloat("AbsMag");
+    this.Age = row.getString("Age");
+    this.Constellation = row.getString("Constellation");
+    this.SolarRadius = row.getString("SolarRadius");
+    this.x = map(Xg,-5,5,starX1,starX2);
+    this.y = map(Yg,-5,5,starY1,starY2);
+    this.radius = AbsMag/2;
+    this.selected = false;
+  }
  
  void isSelected()
  {
@@ -81,7 +75,6 @@ class Star
   }
  }
  
- //for printing
  String toString()
  {
   return hab + "\t" 

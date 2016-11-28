@@ -46,6 +46,7 @@ class bars
      }
      fill(0);
      
+     //used for flashing warning lights at correct times
      if(level > 5 && label != "Shield Integrity" || critical == true)
      {
        if (millis() - n <= 500)
@@ -77,6 +78,7 @@ class bars
      ellipse(textPosX-20,textPosY-10,20,20);
    }
    
+   //checking which colour the box should be
    void colourCheck()
    {
      if(current <= level && current > 5 && label != "Shield Integrity")

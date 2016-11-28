@@ -17,10 +17,10 @@ class box
   this.YPercent = YPercent;
    
  }
-  
+ 
+ //used to draw the main shape used across the sketch
  void drawBox()
  {
-  
    float width10 = boxWidth*(1-XPercent);
    float width90 = boxWidth*XPercent;
    

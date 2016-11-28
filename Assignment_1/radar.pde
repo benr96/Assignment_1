@@ -54,29 +54,22 @@ class radar
       distPoint = dist(0,0,dot.x,dot.y);
       popMatrix();
     }
-    
-    
+
     radius = radius+speed;
 
     ellipse(cX,cY,radius*2,radius*2);
 
-   // println(radius+"\t"+ distPoint);
     if(distPoint < radius)
     {
       pushMatrix();
+      
       translate(cX,cY);
       strokeWeight(5);
       stroke(255,0,0);
       point(dot.x, dot.y);
+      
       popMatrix();
     }
 
-    
   }
-    
-
-
-
-
-
 }
