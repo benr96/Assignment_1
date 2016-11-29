@@ -11,8 +11,6 @@ class Logo
     this.opacity = 255;
     this.cX = 0;
     this.cY = 0;
-    this.location = "missingTexture.jpg";
-    this.img = loadImage(this.location);
   }
  
   Logo(float opacity, float cX, float cY, String location)
