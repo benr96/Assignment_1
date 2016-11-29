@@ -1,6 +1,8 @@
 # Object Oriented  Programming - DT-228/2
 ## Assignment 1 Semester 1 2016
 
+[![YouTube](http://i.imgur.com/sdjvFzI.jpg)](https://www.youtube.com/watch?v=DhkGO3F-yLo)
+
 ### Overview
 This program is desgined to look like an operating system for a spaceship. 
 It has 7 window states
@@ -16,14 +18,14 @@ It has 7 window states
 ### Login
 
 This page is shown when the system is locked. It has preset text in the login credentials and won't 
-let you through to any other screen until it login button has been pressed. If you click a menu option when 
+let you through to any other screen until the login button has been pressed. If you click a menu option when it
 is locked an error sound will play and the login menu will flash.
 ![Sketch](http://i.imgur.com/sdjvFzI.jpg)
 
 ### Transition
 
 This handles the loading screen. It fades the login screen out, fades the rotating logo in. 
-When complete it automatically goes to Report summary.
+When complete it automatically goes to Report Summary.
 
 ### Report Summary
 
@@ -77,38 +79,3 @@ The data will be shown in a box on the right. Below that will be a radar.
 
 You can scroll to zoom in to the planet, click and drag to rotate it.
 ![Sketch](http://imgur.com/jStTq2w.jpg)
-
-
-
-
-### Local Solar System
-
-On this page you are presented with a 3D rendering of a solar system. This solar system will always have 4 planets,
-however the size of each planet, the orbit radius, the initial position and rotation speed will be randomly generated
-every time the program runs.
-
-There are two sliders for control on this page. One tilts the camera to view the solar system from different angles,
-the other changes the rotation speed, or direction.
-
-You can click any of the planets and some basic information will be shown in the box on the right.
-From here you can launch a probe to the planet. The probe information can be viewed in the probe menu
-
-### Ship Controls
-
-Here you can control certain aspects of the ship, such as the power of the engines, the weapons and the shield.
-There are sliders for each element. The values of the sliders effect the colour of the bars above. There are switches
-you can switch on or off which wil shut certain components down.
-
-If you put the power output too high you will get warning and flashing lights. You can also cause overheating. If the overall
-power output is too high you will cause a reactor failure. This will shut everything down and won't come back online
-until the program is restarted.
-
-### Probes
-
-From this menu option you can view more data about each planet you sent a probe to in the solar system map.
-Each planet with a probe on it is listed on the left side. Click them to view more data.
-The data will be shown in a box on the right. Below that will be a radar.
-
-You can scroll to zoom in to the planet, click and drag to rotate it.
-
-
