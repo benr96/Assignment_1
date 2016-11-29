@@ -18,48 +18,6 @@ It has 7 window states
 This page is shown when the system is locked. It has preset text in the login credentials and won't 
 let you through to any other screen until it login button has been pressed. If you click a menu option when 
 is locked an error sound will play and the login menu will flash.
-
-### Transition
-
-This handles the loading screen. It fades the login screen out, fades the rotating logo in. 
-When complete it automatically goes to Report summary.
-
-### Report Summary
-
-This is a kind of landing page once you log in. A welcome message will play. It has some basic information about the senario setup
-in the program, such as where you are in the universe and some systems status.
-
-### Star Map
-
-On this page you see a star map on the left hand side. It uses the same data file we used for the lab test.
-Although I have heavily edited it, I removed data I wasn't using and added more data. 
-
-The current system is listed under the grid and is marked in red on the grid.
-
-You can select up to 36 stars in any order. They will all be connected by a line in the order you select.
-The information about each star will be shown on the right hand side when it is selected. You will be able 
-to view 4 selections at a time, using the next page and prev page buttons.
-
-The reset button will clear the selected stars.# Object Oriented  Programming - DT-228/2
-## Assignment 1 Semester 1 2016
-
-### Overview
-This program is desgined to look like an operating system for a spaceship. 
-It has 7 window states
-
-- Login
-- Transition
-- Report Summary
-- Star Map
-- Local solar system
-- Ship controls
-- Probes
-
-### Login
-
-This page is shown when the system is locked. It has preset text in the login credentials and won't 
-let you through to any other screen until it login button has been pressed. If you click a menu option when 
-is locked an error sound will play and the login menu will flash.
 ![Sketch](http://i.imgur.com/sdjvFzI.jpg)
 
 ### Transition
